@@ -1,0 +1,33 @@
+{% extends "base.html" %}{% from "_macros.html" import badge, csrf, kpi, header %}
+{% block content %}
+{{ header('Settlement ledger', 'Simulated payouts only. No real money is transferred.', 'wallet2') }}
+<div class="row g-3 mb-3">
+  <div class="col-md-4">{{ kpi('Total settled', k.paid_amt|inr, k.paid_n ~ ' settlement(s)', 'cash-coin', 'ok') }}</div>
+  <div class="col-md-4">{{ kpi('Pending payout', k.settle_amt|inr, k.settle_n ~ ' approved claim(s) waiting', 'hourglass-split', 'warn') }}</div>
+  <div class="col-md-4">{{ kpi('Payee rule', 'Hospital / Holder', 'Cashless pays the hospital, reimbursement pays the holder', 'diagram-2') }}</div>
+</div>
+
+<h2 class="sec"><i class="bi bi-hourglass-split"></i>Approved, awaiting settlement</h2>
+<div class="table-responsive"><table class="table align-middle">
+  <tr><th>Claim</th><th>Payee</th><th class="text-end">Eligible</th><th class="text-end">Simulated payout</th><th></th></tr>
+  {% for c, amt in pending %}
+  <tr><td><a class="fw-semibold" href="{{ url_for('detail', claim_id=c.id) }}">#{{ c.id }}</a><br><small class="text-muted">{{ c.member.display_name }}</small></td>
+    <td>{{ c.hospital.name if c.claim_type == 'cashless' else c.policy.holder.display_name }}<br><span class="chip">{{ 'Hospital' if c.claim_type == 'cashless' else 'Policyholder' }}</span></td>
+    <td class="text-end money">{{ c.eligible_amount|inr }}</td><td class="text-end money fw-semibold">{{ amt|inr }}</td>
+    <td class="text-end">{% if g.user.role == 'admin' %}
+      <form method="post" action="{{ url_for('settle_claim', claim_id=c.id) }}">{{ csrf() }}<input type="hidden" name="amount" value="{{ amt }}"><button class="btn btn-primary btn-sm">Record settlement</button></form>
+      {% else %}<a class="btn btn-light btn-sm" href="{{ url_for('detail', claim_id=c.id) }}">View</a>{% endif %}</td></tr>
+  {% else %}<tr><td colspan="5" class="text-center text-muted py-4">Nothing is waiting for settlement.</td></tr>{% endfor %}
+</table></div>
+
+<h2 class="sec"><i class="bi bi-journal-check"></i>Recorded settlements</h2>
+<div class="table-responsive"><table class="table align-middle">
+  <tr><th>Voucher</th><th>Claim</th><th>Payee</th><th class="text-end">Eligible</th><th class="text-end">Deductible and co-pay</th><th class="text-end">Net payout</th><th>Recorded</th></tr>
+  {% for s in rows %}{% set c = s.claim %}
+  <tr><td class="fw-semibold">SET-{{ s.id }}</td><td><a href="{{ url_for('detail', claim_id=c.id) }}">#{{ c.id }}</a><br><small class="text-muted">{{ c.member.display_name }}</small></td>
+    <td>{{ c.hospital.name if s.payee_type == 'hospital' else c.policy.holder.display_name }}<br><span class="chip">{{ s.payee_type|label }}</span></td>
+    <td class="text-end money">{{ c.eligible_amount|inr }}</td><td class="text-end money text-danger">-{{ (c.eligible_amount - s.amount)|inr }}</td>
+    <td class="text-end money fw-semibold">{{ s.amount|inr }}</td><td>{{ s.recorded_at.strftime('%d %b %Y') }}<br><small class="text-muted">{{ s.recorded_by.display_name }}</small></td></tr>
+  {% else %}<tr><td colspan="7" class="text-center text-muted py-4">No settlements recorded yet.</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

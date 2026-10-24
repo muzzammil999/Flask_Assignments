@@ -1,0 +1,15 @@
+{# Small reusable pieces: CSRF field, status badge, text input with inline error. #}
+{% macro csrf() %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endmacro %}
+
+{% macro badge(s) %}
+{% set colors = {'draft':'secondary','submitted':'primary','in_review':'info','more_info':'warning','approved':'success','rejected':'danger','paid':'dark'} %}
+<span class="badge text-bg-{{ colors.get(s, 'secondary') }}">{{ s|label }}</span>
+{% endmacro %}
+
+{% macro inp(name, label, v, errors, type='text', extra='') %}
+<div class="mb-3">
+  <label class="form-label" for="{{ name }}">{{ label }}</label>
+  <input class="form-control {{ 'is-invalid' if errors.get(name) }}" id="{{ name }}" name="{{ name }}" type="{{ type }}" value="{{ v.get(name, '') }}" {{ extra|safe }}>
+  <div class="invalid-feedback">{{ errors.get(name) }}</div>
+</div>
+{% endmacro %}

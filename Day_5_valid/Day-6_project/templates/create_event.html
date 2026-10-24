@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Post New Event | Community Events{% endblock %}
+
+{% block content %}
+<section class="view active" id="create">
+    <a class="back" href="{{ url_for('index') }}">← Back to events</a>
+    <span class="eyebrow">Organizer area</span>
+    <h1>Post a new event</h1>
+    <p class="lead">Fill in the event details so people can discover and register.</p>
+
+    <div class="panel form-panel">
+        <form class="form-grid" method="POST" action="{{ url_for('create_event') }}">
+            <div class="field">
+                <label for="title">Event title *</label>
+                <input id="title" name="title" placeholder="e.g. Digital Skills Saturday" required>
+            </div>
+            <div class="field">
+                <label for="category">Category *</label>
+                <select id="category" name="category" required>
+                    <option value="">Choose a category</option>
+                    <option value="Workshop">Workshop</option>
+                    <option value="Community">Community</option>
+                    <option value="Career">Career</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="date">Event date *</label>
+                <input id="date" name="date" type="date" required>
+            </div>
+            <div class="field">
+                <label for="time">Start time *</label>
+                <input id="time" name="time" type="time" required>
+            </div>
+            <div class="field">
+                <label for="venue">Venue *</label>
+                <input id="venue" name="venue" placeholder="Event location" required>
+            </div>
+            <div class="field">
+                <label for="capacity">Seat capacity *</label>
+                <input id="capacity" name="capacity" type="number" min="1" placeholder="30" required>
+            </div>
+            <div class="field">
+                <label for="email">Organizer email *</label>
+                <input id="email" name="email" type="email" placeholder="organizer@example.com" required>
+            </div>
+            <div class="field">
+                <label for="deadline">Registration deadline *</label>
+                <input id="deadline" name="deadline" type="date" required>
+            </div>
+            <div class="field span">
+                <label for="description">Description *</label>
+                <textarea id="description" name="description" placeholder="What will participants learn or do?" required></textarea>
+            </div>
+
+            <div class="form-actions field span">
+                <button class="btn" type="submit">Publish event</button>
+                <a class="btn secondary" href="{{ url_for('index') }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

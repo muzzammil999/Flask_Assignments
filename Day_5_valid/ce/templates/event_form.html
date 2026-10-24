@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit event' if editing else 'Post a new event' }}{% endblock %}
+
+{% block content %}
+<a class="back" href="{{ url_for('event_details', event_id=event.id) if editing else url_for('home') }}">
+    ← {{ 'Back to event' if editing else 'Back to events' }}
+</a>
+
+<span class="eyebrow">Organizer area</span>
+<h1>{{ 'Edit event' if editing else 'Post a new event' }}</h1>
+<p class="lead">
+    {{ 'Update the event details while protecting existing registrations.' if editing
+       else 'Fill in the event details so people can discover and register.' }}
+</p>
+
+{# novalidate = the browser does no checking; app.py validates everything #}
+<form class="panel form-panel" method="post" novalidate
+      action="{{ url_for('edit_event', event_id=event.id) if editing else url_for('create_event') }}">
+
+    <div class="form-grid">
+        <div class="field">
+            <label for="title">Event title *</label>
+            <input id="title" name="title" value="{{ form.title }}" placeholder="e.g. Digital Skills Saturday">
+        </div>
+
+        <div class="field">
+            <label for="category">Category *</label>
+            <select id="category" name="category">
+                <option value="">Choose a category</option>
+                {% for item in categories %}
+                    <option value="{{ item }}" {% if form.category == item %}selected{% endif %}>{{ item }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="event_date">Event date *</label>
+            <input id="event_date" name="event_date" type="date" value="{{ form.event_date }}">
+        </div>
+
+        <div class="field">
+            <label for="start_time">Start time *</label>
+            <input id="start_time" name="start_time" type="time" value="{{ form.start_time }}">
+        </div>
+
+        <div class="field">
+            <label for="venue">Venue *</label>
+            <input id="venue" name="venue" value="{{ form.venue }}" placeholder="Event location">
+        </div>
+
+        <div class="field">
+            <label for="seat_capacity">Seat capacity *</label>
+            <input id="seat_capacity" name="seat_capacity" value="{{ form.seat_capacity }}" placeholder="30">
+            {% if editing %}
+                <div class="hint">Cannot be lower than {{ event.booked_seats }} seats already booked.</div>
+            {% endif %}
+        </div>
+
+        <div class="field">
+            <label for="organizer_email">Organizer email *</label>
+            <input id="organizer_email" name="organizer_email" value="{{ form.organizer_email }}" placeholder="organizer@example.com">
+        </div>
+
+        <div class="field">
+            <label for="registration_deadline">Registration deadline *</label>
+            <input id="registration_deadline" name="registration_deadline" type="date" value="{{ form.registration_deadline }}">
+        </div>
+
+        <div class="field span">
+            <label for="description">Description *</label>
+            <textarea id="description" name="description" placeholder="What will participants learn or do?">{{ form.description }}</textarea>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button class="btn" type="submit">{{ 'Save changes' if editing else 'Publish event' }}</button>
+        <a class="btn secondary" href="{{ url_for('event_details', event_id=event.id) if editing else url_for('home') }}">Cancel</a>
+    </div>
+</form>
+{% endblock %}

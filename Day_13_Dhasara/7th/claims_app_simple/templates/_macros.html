@@ -1,0 +1,18 @@
+{# Reusable pieces: CSRF field, status pill, page header, KPI card, text input with inline error. #}
+{% macro csrf() %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endmacro %}
+
+{% macro badge(s) %}<span class="pill st-{{ s }}">{{ s|label }}</span>{% endmacro %}
+
+{% macro header(title, sub, icon) %}<div class="page-head"><i class="bi bi-{{ icon }}"></i><div><h1>{{ title }}</h1><p>{{ sub }}</p></div></div>{% endmacro %}
+
+{% macro kpi(label, value, sub, icon, cls='') %}
+<div class="kpi {{ cls }}"><div class="lbl">{{ label }}<i class="bi bi-{{ icon }}"></i></div><div class="val">{{ value }}</div><div class="sub">{{ sub }}</div></div>
+{% endmacro %}
+
+{% macro inp(name, label, v, errors, type='text', extra='') %}
+<div class="mb-3">
+  <label class="form-label" for="{{ name }}">{{ label }}</label>
+  <input class="form-control {{ 'is-invalid' if errors.get(name) }}" id="{{ name }}" name="{{ name }}" type="{{ type }}" value="{{ v.get(name, '') }}" {{ extra|safe }}>
+  <div class="invalid-feedback">{{ errors.get(name) }}</div>
+</div>
+{% endmacro %}

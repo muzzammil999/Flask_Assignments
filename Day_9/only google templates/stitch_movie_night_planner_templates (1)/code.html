@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>Movie Night Planner</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"surface-container-high":"#dee9fc","outline":"#6d7a77","on-secondary-container":"#00476e","on-tertiary-fixed-variant":"#005236","on-surface":"#121c2a","inverse-surface":"#27313f","background":"#f8f9ff","secondary-container":"#5bb8fe","on-error-container":"#93000a","primary-container":"#008378","surface-dim":"#d0dbed","secondary-fixed":"#cce5ff","surface-tint":"#006a61","tertiary-container":"#00855b","on-error":"#ffffff","on-primary-fixed":"#00201d","error-container":"#ffdad6","surface-container-low":"#eff4ff","surface":"#f8f9ff","surface-variant":"#d9e3f6","secondary":"#006398","tertiary":"#006947","on-tertiary-fixed":"#002113","on-tertiary":"#ffffff","on-background":"#121c2a","primary-fixed":"#89f5e7","error":"#ba1a1a","secondary-fixed-dim":"#93ccff","on-tertiary-container":"#f5fff6","tertiary-fixed":"#6ffbbe","tertiary-fixed-dim":"#4edea3","inverse-on-surface":"#eaf1ff","on-secondary-fixed-variant":"#004b73","inverse-primary":"#6bd8cb","outline-variant":"#bcc9c6","surface-container":"#e6eeff","surface-container-highest":"#d9e3f6","primary":"#00685f","primary-fixed-dim":"#6bd8cb","on-primary":"#ffffff","surface-container-lowest":"#ffffff","surface-bright":"#f8f9ff","on-primary-fixed-variant":"#005049","on-primary-container":"#f4fffc","on-surface-variant":"#3d4947","on-secondary-fixed":"#001d31","on-secondary":"#ffffff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter-mobile":"1rem","space-md":"1rem","gutter":"1.5rem","margin-mobile":"1rem","margin":"2rem","space-sm":"0.5rem","space-lg":"1.5rem","space-xs":"0.25rem","space-xl":"2rem"},"fontFamily":{"label-md":["Inter"],"body-md":["Inter"],"body-sm":["Inter"],"label-lg":["Inter"],"headline-lg-mobile":["Inter"],"headline-md":["Inter"],"label-sm":["Inter"],"display-lg-mobile":["Inter"],"display-lg":["Inter"],"headline-lg":["Inter"],"headline-sm":["Inter"],"body-lg":["Inter"]},"fontSize":{"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0","fontWeight":"400"}],"body-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"400"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.03em","fontWeight":"600"}],"display-lg-mobile":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}],"display-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"0","fontWeight":"400"}]}}}};</script></head><body class="bg-background text-on-surface font-body-md text-body-md"><header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 max-w-7xl mx-auto px-margin-mobile lg:px-margin flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm group text-decoration-none" data-path="home" href="#"><div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[20px]">local_movies</span></div><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Movie Night Planner</span></a><nav class="hidden md:flex items-center gap-space-xs" data-active-classes="bg-surface-container-high text-on-surface font-label-lg text-label-lg rounded-lg"><a aria-current="page" class="px-space-md py-space-sm transition-colors bg-surface-container-high text-on-surface font-label-lg text-label-lg rounded-lg" data-path="home" href="#">Home</a><a class="px-space-md py-space-sm rounded-lg text-on-surface-variant font-label-lg text-label-lg transition-colors hover:text-on-surface hover:bg-surface-container" data-path="winning-movie" href="#">Winning Movie</a><a class="px-space-md py-space-sm rounded-lg text-on-surface-variant font-label-lg text-label-lg transition-colors hover:text-on-surface hover:bg-surface-container" data-path="create-movie" href="#">Create Movie</a></nav></div><div class="flex items-center gap-space-md"><div class="hidden sm:flex items-center gap-space-sm py-space-xs px-space-md bg-surface-container-low rounded-full"><span class="font-body-sm text-body-sm text-on-surface-variant">Signed in as <span class="font-label-md text-label-md text-on-surface">muzzammil</span></span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-background min-h-[calc(100vh-4rem)] max-w-7xl mx-auto px-margin-mobile lg:px-margin"><div class="flex flex-col w-full pb-space-xl">
+<!-- Top Banner / Headline Section -->
+<section class="w-full py-space-xl bg-surface-container-low rounded-xl px-space-md sm:px-space-xl mb-space-lg shadow-sm relative overflow-hidden">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-lg relative z-10">
+<div class="max-w-2xl">
+<div class="inline-flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-surface-container text-primary font-label-sm text-label-sm uppercase tracking-wider mb-space-sm">
+<span class="material-symbols-outlined text-[14px]">event_available</span>
+          Next Screening • Friday 8:00 PM
+        </div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">
+          Nominate &amp; Vote for Friday Night Cinema
+        </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-space-xs">
+          Cast your vote or nominate your favorites. The top-voted film wins the projector stage in the student lounge!
+        </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm shrink-0">
+<a class="inline-flex items-center gap-space-xs px-space-lg py-space-sm rounded-lg bg-primary text-on-primary font-label-lg text-label-lg shadow-sm hover:opacity-95 transition-all" data-path="winning-movie" href="#">
+<span class="material-symbols-outlined text-[20px]">trophy</span>
+<span>View Winning Movie</span>
+</a>
+<a class="inline-flex items-center gap-space-xs px-space-lg py-space-sm rounded-lg bg-surface text-primary font-label-lg text-label-lg shadow-sm hover:bg-surface-container transition-all" data-path="create-movie" href="#">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+<span>Nominate Film</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Filter & Search Panel -->
+<section class="w-full bg-surface-container-lowest p-space-md sm:p-space-lg rounded-xl shadow-sm mb-space-xl">
+<form class="flex flex-col lg:flex-row lg:items-end gap-space-md" id="filterForm" onsubmit="event.preventDefault(); applyFilter();">
+<!-- Search Input -->
+<div class="flex-1">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-space-xs" for="searchInput">
+          Search Movie Name
+        </label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-outline text-[20px]">search</span>
+<input class="w-full h-10 pl-10 pr-3 rounded-lg bg-surface-container-low text-on-surface placeholder:text-outline font-body-md text-body-md focus:bg-surface focus:outline-none shadow-sm" id="searchInput" placeholder="e.g. Interstellar, Toy Story..." type="text"/>
+</div>
+</div>
+<!-- Genre Selector -->
+<div class="w-full sm:w-48">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-space-xs" for="genreSelect">
+          Genre
+        </label>
+<select class="w-full h-10 px-3 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md focus:bg-surface focus:outline-none shadow-sm cursor-pointer" id="genreSelect">
+<option value="all">All Genres</option>
+<option value="Action">Action</option>
+<option value="Comedy">Comedy</option>
+<option value="Drama">Drama</option>
+<option value="Sci-Fi">Sci-Fi</option>
+<option value="Animation">Animation</option>
+<option value="Horror">Horror</option>
+<option value="Thriller">Thriller</option>
+</select>
+</div>
+<!-- Sort Dropdown -->
+<div class="w-full sm:w-48">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-space-xs" for="sortSelect">
+          Sort by
+        </label>
+<select class="w-full h-10 px-3 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md focus:bg-surface focus:outline-none shadow-sm cursor-pointer" id="sortSelect">
+<option value="likes">Highest Likes</option>
+<option value="newest">Newest Added</option>
+</select>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-space-sm pt-2 lg:pt-0">
+<button class="h-10 px-space-lg rounded-lg bg-primary text-on-primary font-label-md text-label-md shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-space-xs" type="submit">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+          Filter
+        </button>
+<button class="h-10 px-space-md text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors" onclick="resetFilters()" type="button">
+          Clear
+        </button>
+</div>
+</form>
+</section>
+<!-- Film Listings Grid Header -->
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-sm">
+<h2 class="font-headline-md text-headline-md text-on-surface">Community Nominations</h2>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant" id="resultsCount">3 films</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Vote closes in 14h 22m</span>
+</div>
+<!-- Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg" id="movieGrid">
+<!-- Movie 1: Interstellar -->
+<article class="movie-card bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col" data-date="2" data-genre="Sci-Fi" data-likes="25" data-title="Interstellar">
+<div class="relative w-full aspect-[16/10] bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Cinematic still from Interstellar showcasing an astronaut looking out into a cosmic wormhole with golden space dust and distant glowing stars, deep teal and cosmic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLAeZLp2q2m2ivN3zXQiFBgo_iOSa8kVgRPTW92_DVlvEVk8y-AN0tSrbptmkNh19ItCgNadW5_e8u7thsNBXnqmfkQ4txhhSCQPyIwK9iNsGRqnWu6AJbtqK6kQPd11ByqXtUSZC2dUx0zt39bhLUANg-KUJ7XSyUuJR9GPb7iHXOHqUW_RJzLI8aTrLlTwf0_o3x_Pt5bcfXsdeUMwxSA7Y-Oh8hpFOrtqbE4sCE65ECGX_WjN1UAw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 via-transparent to-transparent"></div>
+<div class="absolute top-3 left-3 flex gap-space-xs items-center">
+<span class="px-2 py-0.5 rounded bg-surface/90 backdrop-blur font-label-sm text-label-sm text-on-surface">U/A</span>
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">Sci-Fi</span>
+</div>
+<div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-surface-container-lowest">
+<span class="font-body-sm text-body-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span> 169 mins
+          </span>
+<span class="font-label-sm text-label-sm flex items-center gap-1 text-primary-fixed">
+<span class="material-symbols-outlined text-[16px]">star</span> 8.7 IMDb
+          </span>
+</div>
+</div>
+<div class="p-space-md flex flex-col flex-1 justify-between gap-space-md">
+<div>
+<div class="flex items-start justify-between gap-2 mb-1">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Interstellar</h3>
+<div class="flex items-center gap-1 px-2 py-0.5 rounded-md bg-surface-container-high text-primary font-label-md text-label-md shrink-0">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">thumb_up</span>
+<span class="like-count">25</span>
+</div>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-label-sm text-on-surface-variant font-semibold">
+              P
+            </div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Proposed by <span class="font-label-md text-label-md text-on-surface">priya</span>
+</p>
+</div>
+</div>
+<!-- Buttons Row -->
+<div class="flex items-center justify-between pt-space-sm bg-surface-container-low -mx-space-md -mb-space-md p-space-md mt-auto">
+<button class="px-space-md py-1.5 rounded-lg bg-surface text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shadow-sm" type="button">
+            Details
+          </button>
+<button class="like-btn px-space-md py-1.5 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md hover:opacity-90 transition-all flex items-center gap-1 shadow-sm" onclick="toggleLike(this)" type="button">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span>Like</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Movie 2: Toy Story (Owner: muzzammil) -->
+<article class="movie-card bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col" data-date="3" data-genre="Animation" data-likes="18" data-title="Toy Story">
+<div class="relative w-full aspect-[16/10] bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Animation style visual featuring toy figurines on bedroom parquet floor with warm morning light streaming from a window, cozy atmosphere with soft teal and amber tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAjoVeu75skLmsiopAN-szusW3ItgsEdFVd6LkYt0oq4PPouonpJxYEN6EV6mNF2uSEJO_ndubIqt18qaoUWiluwIOPIK285w3N4FdJyH8AstFJHPPA-oh_YfP4J2HTQ9oj0nA8sb2_2TxvciOQMkNFbO0preZ5BvhbtxV5TZILRm-nCJaUjRebW-TabbERg4qybns2E1RgXtsKUIyQEOTx4RBLN_-VFwG8bu_ORD9R-Chxui-mFYArA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 via-transparent to-transparent"></div>
+<div class="absolute top-3 left-3 flex gap-space-xs items-center">
+<span class="px-2 py-0.5 rounded bg-surface/90 backdrop-blur font-label-sm text-label-sm text-on-surface">U</span>
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">Animation</span>
+</div>
+<div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-surface-container-lowest">
+<span class="font-body-sm text-body-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span> 81 mins
+          </span>
+<span class="font-label-sm text-label-sm flex items-center gap-1 text-primary-fixed">
+<span class="material-symbols-outlined text-[16px]">star</span> 8.3 IMDb
+          </span>
+</div>
+</div>
+<div class="p-space-md flex flex-col flex-1 justify-between gap-space-md">
+<div>
+<div class="flex items-start justify-between gap-2 mb-1">
+<div class="flex items-center gap-1.5">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Toy Story</h3>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-primary font-label-sm text-label-sm">Mine</span>
+</div>
+<div class="flex items-center gap-1 px-2 py-0.5 rounded-md bg-surface-container-high text-primary font-label-md text-label-md shrink-0">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">thumb_up</span>
+<span class="like-count">18</span>
+</div>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center font-label-sm text-label-sm text-on-primary font-semibold">
+              M
+            </div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Proposed by <span class="font-label-md text-label-md text-on-surface">muzzammil</span> <span class="font-body-sm text-body-sm text-outline">(Owner)</span>
+</p>
+</div>
+</div>
+<!-- Buttons Row with Owner Edit & Delete -->
+<div class="flex flex-wrap items-center justify-between gap-space-xs pt-space-sm bg-surface-container-low -mx-space-md -mb-space-md p-space-md mt-auto">
+<div class="flex items-center gap-1.5">
+<button class="px-2.5 py-1.5 rounded-lg bg-surface text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shadow-sm" type="button">
+              Details
+            </button>
+<button class="px-2.5 py-1.5 rounded-lg bg-surface text-on-surface-variant hover:text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shadow-sm flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+              Edit
+            </button>
+<button class="px-2.5 py-1.5 rounded-lg bg-error-container text-on-error-container font-label-md text-label-md hover:opacity-90 transition-colors shadow-sm flex items-center gap-1" onclick="deleteCard(this)" type="button">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+              Delete
+            </button>
+</div>
+<button class="like-btn px-space-md py-1.5 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md hover:opacity-90 transition-all flex items-center gap-1 shadow-sm" onclick="toggleLike(this)" type="button">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span>Like</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Movie 3: Spider-Man: Spider-Verse -->
+<article class="movie-card bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col" data-date="1" data-genre="Action" data-likes="14" data-title="Spider-Man: Spider-Verse">
+<div class="relative w-full aspect-[16/10] bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Stylized urban comic book panorama with silhouette swinging between neon-lit skyscrapers at dusk, high vibrancy halftone print aesthetic with cyan and magenta accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUpwDFPF9QkrK_gc-ZSrtALbRUtEKN8jH8kuLfGoelnWOz2XrRWU_FytsRcuHf96QV9BA7Ot6c_f-iAZznKIcH0waZWsUPj_-BBK-RRlFkr0jbzkLn4M6C_dd5yH13X1AY7-VKRNcV7J0wIptRf8LyEc89M8yMIH5tMWqKOPEjEy2BVaQXdKPhnbQyZv_Fen_2jH8x33U7Zsvf649TCK5Hq13VBOwwx-tGtoPhvTtTfpZZEdt0oTJ_Bw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/80 via-transparent to-transparent"></div>
+<div class="absolute top-3 left-3 flex gap-space-xs items-center">
+<span class="px-2 py-0.5 rounded bg-surface/90 backdrop-blur font-label-sm text-label-sm text-on-surface">U</span>
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">Action</span>
+</div>
+<div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-surface-container-lowest">
+<span class="font-body-sm text-body-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span> 117 mins
+          </span>
+<span class="font-label-sm text-label-sm flex items-center gap-1 text-primary-fixed">
+<span class="material-symbols-outlined text-[16px]">star</span> 8.4 IMDb
+          </span>
+</div>
+</div>
+<div class="p-space-md flex flex-col flex-1 justify-between gap-space-md">
+<div>
+<div class="flex items-start justify-between gap-2 mb-1">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Spider-Man: Spider-Verse</h3>
+<div class="flex items-center gap-1 px-2 py-0.5 rounded-md bg-surface-container-high text-primary font-label-md text-label-md shrink-0">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">thumb_up</span>
+<span class="like-count">14</span>
+</div>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-label-sm text-on-surface-variant font-semibold">
+              R
+            </div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Proposed by <span class="font-label-md text-label-md text-on-surface">rohan</span>
+</p>
+</div>
+</div>
+<!-- Buttons Row -->
+<div class="flex items-center justify-between pt-space-sm bg-surface-container-low -mx-space-md -mb-space-md p-space-md mt-auto">
+<button class="px-space-md py-1.5 rounded-lg bg-surface text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors shadow-sm" type="button">
+            Details
+          </button>
+<button class="like-btn px-space-md py-1.5 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md hover:opacity-90 transition-all flex items-center gap-1 shadow-sm" onclick="toggleLike(this)" type="button">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span>Like</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- Empty State (hidden by default) -->
+<div class="hidden flex-col items-center justify-center py-16 bg-surface-container-lowest rounded-xl shadow-sm text-center px-space-md mt-space-md" id="emptyState">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-outline mb-space-sm">
+<span class="material-symbols-outlined text-[28px]">search_off</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-1">No movies found</h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-sm mb-space-md">
+      We couldn't find any movie matching your current search and genre criteria.
+    </p>
+<button class="px-space-lg py-space-sm rounded-lg bg-primary text-on-primary font-label-md text-label-md" onclick="resetFilters()" type="button">
+      Reset All Filters
+    </button>
+</div>
+</div>
+<script>
+  function toggleLike(btn) {
+    const card = btn.closest('.movie-card');
+    const countElem = card.querySelector('.like-count');
+    let currentCount = parseInt(countElem.innerText, 10);
+    const isLiked = btn.getAttribute('data-liked') === 'true';
+
+    if (isLiked) {
+      currentCount -= 1;
+      btn.setAttribute('data-liked', 'false');
+      btn.classList.remove('bg-primary', 'text-on-primary');
+      btn.classList.add('bg-primary-container', 'text-on-primary-container');
+    } else {
+      currentCount += 1;
+      btn.setAttribute('data-liked', 'true');
+      btn.classList.remove('bg-primary-container', 'text-on-primary-container');
+      btn.classList.add('bg-primary', 'text-on-primary');
+    }
+
+    countElem.innerText = currentCount;
+    card.setAttribute('data-likes', currentCount);
+  }
+
+  function deleteCard(btn) {
+    if (confirm('Are you sure you want to remove your nominated movie?')) {
+      const card = btn.closest('.movie-card');
+      card.remove();
+      updateCounter();
+    }
+  }
+
+  function applyFilter() {
+    const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+    const genreVal = document.getElementById('genreSelect').value;
+    const sortVal = document.getElementById('sortSelect').value;
+
+    const grid = document.getElementById('movieGrid');
+    const cards = Array.from(grid.querySelectorAll('.movie-card'));
+
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const title = card.getAttribute('data-title').toLowerCase();
+      const genre = card.getAttribute('data-genre');
+
+      const matchesSearch = !searchVal || title.includes(searchVal);
+      const matchesGenre = (genreVal === 'all') || (genre === genreVal);
+
+      if (matchesSearch && matchesGenre) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    // Sorting
+    cards.sort((a, b) => {
+      if (sortVal === 'likes') {
+        return parseInt(b.getAttribute('data-likes'), 10) - parseInt(a.getAttribute('data-likes'), 10);
+      } else {
+        return parseInt(b.getAttribute('data-date'), 10) - parseInt(a.getAttribute('data-date'), 10);
+      }
+    });
+
+    cards.forEach(card => grid.appendChild(card));
+
+    // Empty state handling
+    const emptyState = document.getElementById('emptyState');
+    if (visibleCount === 0) {
+      grid.classList.add('hidden');
+      emptyState.classList.remove('hidden');
+      emptyState.classList.add('flex');
+    } else {
+      grid.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+      emptyState.classList.remove('flex');
+    }
+
+    document.getElementById('resultsCount').innerText = `${visibleCount} film${visibleCount === 1 ? '' : 's'}`;
+  }
+
+  function resetFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('genreSelect').value = 'all';
+    document.getElementById('sortSelect').value = 'likes';
+    applyFilter();
+  }
+
+  function updateCounter() {
+    const visibleCards = document.querySelectorAll('.movie-card:not([style*="display: none"])').length;
+    document.getElementById('resultsCount').innerText = `${visibleCards} film${visibleCards === 1 ? '' : 's'}`;
+  }
+</script></main><footer class="w-full bg-surface-container-lowest mt-space-xl py-space-lg shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="max-w-7xl mx-auto px-margin-mobile lg:px-margin flex flex-col sm:flex-row items-center justify-between gap-space-md text-center sm:text-left"><p class="font-body-sm text-body-sm text-on-surface-variant">© 2025 Movie Night Planner</p><div class="flex items-center gap-space-lg"><span class="font-body-sm text-body-sm text-on-surface-variant">Campus Movie Club &amp; Social Hub</span></div></div></footer></body></html>

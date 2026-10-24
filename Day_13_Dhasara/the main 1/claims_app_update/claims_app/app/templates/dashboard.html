@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% from "_macros.html" import badge, kpi, header %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+  {{ header('Claims overview', 'Welcome, ' ~ g.user.display_name ~ '. Figures cover only the claims you may see.', 'grid') }}
+  <div class="d-flex gap-2">
+    <a class="btn btn-light" href="{{ url_for('claims.export_csv') }}"><i class="bi bi-download"></i> Export CSV</a>
+    {% if g.user.role in ('policyholder', 'hospital') %}<a class="btn btn-primary" href="{{ url_for('claims.new_claim') }}"><i class="bi bi-plus-circle"></i> New claim</a>{% endif %}
+    {% if g.user.role == 'claims_officer' %}<a class="btn btn-primary" href="{{ url_for('claims.review_queue') }}"><i class="bi bi-clipboard2-pulse"></i> Review queue</a>{% endif %}
+  </div>
+</div>
+<div class="row g-3">
+  <div class="col-sm-6 col-xl-3">{{ kpi('Total claims', k.total, 'Excluding other people\'s drafts', 'inboxes') }}</div>
+  <div class="col-sm-6 col-xl-3">{{ kpi('Under adjudication', k.open_n, 'Requested ' ~ (k.open_amt|inr), 'hourglass-split', 'warn') }}</div>
+  <div class="col-sm-6 col-xl-3">{{ kpi('Approved, to settle', k.settle_n, 'Simulated payout ' ~ (k.settle_amt|inr), 'patch-check', 'ok') }}</div>
+  <div class="col-sm-6 col-xl-3">{{ kpi('Simulated paid', k.paid_amt|inr, k.paid_n ~ ' settlement(s) recorded', 'cash-coin', 'purple') }}</div>
+</div>
+{% if extra %}<div class="row g-3 mt-0">{% for name, n in extra.items() %}<div class="col-sm-6 col-xl-3">{{ kpi(name, n, 'Open the review queue', 'person-workspace') }}</div>{% endfor %}</div>{% endif %}
+
+<div class="tabs-row">
+  <a class="on" href="{{ url_for('claims.claim_list') }}">All<small>{{ k.total }}</small></a>
+  {% for s in ['draft','submitted','in_review','more_info','approved','paid','rejected'] %}
+  <a href="{{ url_for('claims.claim_list', status=s) }}">{{ s|label }}<small>{{ k.counts.get(s, 0) }}</small></a>{% endfor %}
+</div>
+
+<h2 class="sec mt-0"><i class="bi bi-clock-history"></i>Recent claims</h2>
+<div class="table-responsive"><table class="table align-middle">
+  <tr><th>Claim</th><th>Member</th><th>Hospital</th><th class="text-end">Requested</th><th class="text-end">Paid</th><th>Status</th><th></th></tr>
+  {% for c in recent %}
+  <tr><td><a class="fw-semibold" href="{{ url_for('claims.detail', claim_id=c.id) }}">#{{ c.id }}</a><br><small class="text-muted">{{ c.claim_type|label }}</small></td>
+    <td>{{ c.member.display_name }}<br><small class="text-muted">Policy {{ c.policy_id }}</small></td><td>{{ c.hospital.name }}</td>
+    <td class="text-end money">{{ c.requested_amount|inr }}</td><td class="text-end money">{{ c.settlement.amount|inr if c.settlement else '-' }}</td>
+    <td>{{ badge(c.status) }}</td><td class="text-end"><a class="btn btn-light btn-sm" href="{{ url_for('claims.detail', claim_id=c.id) }}">View</a></td></tr>
+  {% else %}<tr><td colspan="7" class="text-center text-muted py-4">No claims yet.</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

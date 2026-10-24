@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Edit Movie{% endblock %}
+{% block content %}
+<h1>Edit movie</h1>
+<form method="post" action="{{ url_for('edit_movie', movie_id=movie.id) }}" enctype="multipart/form-data" class="card narrow">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <label>Movie name
+    <input name="movie_name" value="{{ form.get('movie_name', '') }}">
+  </label>
+  <label>Genre
+    <select name="genre">
+      {% for g in genres %}
+        <option value="{{ g }}" {% if form.get('genre') == g %}selected{% endif %}>{{ g }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <div class="row">
+    <label>Length (minutes)
+      <input name="length" inputmode="numeric" value="{{ form.get('length', '') }}">
+    </label>
+    <label>Certification
+      <select name="certification">
+        {% for c in certifications %}
+          <option value="{{ c }}" {% if form.get('certification') == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </label>
+  </div>
+
+  {% if movie.poster_filename %}
+    <p>Current poster:<br>
+      <img class="thumb" src="{{ url_for('static', filename='uploads/' + movie.poster_filename) }}" alt="Current poster">
+    </p>
+  {% endif %}
+  <label>New poster (optional - leave empty to keep the current one)
+    <input type="file" name="poster" accept=".png,.jpg,.jpeg,.webp">
+  </label>
+
+  <button type="submit">Save changes</button>
+  <a href="{{ url_for('movie_details', movie_id=movie.id) }}">Cancel</a>
+</form>
+{% endblock %}

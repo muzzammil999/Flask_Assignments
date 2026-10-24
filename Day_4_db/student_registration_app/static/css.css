@@ -1,0 +1,724 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+
+  background: #354d58;
+  color: #ffffff;
+}
+
+
+/* =========================================
+   MAIN PAGE
+========================================= */
+
+.registration-page {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+
+  padding: 30px 20px 70px;
+}
+
+
+/* =========================================
+   FORM CONTAINER
+========================================= */
+
+.registration-card {
+  width: 100%;
+  max-width: 950px;
+
+  padding: 0 20px;
+
+  background: transparent;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.form-header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.form-header h2 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 27px;
+  font-weight: 400;
+
+  letter-spacing: 0.3px;
+}
+
+.header-line {
+  width: 30px;
+  height: 3px;
+
+  background: #9ce8d0;
+
+  margin: 22px auto 0;
+
+  border-radius: 10px;
+}
+
+
+/* =========================================
+   SUBTITLE
+========================================= */
+
+.subtitle {
+  color: #d8e1e5;
+
+  font-size: 13px;
+
+  margin: 0 0 25px;
+}
+
+.required {
+  color: #ff8e96;
+}
+
+
+/* =========================================
+   GRID
+========================================= */
+
+.form-grid {
+  display: grid;
+
+  gap: 22px;
+
+  width: 100%;
+}
+
+.grid-3 {
+  grid-template-columns:
+    1fr
+    1fr
+    1.7fr;
+}
+
+.grid-2 {
+  grid-template-columns:
+    1fr
+    1fr;
+}
+
+
+/* =========================================
+   FORM GROUP
+========================================= */
+
+.form-group {
+  margin-bottom: 24px;
+
+  border: none;
+  padding: 0;
+}
+
+
+/* =========================================
+   LABEL
+========================================= */
+
+label,
+legend {
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 400;
+
+  letter-spacing: 0.1px;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 9px;
+}
+
+
+/* =========================================
+   INPUTS
+========================================= */
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="number"],
+input[type="url"],
+input[type="password"],
+input[type="file"],
+select,
+textarea {
+
+  width: 100%;
+
+  min-height: 38px;
+
+  padding: 9px 12px;
+
+  background: #587582;
+
+  color: #ffffff;
+
+  border: 1px solid #587582;
+
+  border-radius: 4px;
+
+  outline: none;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    box-shadow 0.2s;
+}
+
+
+/* Placeholder */
+
+input::placeholder,
+textarea::placeholder {
+  color: #d0dadd;
+}
+
+
+/* Focus */
+
+input:focus,
+select:focus,
+textarea:focus {
+  background: #607f8c;
+
+  border-color: #9ce8d0;
+
+  box-shadow:
+    0 0 0 2px rgba(156, 232, 208, 0.15);
+}
+
+
+/* Select */
+
+select {
+  cursor: pointer;
+}
+
+
+/* Date */
+
+input[type="date"] {
+  color-scheme: dark;
+}
+
+
+/* Textarea */
+
+textarea {
+  min-height: 100px;
+
+  resize: vertical;
+}
+
+
+/* File input */
+
+input[type="file"] {
+  padding: 7px;
+}
+
+
+/* =========================================
+   DIVIDER
+========================================= */
+
+.form-divider {
+  width: 100%;
+
+  height: 2px;
+
+  background: #56717c;
+
+  margin: 22px 0 45px;
+}
+
+
+/* =========================================
+   RADIO SECTIONS
+========================================= */
+
+.radio-section {
+  border: none;
+
+  padding: 0;
+
+  margin: 0 0 35px;
+}
+
+.radio-section legend {
+  padding: 0;
+
+  margin-bottom: 25px;
+
+  font-weight: 400;
+}
+
+
+/* =========================================
+   RADIO OPTIONS
+========================================= */
+
+.radio-options {
+  display: flex;
+
+  align-items: center;
+
+  gap: 55px;
+
+  flex-wrap: wrap;
+}
+
+.radio-option {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  cursor: pointer;
+
+  color: #ffffff;
+
+  font-size: 14px;
+
+  font-weight: 400;
+}
+
+
+/* Hide actual radio */
+
+.radio-option input[type="radio"] {
+  position: absolute;
+
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+/* Custom radio */
+
+.radio-circle {
+  width: 30px;
+  height: 30px;
+
+  display: inline-block;
+
+  border-radius: 50%;
+
+  border: 5px solid #587582;
+
+  background: transparent;
+
+  transition: all 0.2s;
+}
+
+
+/* Selected radio */
+
+.radio-option input[type="radio"]:checked + .radio-circle {
+  border-color: #9ce8d0;
+
+  background: #9ce8d0;
+
+  box-shadow:
+    inset 0 0 0 5px #354d58;
+}
+
+
+/* Hover */
+
+.radio-option:hover .radio-circle {
+  border-color: #8fd9c5;
+}
+
+
+/* =========================================
+   CHECKBOX / SKILLS
+========================================= */
+
+.skills-section {
+  margin-top: 10px;
+}
+
+.skills-section legend small {
+  color: #cbd7db;
+
+  font-size: 12px;
+}
+
+.checkbox-options {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 18px 35px;
+}
+
+.checkbox-options label {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  font-weight: 400;
+}
+
+.checkbox-options input {
+  width: 17px;
+  height: 17px;
+
+  accent-color: #9ce8d0;
+}
+
+
+/* =========================================
+   AGREEMENT
+========================================= */
+
+.agreement {
+  margin: 10px 0 30px;
+}
+
+.agreement label {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  font-size: 14px;
+
+  font-weight: 400;
+
+  cursor: pointer;
+}
+
+.agreement input {
+  width: 17px;
+  height: 17px;
+
+  accent-color: #9ce8d0;
+}
+
+
+/* =========================================
+   BUTTON
+========================================= */
+
+button[type="submit"] {
+  width: 100%;
+
+  padding: 13px 20px;
+
+  border: none;
+  border-radius: 4px;
+
+  background: #9ce8d0;
+
+  color: #29414b;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s,
+    transform 0.1s;
+}
+
+button[type="submit"]:hover {
+  background: #b4f1df;
+}
+
+button[type="submit"]:active {
+  transform: translateY(1px);
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.error {
+  background: #713f46;
+
+  color: #ffd7da;
+
+  padding: 12px 15px;
+
+  border-radius: 4px;
+
+  font-size: 14px;
+
+  margin-bottom: 20px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 750px) {
+
+  .registration-page {
+    padding: 25px 15px 50px;
+  }
+
+  .registration-card {
+    padding: 0;
+  }
+
+  .grid-3,
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .radio-options {
+    gap: 20px 30px;
+  }
+
+  .form-header h2 {
+    font-size: 23px;
+  }
+}
+
+
+@media (max-width: 480px) {
+
+  .radio-options {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 18px;
+  }
+
+  .checkbox-options {
+    flex-direction: column;
+
+    gap: 14px;
+  }
+}
+
+
+/* =========================================
+   STUDENTS LIST PAGE
+========================================= */
+
+.container {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.navbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.navbar a {
+  color: #9ce8d0;
+  text-decoration: none;
+}
+
+.card {
+  background: #43606c;
+  border-radius: 6px;
+  padding: 24px;
+}
+
+.student-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.student-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 16px;
+  background: #587582;
+  border-radius: 6px;
+}
+
+/* Small round photo (was showing at full size) */
+.student-avatar {
+  flex: 0 0 auto;
+  width: 80px;
+  height: 80px;
+}
+
+.student-avatar img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #9ce8d0;
+  display: block;
+}
+
+.student-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.student-details h3 {
+  margin: 0 0 8px;
+  font-weight: 500;
+}
+
+.student-details p {
+  margin: 4px 0;
+  font-size: 13px;
+  color: #e6eef1;
+  overflow-wrap: anywhere;
+}
+
+.student-details a {
+  color: #9ce8d0;
+}
+
+.student-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.student-actions form {
+  margin: 0;
+}
+
+.btn {
+  display: block;
+  width: 80px;
+  padding: 8px 0;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background: #9ce8d0;
+  color: #29414b;
+}
+
+.btn-edit:hover {
+  background: #b4f1df;
+}
+
+.btn-delete {
+  background: #d9646f;
+  color: #ffffff;
+}
+
+.btn-delete:hover {
+  background: #e57a84;
+}
+
+/* Current photo shown on the edit form */
+.current-photo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.current-photo img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.form-group .inline-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .student-item {
+    flex-wrap: wrap;
+  }
+  .student-actions {
+    flex-direction: row;
+    width: 100%;
+  }
+}
+
+
+
+
+/* =========== Flash =============== */
+/* =========== Flash popup for form errors =============== */
+#form-error[hidden] {
+  display: none !important;
+}
+
+#form-error {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  max-width: 340px;
+  margin: 0;
+  font-size: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  animation: flash-fade 5s ease forwards;
+}
+
+@keyframes flash-fade {
+  0%, 85% { opacity: 1; transform: translateY(0); }
+  100%    { opacity: 0; transform: translateY(-10px); pointer-events: none; }
+}

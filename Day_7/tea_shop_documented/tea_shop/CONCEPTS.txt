@@ -1,0 +1,615 @@
+=====================================================================
+ CONCEPTS.txt  -  New words and ideas, explained very simply
+ Project: Tea Shop Order Simulator (Flask + JavaScript + MySQL)
+=====================================================================
+
+HOW TO USE THIS FILE
+--------------------
+Every idea has:   WHAT IT MEANS   +   A TINY EXAMPLE   +   WHERE IT IS
+USED in this project. Read Part 1 first. It is the heart of the project.
+
+CONTENTS
+    PART 1  - Waiting in JavaScript (the main lesson)
+    PART 2  - Talking to the server (browser <-> Flask)
+    PART 3  - Everyday JavaScript tools used in script.js
+    PART 4  - Flask and Python words used in app.py
+    PART 5  - Database words (MySQL)
+    PART 6  - Putting it all together (a timeline of 2 orders)
+    PART 7  - Common mistakes and quick answers
+
+
+=====================================================================
+ PART 1 : WAITING IN JAVASCRIPT (THE MAIN LESSON)
+=====================================================================
+
+1.1  SYNCHRONOUS (normal code)
+------------------------------
+Meaning : Lines run one after another. Each line finishes before
+          the next one starts.
+Like    : Standing in a queue. The next person waits until the
+          person in front is done.
+
+    console.log("A");
+    console.log("B");
+    console.log("C");
+    // Prints: A, B, C   (always in this order)
+
+
+1.2  ASYNCHRONOUS (code that finishes later)
+--------------------------------------------
+Meaning : A slow job is started, but JavaScript does NOT stand still
+          waiting for it. It goes on with the next lines. When the
+          slow job finishes, JavaScript comes back to handle the result.
+Like    : You put clothes in a washing machine. You do not stand and
+          stare at it for an hour. You do other work and come back
+          when it beeps.
+
+    console.log("A");
+    setTimeout(() => console.log("B"), 1000);
+    console.log("C");
+    // Prints: A, C, and then (after 1 second) B
+
+Used in : the whole tea waiting system (prepareTea, processOrder).
+
+
+1.3  BLOCKING vs NON-BLOCKING
+-----------------------------
+BLOCKING     : The page is frozen until the job ends. Buttons do not
+               click, nothing moves. (Bad.)
+NON-BLOCKING : The page stays alive while the job is running. (Good.)
+Our tea orders are NON-BLOCKING, so you can place a new order while
+another one is being prepared.
+
+
+1.4  setTimeout
+---------------
+Meaning : "Run this function LATER, after some milliseconds."
+Units   : milliseconds (ms).  1 second = 1000 ms.
+
+    setTimeout(() => {
+        console.log("Tea is ready!");
+    }, 3000);               // runs after 3 seconds
+
+    // Remember: setTimeout does NOT pause the code below it.
+
+Used in : prepareTea() and all three demo functions in script.js.
+
+
+1.5  CALLBACK
+-------------
+Meaning : A function that you GIVE to another function, so that it
+          can CALL it later.
+Like    : You leave your phone number at a shop:
+          "Call me when my order is ready."
+          The number is the callback. The shop calls it later.
+
+    function makeTea(done) {              // done is the callback
+        setTimeout(() => {
+            done("Tea is ready");         // call it later
+        }, 2000);
+    }
+
+    makeTea(message => {                  // we give a function
+        console.log(message);             // prints after 2 seconds
+    });
+    console.log("I am not waiting!");     // prints FIRST
+
+Other callbacks in this project:
+    - addEventListener("click", someFunction)  -> called when clicked
+    - orders.filter(order => ...)              -> called for each order
+    - orders.forEach(order => ...)             -> called for each order
+    - setTimeout(() => ..., ms)                -> called when time is over
+
+Used in : callbackDemo(), and everywhere above.
+
+
+1.6  CALLBACK HELL (why callbacks are not enough)
+-------------------------------------------------
+Meaning : If one waiting job depends on another, which depends on
+          another, callbacks sit inside callbacks. It becomes a
+          pyramid that is hard to read.
+
+    makeTea(() => {
+        addSugar(() => {
+            pourInCup(() => {
+                serve(() => {
+                    console.log("Finally done");
+                });
+            });
+        });
+    });
+
+Promises and async/await fix this (read on).
+
+
+1.7  WHY "return" DOES NOT WORK INSIDE setTimeout
+-------------------------------------------------
+    function tea() {
+        setTimeout(() => {
+            return "Ready";       // goes back to the timer, NOT to us
+        }, 2000);
+    }
+
+    const result = tea();
+    console.log(result);          // undefined
+
+Reason : tea() finishes at once, so it returns nothing. The word
+         "Ready" is returned 2 seconds later, to the timer, which
+         ignores it. By then, tea() is long gone.
+Fix    : Use a callback or (better) a Promise.
+
+Used in : brokenReturnDemo().
+
+
+1.8  PROMISE
+------------
+Meaning : An object that stands for a result that will arrive LATER.
+          You get it IMMEDIATELY. It is like a token number or an
+          order receipt. The food is not there yet, but you hold
+          the promise of food.
+
+A Promise is always in ONE of three states:
+
+    pending    = still waiting          (timer running)
+    fulfilled  = finished successfully  (resolve was called)
+    rejected   = finished with an error (reject was called)
+
+After it becomes fulfilled or rejected, it can never change again.
+
+    const ticket = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve("Tea is ready");    // success
+            // or: reject(new Error("No milk"));   // failure
+        }, 2000);
+    });
+
+    console.log(ticket);   // Promise { <pending> }   (shown at once)
+
+The words inside:
+    new Promise((resolve, reject) => { ... })
+        resolve(value) -> "It worked, here is the result."
+        reject(error)  -> "It failed, here is the reason."
+
+Used in : prepareTea() (real project), promiseDemo() (small demo).
+
+
+1.9  .then()  and  .catch()
+---------------------------
+Meaning : The older way to say what to do WHEN a Promise finishes.
+    .then(fn)   -> fn runs if the Promise is fulfilled.
+    .catch(fn)  -> fn runs if the Promise is rejected.
+
+    makeTeaPromise()
+        .then(result => console.log("Success:", result))
+        .catch(error => console.log("Failed:", error.message));
+
+Used in : promiseDemo() uses .then().
+          processOrder() uses await + try/catch instead (easier).
+
+
+1.10  async
+-----------
+Meaning : Writing `async` before a function does two things:
+          (1) It lets you use `await` inside that function.
+          (2) That function ALWAYS returns a Promise.
+
+    async function hello() {
+        return 5;
+    }
+    // hello() gives back a Promise that will be fulfilled with 5.
+
+Used in : api(), loadOrders(), processOrder(), handleSubmit(), start().
+
+
+1.11  await
+-----------
+Meaning : "Pause THIS function here until the Promise is finished,
+          then give me its result."
+It only works inside an async function.
+
+KEY POINT: await pauses ONLY that function. The rest of the web page,
+the buttons, and other orders keep running.
+
+    async function serveCustomer() {
+        console.log("1. Taking order");
+        const tea = await makeTeaPromise();    // pause here (2 sec)
+        console.log("2. Serving", tea);        // runs after the wait
+    }
+
+    serveCustomer();
+    console.log("3. Next customer");           // does NOT wait!
+
+    // Prints:
+    // 1. Taking order
+    // 3. Next customer
+    // 2. Serving Tea is ready      (after 2 seconds)
+
+Used in : processOrder() (waits for prepareTea), api() (waits for the
+          server), loadOrders(), handleSubmit(), start().
+
+
+1.12  AWAIT vs NO AWAIT  (the most important line in the project)
+-----------------------------------------------------------------
+In handleSubmit():
+
+    processOrder(order);           // NO await -> cashier is free at once
+    await processOrder(order);     // WITH await -> cashier is stuck
+
+WITHOUT await : the order starts in the background. The cashier can
+                type the next customer immediately.
+WITH await    : handleSubmit would wait for the entire 6 seconds.
+                A new order could still be typed, but the form handling
+                of this order would not finish (the form would not
+                clear and "Placed" would not even update) until the
+                tea is done.
+
+Small example:
+
+    async function main() {
+        slowJob();            // starts it, moves on at once
+        console.log("next");  // prints immediately
+        await slowJob();      // starts it AND waits for it
+        console.log("after"); // prints only after slowJob finishes
+    }
+
+This style ("start it and do not wait") is called FIRE AND FORGET.
+It is safe in this project because processOrder() catches its own
+errors with try/catch.
+
+
+1.13  try / catch  (and throw)
+------------------------------
+Meaning : Safe way to handle errors.
+    try   { run this code }
+    catch { if an error happens, jump here instead of crashing }
+    throw : create an error on purpose.
+
+With await, a REJECTED Promise acts like a thrown error, so catch
+receives it.
+
+    async function demo() {
+        try {
+            const tea = await prepareTea(order);   // rejected here
+            console.log("This line is skipped");
+        } catch (error) {
+            console.log("Caught:", error.message); // runs instead
+        }
+    }
+
+Used in : processOrder(), handleSubmit(), start(). api() uses `throw`.
+
+
+1.14  PARALLEL / AT THE SAME TIME  (concurrency)
+------------------------------------------------
+Meaning : Many waiting jobs can be in progress together, because
+          they are only waiting for timers/servers, not working hard.
+
+    Order A (6 sec) ----------------------------> ready
+    Order B (2 sec) ------------> ready
+                      ^ B finishes FIRST, although A started earlier
+
+Each order has its OWN copy of processOrder() and its OWN timer, so
+they do not wait for each other. That is why "a later order can finish
+first".
+
+
+1.15  THE EVENT LOOP  (just the simple idea)
+--------------------------------------------
+JavaScript has ONE worker. It follows these steps again and again:
+    1. Do the code that is ready right now.
+    2. Start slow jobs (timers, server requests) in the background.
+    3. When a slow job ends, put its callback in a waiting line.
+    4. When the worker is free, take the next callback from the line.
+Like a waiter: takes orders, hands them to the kitchen, and comes back
+to serve each dish when the kitchen calls.
+
+
+=====================================================================
+ PART 2 : TALKING TO THE SERVER
+=====================================================================
+
+2.1  FRONTEND and BACKEND
+-------------------------
+Frontend = what runs in the browser (HTML, CSS, script.js).
+Backend  = what runs on the server (app.py with Flask and MySQL).
+They talk using requests and responses.
+
+2.2  API
+--------
+Meaning : A list of URLs the backend offers. The frontend calls them
+          to ask for or change data. Like a restaurant menu: you may
+          only order what is on the menu.
+Used in : /api/orders ... in app.py, called from api() in script.js.
+
+2.3  HTTP METHODS
+-----------------
+    GET   = "give me data"              (read)
+    POST  = "create something new"      (create)
+    PUT   = "change something existing" (update)
+    DELETE= "remove something"          (not used in this project)
+
+In this project:
+    POST /api/orders                 -> save a new order
+    PUT  /api/orders/5/processing    -> change order 5 to processing
+    GET  /api/orders                 -> read all orders
+    GET  /api/orders/5               -> read order 5
+
+2.4  HTTP STATUS CODES
+----------------------
+    200 = OK
+    201 = Created (a new thing was saved)
+    400 = Bad request (you sent wrong data)
+    404 = Not found
+    500 = Server crashed
+
+2.5  fetch()
+------------
+Meaning : The browser's tool to send a request. It returns a Promise.
+
+    const response = await fetch("/api/orders");
+
+IMPORTANT : fetch() only "fails" (rejects) when the network/server is
+unreachable. A 400 or 404 is still a normal reply. That is why
+api() checks `response.ok` and throws an error by itself.
+
+2.6  JSON
+---------
+Meaning : A text format to send data between browser and server.
+
+    {"customer_name": "Anu", "tea_type": "Green", "prep_seconds": 4}
+
+    JSON.stringify(object) -> object to JSON text   (before sending)
+    response.json()        -> JSON text to object   (after receiving;
+                              it returns a Promise, so we await it)
+
+2.7  response.ok
+----------------
+true if the status code is 200-299, otherwise false.
+
+
+=====================================================================
+ PART 3 : EVERYDAY JAVASCRIPT TOOLS (script.js)
+=====================================================================
+
+3.1  const
+----------
+A name for a value that will not be assigned again.
+    const tea = "Ginger";
+
+3.2  DOM  and  document.getElementById
+--------------------------------------
+DOM = the web page as JavaScript objects that you can read and change.
+    const box = document.getElementById("activityLog");
+    box.innerHTML = "";          // empties that box on the page
+
+3.3  textContent  vs  innerHTML
+-------------------------------
+    textContent = puts plain text (safer for outside text)
+    innerHTML   = puts HTML tags (powerful, use with care)
+
+3.4  Event and addEventListener
+-------------------------------
+An event is something the user does (click, submit, type).
+    button.addEventListener("click", sayHello);
+Give the function name WITHOUT ( ). Writing sayHello() would run it
+immediately, but we want the browser to run it later, on click.
+
+3.5  event.preventDefault()
+---------------------------
+A form normally reloads the whole page when submitted. This call
+stops that, so our JavaScript stays in control.
+
+3.6  Arrow function
+-------------------
+A short way to write a function.
+    function double(x) { return x * 2; }     // normal
+    const double = x => x * 2;               // arrow, same thing
+
+3.7  Template literal (backticks and ${ })
+------------------------------------------
+Put values inside text easily.
+    const name = "Anu";
+    `Hello ${name}`      // gives: Hello Anu
+
+3.8  Array .filter()
+--------------------
+Keeps only the items for which the callback says true.
+    [1, 2, 3, 4].filter(n => n > 2)    // [3, 4]
+
+3.9  Array .forEach()
+---------------------
+Runs a callback once for every item.
+    ["a", "b"].forEach(letter => console.log(letter));   // a, then b
+
+3.10  Early return
+------------------
+`return;` in the middle of a function stops it right there.
+    if (name.length < 2) { return; }    // the rest is skipped
+
+3.11  Default parameter
+-----------------------
+    function addLog(message, type = "info") { ... }
+    addLog("Hi");              // type becomes "info"
+    addLog("Hi", "error");     // type is "error"
+
+
+=====================================================================
+ PART 4 : FLASK AND PYTHON WORDS (app.py)
+=====================================================================
+
+4.1  Flask
+----------
+A small Python tool for building websites and APIs.
+
+4.2  Route and decorator (@app.route)
+-------------------------------------
+A decorator is a line starting with @ above a function.
+    @app.route("/hello")
+    def hello():
+        return "Hi!"
+Meaning: when someone opens /hello, run hello().
+
+4.3  jsonify
+------------
+Turns a Python dictionary into a JSON reply for the browser.
+
+4.4  request.get_json()
+-----------------------
+Reads the JSON the browser sent. silent=True returns None for bad JSON
+instead of crashing.
+
+4.5  Validation
+---------------
+Checking that the data is correct BEFORE saving it. The server must do
+this even if the browser already checked, because anyone can call the
+API directly.
+
+4.6  Docstring
+--------------
+The text inside triple quotes right under a Python function. It
+explains what the function does. Python can show it with help(name).
+
+4.7  .env file and environment variables
+----------------------------------------
+A private file for settings like the database password, so they are
+not written inside the code. load_dotenv() reads it. os.getenv("X")
+gets one value.
+(Never share your real .env file or upload it publicly.)
+
+4.8  time.time()
+----------------
+The current time as a number of seconds. Our ready_at is:
+    ready_at = now + prep_seconds
+Later, "seconds left" = ready_at - now.
+
+4.9  Dictionary
+---------------
+Python's {"key": value} data, like a JavaScript object.
+
+
+=====================================================================
+ PART 5 : DATABASE WORDS (MySQL)
+=====================================================================
+
+5.1  Database / table / row / column
+------------------------------------
+Database = a digital store room. A table = one sheet in it ("orders").
+A row = one order. A column = one detail (name, tea_type, status).
+
+5.2  Connection and cursor
+--------------------------
+Connection = the open door to the database.
+Cursor     = the pen you use to run commands and read results.
+Always close both when finished.
+
+5.3  SELECT / INSERT / UPDATE
+-----------------------------
+    SELECT = read rows        INSERT = add a new row
+    UPDATE = change a row
+
+5.4  commit()
+-------------
+Saves your changes for real. Without it, INSERT and UPDATE are lost.
+
+5.5  %s placeholder
+-------------------
+A safe empty slot in an SQL command. Values are sent separately, which
+protects against "SQL injection" (hackers writing harmful SQL).
+
+5.6  Why save orders in the database?
+-------------------------------------
+Browser memory vanishes on refresh. The database remembers. After a
+refresh, start() reads the saved orders and continues the unfinished
+ones.
+
+5.7  The four statuses
+----------------------
+    placed -> processing -> ready
+                        \-> failed
+
+
+=====================================================================
+ PART 6 : PUTTING IT ALL TOGETHER - TIMELINE OF TWO ORDERS
+=====================================================================
+Scenario: Order A = 6 seconds. Immediately after, Order B = 2 seconds.
+
+Second  What happens
+------  --------------------------------------------------------------
+ 0.0    Cashier places Order A. handleSubmit runs.
+        await api(POST) -> Flask saves A as "placed".
+        processOrder(A) starts (NO await). Log: "A is placed".
+        await api(PUT)  -> Flask sets A to "processing".
+        Log: "A is processing".
+        await prepareTea(A) -> A's function PAUSES (timer: 6 s).
+
+ 0.5    Cashier is free. Places Order B. Same steps.
+        await prepareTea(B) -> B's function PAUSES (timer: 2 s).
+        (A's timer is still counting in the background!)
+
+ 2.5    B's timer ends -> B's Promise is fulfilled.
+        B's function wakes up -> asks Flask -> "ready".
+        Log: "B is ready".                 <-- B finished FIRST
+
+ 6.0    A's timer ends -> A's Promise is fulfilled.
+        A wakes up -> Log: "A is ready".
+
+Failure version (checkbox ticked):
+        At the end of the timer, prepareTea calls reject(Error).
+        The `await` throws, so JavaScript jumps to catch.
+        Log: "... order failed: Ingredients are unavailable ...".
+        Other orders are NOT affected.
+
+Refresh version:
+        Refresh at second 3. The browser forgets everything, but MySQL
+        remembers. start() reads the orders, finds A still "processing"
+        with about 3 seconds left, and calls processOrder(A) again.
+        It waits for the remaining 3 seconds, then A becomes ready.
+
+
+=====================================================================
+ PART 7 : COMMON MISTAKES AND QUICK ANSWERS
+=====================================================================
+
+Q1. Why can a 2-second order finish before an earlier 6-second order?
+A1. Each order has its own timer and its own processOrder() running.
+    They wait independently.
+
+Q2. Does await freeze the page?
+A2. No. It pauses only the async function it is written in.
+
+Q3. Why is there no await before processOrder(order) in handleSubmit?
+A3. So the cashier is free at once and can place more orders. The
+    order keeps going in the background.
+
+Q4. What does an async function return?
+A4. Always a Promise.
+
+Q5. What does `await` give me?
+A5. The value the Promise was fulfilled with. If the Promise is
+    rejected, it throws the error instead.
+
+Q6. Why check response.ok after fetch()?
+A6. fetch() does not reject for HTTP errors like 400 or 404. We must
+    check it ourselves.
+
+Q7. Mistake: forgetting await.
+        const orders = api("/api/orders");      // wrong
+        console.log(orders);                    // Promise { <pending> }
+    Correct:
+        const orders = await api("/api/orders");
+
+Q8. Mistake: using await outside an async function.
+    It causes an error. Put `async` before the function.
+
+Q9. Mistake: writing sayHello() instead of sayHello inside
+    addEventListener. The first runs it right now, the second hands it
+    over to be called later.
+
+Q10. Mistake: expecting setTimeout to pause the next line.
+     It does not. Code after setTimeout runs immediately.
+
+SUMMARY IN ONE BREATH
+---------------------
+Callback = "call me later".   Promise = "a ticket now, result later".
+await = "wait here, but only inside this function".
+Result : many orders can wait together without freezing the page.

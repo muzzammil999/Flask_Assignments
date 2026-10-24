@@ -1,0 +1,125 @@
+/* style.css - look of the Tea Shop page (colours and layout) */
+
+:root {
+  --bg: #f3f1ec;          /* page background (warm light grey) */
+  --dark: #163e47;        /* header dark teal */
+  --teal: #1f6a64;        /* main button colour */
+  --mint: #e8f1ec;        /* predict box background */
+  --chip: #dce8e3;        /* small button background */
+  --ink: #1d2f33;         /* main text colour */
+  --muted: #6b7b7e;       /* soft grey text */
+  --line: #e3e6e4;        /* thin borders */
+  --err: #b3261e;         /* error red */
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  font-size: 15px;
+}
+
+.wrap { max-width: 804px; margin: 0 auto; padding: 0 16px; }
+
+/* ---------- header ---------- */
+.top { background: var(--dark); color: #fff; padding: 26px 0 22px; }
+.eyebrow { margin: 0 0 14px; font-size: 10px; letter-spacing: .12em; font-weight: 700; color: #9fe3cf; }
+.top h1 { margin: 0; font-size: 28px; }
+.cup { font-size: 30px; margin-right: 6px; }
+.sub { margin: 6px 0 0; font-size: 13px; color: #d5e4e4; }
+
+main.wrap { padding-top: 16px; padding-bottom: 40px; }
+
+h2 { margin: 0 0 10px; font-size: 17px; }
+h3 { margin: 0 0 4px; font-size: 13px; }
+
+/* ---------- cards ---------- */
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+
+/* ---------- predict box ---------- */
+.predict { background: var(--mint); border: 1px solid #d5e5dc; border-radius: 12px; padding: 16px; }
+.predict p { margin: 0 0 12px; color: #53676a; font-size: 13px; }
+.predict .note { font-size: 11px; margin: 12px 0 0; }
+.demo-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.chip {
+  background: var(--chip); color: var(--ink);
+  border: 0; border-radius: 8px; padding: 9px 12px;
+  font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.chip:hover { background: #cfe0d9; }
+
+/* ---------- layout grids ---------- */
+.two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px; }
+.status-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px; }
+.four-col  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+/* ---------- form ---------- */
+label { display: block; margin: 12px 0 5px; font-size: 12px; font-weight: 700; }
+input[type=text], select {
+  width: 100%; padding: 10px; font: inherit; font-size: 13px;
+  border: 1px solid #cfd6d4; border-radius: 8px; background: #fff;
+}
+select { font-weight: 600; }
+input:focus, select:focus { outline: 2px solid var(--teal); outline-offset: 1px; }
+label.check { display: flex; align-items: center; gap: 8px; font-weight: 400; margin: 14px 0; }
+.check input { width: 15px; height: 15px; }
+
+.primary {
+  background: var(--teal); color: #fff; border: 0; border-radius: 8px;
+  padding: 10px 14px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+}
+.primary:hover { background: #185a55; }
+
+.form-error {
+  margin: 0 0 12px; padding: 8px 10px; font-size: 13px;
+  color: var(--err); background: #fdeceb; border: 1px solid #f3c4c1; border-radius: 8px;
+}
+.form-error[hidden] { display: none; }
+
+/* ---------- activity log ---------- */
+.muted { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+.log { list-style: none; margin: 12px 0 0; padding: 0; max-height: 300px; overflow-y: auto; }
+.log li {
+  font-size: 12px; padding: 6px 8px; margin-bottom: 4px;
+  border-left: 3px solid #b8c4c2; background: #f8faf9; border-radius: 4px;
+}
+.log .time { color: var(--muted); font-family: Consolas, monospace; margin-right: 6px; }
+.log .info    { border-left-color: #6aa3d9; }   /* order placed / info  */
+.log .working { border-left-color: #e0a526; }   /* processing           */
+.log .success { border-left-color: #2e9e5b; }   /* order successful     */
+.log .error   { border-left-color: var(--err); background: #fdf3f2; }  /* failures / errors */
+.log .demo    { border-left-color: #8a63c9; }   /* demonstrations       */
+
+/* ---------- status columns ---------- */
+.three-col h2, .status-grid h2 { display: flex; align-items: center; gap: 6px; }
+.three-col h2 small, .status-grid h2 small { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.ico.ok { background: #35b36b; color: #fff; border-radius: 4px; font-size: 12px; padding: 0 3px; }
+
+.order {
+  border: 1px solid var(--line); background: #f9fbfa;
+  border-radius: 6px; padding: 8px 10px; margin-bottom: 8px;
+}
+.order b { display: block; font-size: 12px; }
+.order span { font-size: 11px; color: var(--muted); }
+.order .why { display: block; margin-top: 4px; color: var(--err); }
+
+/* ---------- teaching box ---------- */
+.teach { margin-top: 14px; }
+.teach p { margin: 0; font-size: 11.5px; color: #53676a; line-height: 1.45; }
+code { background: #e5efe9; padding: 1px 4px; border-radius: 4px; font-size: 11px; }
+
+/* ---------- phones ---------- */
+@media (max-width: 700px) {
+  .two-col, .three-col, .four-col, .status-grid { grid-template-columns: 1fr; }
+}

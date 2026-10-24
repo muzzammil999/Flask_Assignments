@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% from "_macros.html" import header %}
+{% block content %}
+{{ header(e.code ~ ' - ' ~ ('Access denied' if e.code == 403 else 'Not found'), 'The server blocked or could not find this page.', 'shield-exclamation' if e.code == 403 else 'search') }}
+<p>{{ 'You are not allowed to view or change this item.' if e.code == 403 else 'This page or record does not exist.' }}</p>
+<a href="{{ url_for('main.dashboard') }}">Back to dashboard</a>
+{% endblock %}

@@ -1,0 +1,31 @@
+{# Page: Home (route: home).  Data: `trips` = up to 6 completed trips (logged-in only).
+   Card markup comes from _completed_card.html. #}
+{% extends "base.html" %}
+{% block title %}Home | Trip Planner{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">YOUR NEXT ADVENTURE STARTS HERE</p>
+    <h1>Plan your trip.<br><span>Keep your budget in view.</span></h1>
+    <p class="lead">Organize places by day, estimate costs, and keep your personal itinerary in one simple place.</p>
+    <div class="actions">
+      {% if session.get('user_id') %}<a class="button" href="{{ url_for('my_trips') }}">Go to My Trips</a>
+      {% else %}<a class="button" href="{{ url_for('register') }}">Get Started</a>{% endif %}
+    </div>
+  </div>
+  <div class="hero-art"><span>🧭</span><strong>Make memories,<br>not spreadsheets.</strong><small>Plan · Explore · Enjoy</small></div>
+</section>
+{# Completed-trips preview: only for signed-in users (data from home() in app.py). #}
+{% if session.get('user_id') %}
+<section class="section-heading"><div><p class="eyebrow">SAMPLE TRIPS</p><h2>Your completed trips</h2></div><a href="{{ url_for('completed_trips_page') }}">See all completed trips →</a></section>
+<div class="card-grid">
+{% for trip in trips %}
+  {% include "_completed_card.html" %}
+{% else %}
+  <div class="empty-state"><span>🏁</span><h2>No completed trips yet</h2><p>Trips move here automatically the day after their end date.</p></div>
+{% endfor %}
+</div>
+{% else %}
+<section class="empty-state"><span>🔒</span><h2>Log in to see your completed trips</h2><p>Your finished trips appear here as sample trips, with their photos.</p><a class="button" href="{{ url_for('login') }}">Login</a></section>
+{% endif %}
+{% endblock %}

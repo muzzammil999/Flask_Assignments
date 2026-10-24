@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% from "_macros.html" import header %}
+{% block content %}
+{{ header('My policies', 'Your plans, benefits, remaining cover and covered members.', 'shield-check') }}
+{% for p in policies %}
+<div class="card mb-3"><div class="card-body">
+  <h2 class="h6">Policy {{ p.id }} - {{ p.plan.name }} <span class="badge text-bg-{{ 'success' if p.status == 'active' else 'secondary' }}">{{ p.status }}</span></h2>
+  <p class="mb-1">{{ p.start_date }} to {{ p.end_date }}</p>
+  <p class="mb-1">Annual limit {{ p.plan.annual_limit|inr }} | Deductible {{ p.plan.deductible|inr }} | Co-pay {{ p.plan.copay_percent }}% | Covers: {{ p.plan.covered_treatment_types.replace('|', ', ') }}</p>
+  <p class="mb-2">Remaining fictional cover: <b>{{ cover(p)|inr }}</b></p>
+  <table class="table table-sm w-auto"><tr><th>Member</th><th>Relationship</th></tr>
+  {% for m in p.members %}<tr><td>{{ m.display_name }}</td><td>{{ m.relationship }}</td></tr>{% endfor %}</table>
+</div></div>
+{% else %}<p>No policies found.</p>{% endfor %}
+{% endblock %}

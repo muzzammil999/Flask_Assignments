@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>Movie Night Planner</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"surface-container-high":"#dee9fc","outline":"#6d7a77","on-secondary-container":"#00476e","on-tertiary-fixed-variant":"#005236","on-surface":"#121c2a","inverse-surface":"#27313f","background":"#f8f9ff","secondary-container":"#5bb8fe","on-error-container":"#93000a","primary-container":"#008378","surface-dim":"#d0dbed","secondary-fixed":"#cce5ff","surface-tint":"#006a61","tertiary-container":"#00855b","on-error":"#ffffff","on-primary-fixed":"#00201d","error-container":"#ffdad6","surface-container-low":"#eff4ff","surface":"#f8f9ff","surface-variant":"#d9e3f6","secondary":"#006398","tertiary":"#006947","on-tertiary-fixed":"#002113","on-tertiary":"#ffffff","on-background":"#121c2a","primary-fixed":"#89f5e7","error":"#ba1a1a","secondary-fixed-dim":"#93ccff","on-tertiary-container":"#f5fff6","tertiary-fixed":"#6ffbbe","tertiary-fixed-dim":"#4edea3","inverse-on-surface":"#eaf1ff","on-secondary-fixed-variant":"#004b73","inverse-primary":"#6bd8cb","outline-variant":"#bcc9c6","surface-container":"#e6eeff","surface-container-highest":"#d9e3f6","primary":"#00685f","primary-fixed-dim":"#6bd8cb","on-primary":"#ffffff","surface-container-lowest":"#ffffff","surface-bright":"#f8f9ff","on-primary-fixed-variant":"#005049","on-primary-container":"#f4fffc","on-surface-variant":"#3d4947","on-secondary-fixed":"#001d31","on-secondary":"#ffffff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter-mobile":"1rem","space-md":"1rem","gutter":"1.5rem","margin-mobile":"1rem","margin":"2rem","space-sm":"0.5rem","space-lg":"1.5rem","space-xs":"0.25rem","space-xl":"2rem"},"fontFamily":{"label-md":["Inter"],"body-md":["Inter"],"body-sm":["Inter"],"label-lg":["Inter"],"headline-lg-mobile":["Inter"],"headline-md":["Inter"],"label-sm":["Inter"],"display-lg-mobile":["Inter"],"display-lg":["Inter"],"headline-lg":["Inter"],"headline-sm":["Inter"],"body-lg":["Inter"]},"fontSize":{"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0","fontWeight":"400"}],"body-sm":["12px",{"lineHeight":"16px","letterSpacing":"0.01em","fontWeight":"400"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.03em","fontWeight":"600"}],"display-lg-mobile":["30px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}],"display-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-sm":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"0","fontWeight":"400"}]}}}};</script></head><body class="bg-background text-on-surface font-body-md text-body-md"><header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 max-w-7xl mx-auto px-margin-mobile lg:px-margin flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm group text-decoration-none" data-path="home" href="#"><div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[20px]">local_movies</span></div><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Movie Night Planner</span></a><nav class="hidden md:flex items-center gap-space-xs" data-active-classes="bg-surface-container-high text-on-surface font-label-lg text-label-lg rounded-lg"><a class="px-space-md py-space-sm rounded-lg text-on-surface-variant font-label-lg text-label-lg transition-colors hover:text-on-surface hover:bg-surface-container" data-path="home" href="#">Home</a><a class="px-space-md py-space-sm rounded-lg text-on-surface-variant font-label-lg text-label-lg transition-colors hover:text-on-surface hover:bg-surface-container" data-path="winning-movie" href="#">Winning Movie</a><a aria-current="page" class="px-space-md py-space-sm transition-colors bg-surface-container-high text-on-surface font-label-lg text-label-lg rounded-lg" data-path="create-movie" href="#">Create Movie</a></nav></div><div class="flex items-center gap-space-md"><div class="hidden sm:flex items-center gap-space-sm py-space-xs px-space-md bg-surface-container-low rounded-full"><span class="font-body-sm text-body-sm text-on-surface-variant">Signed in as <span class="font-label-md text-label-md text-on-surface">muzzammil</span></span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-background min-h-[calc(100vh-4rem)] max-w-7xl mx-auto px-margin-mobile lg:px-margin"><div class="flex flex-col w-full pb-space-xl">
+<!-- Dynamic subtle aura backdrop -->
+<div class="relative w-full max-w-4xl mx-auto px-margin-mobile md:px-0 pt-space-lg">
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 w-96 h-56 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-20 right-4 w-72 h-44 bg-secondary-container/20 rounded-full blur-2xl pointer-events-none"></div>
+<!-- Header Section -->
+<div class="relative text-center mb-space-lg">
+<div class="inline-flex items-center gap-space-xs px-space-md py-1 bg-surface-container-high text-on-secondary-container rounded-full mb-space-sm shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">how_to_vote</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Weekly Ballot Open</span>
+</div>
+<h1 class="font-display-lg text-headline-lg md:text-display-lg text-on-surface tracking-tight">Propose a Movie</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg mx-auto mt-space-xs">
+        Add a movie proposal for upcoming Friday movie night voting.
+      </p>
+</div>
+<!-- Main Form Grid Layout with Real-time Preview -->
+<div class="relative grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Primary Form Card -->
+<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl p-space-md sm:p-space-xl shadow-md">
+<form class="flex flex-col gap-space-md" id="movieProposalForm" onsubmit="event.preventDefault(); handleSubmit();">
+<!-- Movie Title -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface" for="movieTitle">
+                Movie Title <span class="text-error">*</span>
+</label>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Required</span>
+</div>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-[20px] pointer-events-none">movie</span>
+<input class="w-full pl-10 pr-3 py-2 bg-surface rounded-lg font-body-md text-body-md text-on-surface placeholder:text-outline-variant transition-all duration-200 outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#00685f,0_0_0_5px_rgba(0,104,95,0.15)]" id="movieTitle" name="movieTitle" oninput="updatePreview()" placeholder="e.g., Inception" required="" type="text"/>
+</div>
+</div>
+<!-- Two-column: Genre & Movie Length -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<!-- Genre -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface" for="genre">Genre</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-[20px] pointer-events-none">theater_comedy</span>
+<select class="w-full pl-10 pr-10 py-2 bg-surface rounded-lg font-body-md text-body-md text-on-surface appearance-none outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#00685f,0_0_0_5px_rgba(0,104,95,0.15)] transition-all cursor-pointer" id="genre" name="genre" onchange="updatePreview()">
+<option selected="" value="Sci-Fi">Sci-Fi</option>
+<option value="Action">Action</option>
+<option value="Comedy">Comedy</option>
+<option value="Animation">Animation</option>
+<option value="Drama">Drama</option>
+<option value="Thriller">Thriller</option>
+<option value="Horror">Horror</option>
+<option value="Other">Other</option>
+</select>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-[20px] pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Length in Minutes -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface" for="movieLength">Movie Length (minutes)</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-[20px] pointer-events-none">schedule</span>
+<input class="w-full pl-10 pr-3 py-2 bg-surface rounded-lg font-body-md text-body-md text-on-surface placeholder:text-outline-variant outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#00685f,0_0_0_5px_rgba(0,104,95,0.15)] transition-all" id="movieLength" max="600" min="1" name="movieLength" oninput="updatePreview()" placeholder="148" type="number" value="148"/>
+</div>
+</div>
+</div>
+<!-- Certification Dropdown -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface" for="certification">Certification</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-[20px] pointer-events-none">verified_user</span>
+<select class="w-full pl-10 pr-10 py-2 bg-surface rounded-lg font-body-md text-body-md text-on-surface appearance-none outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#00685f,0_0_0_5px_rgba(0,104,95,0.15)] transition-all cursor-pointer" id="certification" name="certification" onchange="updatePreview()">
+<option selected="" value="U">U — Universal (Suitable for all ages)</option>
+<option value="U/A">U/A — Parental Guidance (Contains mild themes)</option>
+<option value="A">A — Adults Only (Restricted to 18+)</option>
+</select>
+<span class="absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-[20px] pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Poster Upload -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-lg text-label-lg text-on-surface">Movie Poster Image</label>
+<div class="relative bg-surface rounded-lg p-space-md text-center transition-all cursor-pointer hover:bg-surface-container-low group flex flex-col items-center justify-center gap-space-xs" id="dropArea" onclick="document.getElementById('posterInput').click()">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[24px]">add_photo_alternate</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-label-md text-label-md text-primary">Click to select poster image</span>
+<span class="font-body-sm text-body-sm text-outline mt-0.5" id="uploadFilename">Allowed: PNG, JPG, JPEG. Max size 2MB</span>
+</div>
+<input accept=".png, .jpg, .jpeg" class="hidden" id="posterInput" name="posterInput" onchange="handleFileSelected(event)" type="file"/>
+</div>
+</div>
+<!-- Synopsis / Brief Reason -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-label-lg text-label-lg text-on-surface" for="synopsis">Synopsis / Brief Reason</label>
+<span class="font-body-sm text-body-sm text-outline" id="charCounter">0/240</span>
+</div>
+<textarea class="w-full p-space-sm bg-surface rounded-lg font-body-md text-body-md text-on-surface placeholder:text-outline-variant outline-none focus:bg-surface-container-lowest focus:shadow-[0_0_0_2px_#00685f,0_0_0_5px_rgba(0,104,95,0.15)] transition-all resize-none" id="synopsis" maxlength="240" name="synopsis" oninput="updatePreview(); updateCount(this)" placeholder="Why should we watch this? Pitch the vibe, plot hook, or popcorn appeal..." rows="3"></textarea>
+</div>
+<!-- Actions -->
+<div class="pt-space-sm flex flex-col-reverse sm:flex-row items-center justify-end gap-space-md">
+<a class="w-full sm:w-auto px-space-lg py-2.5 rounded-lg font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors text-center" data-path="home" href="#">
+              Cancel
+            </a>
+<button class="w-full sm:w-auto px-space-xl py-2.5 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg shadow-sm hover:opacity-95 active:scale-[0.98] transition-all flex items-center justify-center gap-space-xs" id="submitBtn" type="submit">
+<span class="material-symbols-outlined text-[20px]">send</span>
+<span>Submit Proposal</span>
+</button>
+</div>
+</form>
+</div>
+<!-- Live Ballot Card Preview -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<!-- Live Card Container -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-md flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-outline uppercase tracking-wider flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+              Live Card Preview
+            </span>
+<span class="font-body-sm text-body-sm text-outline-variant">Friday Ballot</span>
+</div>
+<!-- Preview Card -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm flex flex-col">
+<!-- Poster Aspect 2:3 container -->
+<div class="relative w-full aspect-[2/3] bg-surface-container-high overflow-hidden flex items-center justify-center">
+<img class="w-full h-full object-cover transition-opacity duration-300" data-alt="Cinematic concept poster of an introspective sci-fi film showing atmospheric glowing neon cityscapes and abstract dimensional architecture, dramatic studio lighting with deep cool teal and soft shadows." id="previewImg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcHo-JaMAO2t794O0HCyb_7P6B_QPegv41CcC21wakAOKNSlRbaJOGtjTiqpvh5ckEL3Xly6NL5wYy8m5nMNbcVz7l81Oz1pl7gWtsH_gh6JlrjfEmTiXr80w3rhRnzzcjkg30WEQiPSseB9olbvRemryXs5o9XP1DeFRqqZqbB9HCempGkup3AAw5GSbey-ToEru5l2p4uDEo6-0ZDAENt9SQOJnb5UuXGqgdl8M5kHDoJEQrWq8fkw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/90 via-transparent to-transparent"></div>
+<!-- Badges over poster bottom -->
+<div class="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+<span class="px-2 py-0.5 bg-surface-container-lowest/90 backdrop-blur-md rounded text-on-surface font-label-sm text-label-sm tracking-wider uppercase" id="previewCert">
+                  U
+                </span>
+<div class="flex items-center gap-1 bg-surface-container-lowest/90 backdrop-blur-md px-2 py-0.5 rounded text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px] text-tertiary">schedule</span>
+<span id="previewDuration">148 min</span>
+</div>
+</div>
+</div>
+<!-- Preview Card Content -->
+<div class="p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-container font-label-sm text-label-sm" id="previewGenre">
+                  Sci-Fi
+                </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">person</span>
+                  muzzammil
+                </span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1" id="previewTitle">Inception</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2" id="previewSynopsis">
+                Why should we watch this? Pitch the vibe, plot hook, or popcorn appeal...
+              </p>
+</div>
+</div>
+<!-- Micro Quick Tips -->
+<div class="bg-surface rounded-lg p-space-sm flex gap-space-sm items-start">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">tips_and_updates</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Club Voting Rules</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Polls open every Thursday at 6:00 PM. Top voted film gets screened at the Student Lounge on Friday night!</p>
+</div>
+</div>
+</div>
+<!-- Success Toast Mockup (Hidden by default) -->
+<div class="hidden bg-tertiary-container text-on-tertiary-container p-space-md rounded-xl shadow-md flex items-start gap-space-sm transition-all duration-300" id="successNotice">
+<span class="material-symbols-outlined text-[24px] text-tertiary-fixed shrink-0">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg">Proposal Submitted!</span>
+<p class="font-body-sm text-body-sm text-on-tertiary-container/90 mt-0.5">Your movie has been added to the candidate pool for Friday night voting.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+    function updatePreview() {
+      const titleInput = document.getElementById('movieTitle');
+      const genreInput = document.getElementById('genre');
+      const lengthInput = document.getElementById('movieLength');
+      const certInput = document.getElementById('certification');
+      const synopsisInput = document.getElementById('synopsis');
+
+      const previewTitle = document.getElementById('previewTitle');
+      const previewGenre = document.getElementById('previewGenre');
+      const previewDuration = document.getElementById('previewDuration');
+      const previewCert = document.getElementById('previewCert');
+      const previewSynopsis = document.getElementById('previewSynopsis');
+
+      if (titleInput && previewTitle) {
+        previewTitle.textContent = titleInput.value.trim() || 'Inception';
+      }
+      if (genreInput && previewGenre) {
+        previewGenre.textContent = genreInput.value;
+      }
+      if (lengthInput && previewDuration) {
+        const val = lengthInput.value.trim();
+        previewDuration.textContent = val ? `${val} min` : '— min';
+      }
+      if (certInput && previewCert) {
+        previewCert.textContent = certInput.value;
+      }
+      if (synopsisInput && previewSynopsis) {
+        const text = synopsisInput.value.trim();
+        previewSynopsis.textContent = text || 'Why should we watch this? Pitch the vibe, plot hook, or popcorn appeal...';
+      }
+    }
+
+    function updateCount(el) {
+      const counter = document.getElementById('charCounter');
+      if (counter) {
+        counter.textContent = `${el.value.length}/240`;
+      }
+    }
+
+    function handleFileSelected(event) {
+      const file = event.target.files[0];
+      const filenameLabel = document.getElementById('uploadFilename');
+      const previewImg = document.getElementById('previewImg');
+      
+      if (file) {
+        if (filenameLabel) {
+          filenameLabel.textContent = `${file.name} (${Math.round(file.size / 1024)} KB)`;
+          filenameLabel.classList.remove('text-outline');
+          filenameLabel.classList.add('text-primary');
+        }
+        if (previewImg && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            previewImg.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    }
+
+    function handleSubmit() {
+      const notice = document.getElementById('successNotice');
+      const form = document.getElementById('movieProposalForm');
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-75');
+      }
+
+      if (notice) {
+        notice.classList.remove('hidden');
+        notice.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      setTimeout(() => {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('opacity-75');
+        }
+      }, 3000);
+    }
+  </script>
+</div></main><footer class="w-full bg-surface-container-lowest mt-space-xl py-space-lg shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="max-w-7xl mx-auto px-margin-mobile lg:px-margin flex flex-col sm:flex-row items-center justify-between gap-space-md text-center sm:text-left"><p class="font-body-sm text-body-sm text-on-surface-variant">© 2025 Movie Night Planner</p><div class="flex items-center gap-space-lg"><span class="font-body-sm text-body-sm text-on-surface-variant">Campus Movie Club &amp; Social Hub</span></div></div></footer></body></html>

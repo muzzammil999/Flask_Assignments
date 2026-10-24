@@ -1,0 +1,31 @@
+{% extends "events/layout.html" %}
+{% from "events/_card_cover.html" import cover %}
+{% block title %}Register – {{ ev.title }}{% endblock %}
+{% block content %}
+<a class="back" href="{{ url_for('events.details', event_id=ev.id) }}">← Event details</a><br>
+<span class="eyebrow">Seat reservation</span>
+<h1>Register for an event</h1>
+<p class="lead">Enter your details to reserve one or two seats.</p>
+{% if errors %}<div class="alert error"><ul class="errors">{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+<div class="registration-layout">
+  <form class="panel form-panel" method="post">
+    <div class="form-grid">
+      <div class="field span"><label>Full name *</label><input name="full_name" value="{{ v.full_name or '' }}" placeholder="Your full name"></div>
+      <div class="field"><label>Email address *</label><input type="email" name="email" value="{{ v.email or '' }}" placeholder="you@example.com"></div>
+      <div class="field"><label>Mobile number *</label><input name="mobile" value="{{ v.mobile or '' }}" maxlength="10" inputmode="numeric" placeholder="10-digit phone number"></div>
+      <div class="field span"><label>Seats requested *</label>
+        <select name="seats"><option value="1" {{ 'selected' if v.seats == '1' }}>1 seat</option><option value="2" {{ 'selected' if v.seats == '2' }}>2 seats</option></select>
+        <div class="hint">A person can register once per event using the same email.</div></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn" type="submit" {{ 'disabled' if ev.is_full or ev.is_closed }}>Confirm registration</button>
+      <a class="btn secondary" href="{{ url_for('events.details', event_id=ev.id) }}">Cancel</a>
+    </div>
+  </form>
+  <aside class="panel aside">{{ cover(ev) }}
+    <span class="pill">{{ ev.category|upper }}</span>
+    <h3 style="margin-top:10px">{{ ev.title }}</h3>
+    <p>{{ ev.event_date|dmy }} · {{ ev.venue }}</p>
+    <div class="capacity">{{ ev.available }} seats available</div></aside>
+</div>
+{% endblock %}

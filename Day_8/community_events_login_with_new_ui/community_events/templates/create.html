@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Post a new event — Community Events{% endblock %}
+{% block content %}
+<section class="view active" id="create">
+    <a class="back" href="{{ url_for('home') }}">← Back to events</a>
+    <span class="eyebrow">Organizer area</span>
+    <h1>Post a new event</h1>
+    <p class="lead">Fill in the event details so people can discover and register.</p>
+
+    {# novalidate: the browser checks nothing, app.py validates everything #}
+    <form class="panel form-panel" method="post" enctype="multipart/form-data" novalidate
+        action="{{ url_for('create_event') }}">
+        {# CSRF token: required for every POST form #}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-grid">
+            <div class="field"><label for="title">Event title *</label>
+                <input id="title" name="title" value="{{ form.title }}" placeholder="e.g. Digital Skills Saturday">
+            </div>
+            <div class="field"><label for="category">Category *</label>
+                <select id="category" name="category">
+                    <option value="">Choose a category</option>
+                    {% for item in categories %}<option value="{{ item }}" {% if form.category==item %}selected{% endif
+                        %}>{{ item }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="field"><label for="event_date">Event date *</label><input id="event_date" name="event_date"
+                    type="date" value="{{ form.event_date }}"></div>
+            <div class="field"><label for="start_time">Start time *</label><input id="start_time" name="start_time"
+                    type="time" value="{{ form.start_time }}"></div>
+            <div class="field"><label for="venue">Venue *</label><input id="venue" name="venue" value="{{ form.venue }}"
+                    placeholder="Event location"></div>
+            <div class="field"><label for="seat_capacity">Seat capacity *</label>
+                <input id="seat_capacity" name="seat_capacity" value="{{ form.seat_capacity }}" placeholder="30">
+            </div>
+            <div class="field"><label for="organizer_email">Organizer email *</label>
+                <input id="organizer_email" name="organizer_email" value="{{ form.organizer_email }}"
+                    placeholder="organizer@example.com">
+            </div>
+            <div class="field"><label for="registration_deadline">Registration deadline *</label>
+                <input id="registration_deadline" name="registration_deadline" type="date"
+                    value="{{ form.registration_deadline }}">
+            </div>
+            <div class="field span"><label for="description">Description *</label>
+                <textarea id="description" name="description"
+                    placeholder="What will participants learn or do?">{{ form.description }}</textarea>
+            </div>
+            <div class="field span"><label for="image">Event image (optional)</label>
+                <input id="image" name="image" type="file" accept="image/png,image/jpeg">
+                <div class="hint">PNG or JPEG · Maximum 2 MB</div>
+            </div>
+        </div>
+        <div class="form-actions"><button class="btn" type="submit">Publish event</button><a class="btn secondary"
+                href="{{ url_for('home') }}">Cancel</a></div>
+    </form>
+</section>
+{% endblock %}

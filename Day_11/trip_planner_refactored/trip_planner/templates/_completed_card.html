@@ -1,0 +1,26 @@
+{#
+  Partial: one "completed trip" card.
+  Included by: index.html (home) and explore.html (Completed Trips page).
+  Expects a Trip object (models.py), e.g. from Trip.completed_for(). It uses:
+    id, destination, start_date, end_date, budget, image_filename and the computed
+    properties activity_count and total_cost.
+  The badge compares total_cost with budget (within / over budget).
+  Links to: trip_detail (full itinerary) and edit_trip.  Photo comes from the media route.
+#}
+<article class="trip-card completed-card">
+  {% if trip.image_filename %}
+    <img class="card-image" src="{{ url_for('media', filename=trip.image_filename) }}" alt="Photo of {{ trip.destination }}">
+  {% else %}
+    <div class="card-image placeholder" aria-hidden="true">🧳</div>
+  {% endif %}
+  {% set left = trip.budget - trip.total_cost %}
+  {% if left >= 0 %}<span class="category">✓ Completed within budget</span>{% else %}<span class="category over">Completed · over budget</span>{% endif %}
+  <h2>{{ trip.destination }}</h2>
+  <p class="muted">{{ trip.start_date.strftime('%d %b %Y') }} – {{ trip.end_date.strftime('%d %b %Y') }} · {{ trip.activity_count }} activit{{ 'y' if trip.activity_count == 1 else 'ies' }}</p>
+  <div class="trip-stats">
+    <div><small>Budget</small><strong>{{ '%.2f'|format(trip.budget) }}</strong></div>
+    <div><small>Spent</small><strong>{{ '%.2f'|format(trip.total_cost) }}</strong></div>
+    <div><small>{% if left >= 0 %}Saved{% else %}Over by{% endif %}</small><strong class="{% if left >= 0 %}under-budget{% else %}over-budget{% endif %}">{{ '%.2f'|format(left|abs) }}</strong></div>
+  </div>
+  <div class="actions"><a class="button small" href="{{ url_for('trip_detail', trip_id=trip.id) }}">View Trip</a><a class="button secondary small" href="{{ url_for('edit_trip', trip_id=trip.id) }}">Edit</a></div>
+</article>

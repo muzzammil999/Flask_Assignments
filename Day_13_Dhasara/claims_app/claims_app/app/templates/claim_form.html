@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% from "_macros.html" import csrf, inp %}
+{% block content %}
+<h1 class="h4">{{ 'Edit draft #' ~ claim.id if claim else 'New ' ~ ('reimbursement' if g.user.role == 'policyholder' else 'cashless') ~ ' claim' }}</h1>
+<form method="post" novalidate>{{ csrf() }}
+  {% if g.user.role == 'policyholder' %}
+    <div class="mb-3"><label class="form-label" for="policy_id">Policy</label>
+      <select class="form-select {{ 'is-invalid' if errors.policy_id }}" id="policy_id" name="policy_id" required>
+        <option value="">Choose...</option>
+        {% for p in policies %}<option value="{{ p.id }}" {{ 'selected' if v.get('policy_id')|string == p.id|string }}>Policy {{ p.id }} - {{ p.plan.name }}</option>{% endfor %}
+      </select><div class="invalid-feedback">{{ errors.policy_id }}</div></div>
+    <div class="mb-3"><label class="form-label" for="member_id">Covered member</label>
+      <select class="form-select {{ 'is-invalid' if errors.member_id }}" id="member_id" name="member_id" required>
+        <option value="">Choose...</option>
+        {% for p in policies %}{% for m in p.members %}<option value="{{ m.id }}" data-policy="{{ p.id }}" {{ 'selected' if v.get('member_id')|string == m.id|string }}>{{ m.display_name }} ({{ m.relationship }})</option>{% endfor %}{% endfor %}
+      </select><div class="invalid-feedback">{{ errors.member_id }}</div></div>
+    <div class="mb-3"><label class="form-label" for="hospital_id">Hospital</label>
+      <select class="form-select {{ 'is-invalid' if errors.hospital_id }}" id="hospital_id" name="hospital_id" required>
+        <option value="">Choose...</option>
+        {% for h in hospitals %}<option value="{{ h.id }}" {{ 'selected' if v.get('hospital_id')|string == h.id|string }}>{{ h.name }}, {{ h.city }}</option>{% endfor %}
+      </select><div class="invalid-feedback">{{ errors.hospital_id }}</div></div>
+  {% else %}
+    {{ inp('policy_id', 'Policy ID', v, errors, 'number', 'required') }}
+    {{ inp('member_id', 'Member ID', v, errors, 'number', 'required') }}
+    {{ inp('hospital_id', 'Hospital ID (must be your own network hospital)', v, errors, 'number', 'required') }}
+  {% endif %}
+  <div class="mb-3"><label class="form-label" for="treatment_type">Treatment type</label>
+    <select class="form-select {{ 'is-invalid' if errors.treatment_type }}" id="treatment_type" name="treatment_type" required>
+      {% for t in ['inpatient','daycare'] %}<option value="{{ t }}" {{ 'selected' if v.get('treatment_type') == t }}>{{ t|label }}</option>{% endfor %}
+    </select><div class="invalid-feedback">{{ errors.treatment_type }}</div></div>
+  <div class="row"><div class="col-md-4">{{ inp('admission_date', 'Admission date', v, errors, 'date', 'required') }}</div>
+    <div class="col-md-4">{{ inp('discharge_date', 'Discharge date', v, errors, 'date', 'required') }}</div>
+    <div class="col-md-4">{{ inp('requested_amount', 'Requested amount (INR)', v, errors, 'number', 'required min="0.01" step="0.01"') }}</div></div>
+  {{ inp('description', 'Short description', v, errors, 'text', 'required maxlength="255"') }}
+  <button class="btn btn-outline-primary" name="action" value="draft">Save draft</button>
+  <button class="btn btn-primary" name="action" value="submit">Submit claim</button>
+</form>
+{% endblock %}

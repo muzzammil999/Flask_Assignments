@@ -1,0 +1,16 @@
+﻿user_id,username,display_name,role,hospital_id,password
+1,aasha,Aasha Rao,policyholder,,Aasha@2026
+2,bilal,Bilal Khan,policyholder,,Bilal@2026
+3,chitra,Chitra Devi,policyholder,,Chitra@2026
+4,dev,Dev Kumar,policyholder,,Dev@2026
+5,esha,Esha Reddy,policyholder,,Esha@2026
+6,farhan,Farhan Ali,policyholder,,Farhan@2026
+7,gita,Gita Naik,policyholder,,Gita@2026
+8,harish,Harish Babu,policyholder,,Harish@2026
+9,city_hospital,CityCare Desk,hospital,1,City_hospital@2026
+10,lotus_hospital,Lotus Desk,hospital,2,Lotus_hospital@2026
+11,green_hospital,Green Valley Desk,hospital,3,Green_hospital@2026
+15,sunrise_hospital,Sunrise Desk,hospital,4,Sunrise_hospital@2026
+12,officer_meera,Meera Shah,claims_officer,,Officer_meera@2026
+13,officer_rahul,Rahul Sen,claims_officer,,Officer_rahul@2026
+14,Chinna_Admin,Chinna_Admin,admin,,Chinna@9999

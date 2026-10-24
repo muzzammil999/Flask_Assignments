@@ -1,0 +1,29 @@
+{% extends 'base.html' %}{% block content %}
+<h1>My books</h1>
+<p>Flask renders this HTML on the server.</p>
+<div class="row g-3">
+  {% for book in books %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="h5">{{ book.title }}</h2>
+        <p>By {{ book.author }}</p>
+        <span class="badge text-bg-secondary">{{ book.status }}</span>
+        <div class="d-flex gap-2 mt-3">
+          <a
+            class="btn btn-primary btn-sm"
+            href="{{ url_for('edit',book_id=book.id) }}"
+            >Edit</a
+          >
+          <form method="post" action="{{ url_for('delete',book_id=book.id) }}">
+            <button class="btn btn-outline-danger btn-sm">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <p>No books yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

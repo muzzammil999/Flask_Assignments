@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Community Events{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='events.css') }}">
+</head><body>
+<header class="top"><div class="top-inner">
+  <a class="brand" href="{{ url_for('events.list_events') }}">community<span>·</span><em>events</em></a>
+  <nav class="nav" aria-label="Main navigation">
+    <a href="{{ url_for('events.list_events') }}" class="{{ 'active' if request.endpoint == 'events.list_events' }}">Explore</a>
+    <a href="{{ url_for('student_list') }}">Students</a>
+    <a class="nav-cta" href="{{ url_for('events.create') }}">+ Post event</a>
+  </nav>
+</div></header>
+<main class="shell">{% block content %}{% endblock %}</main>
+<footer class="footer">Community Event Manager</footer>
+</body></html>

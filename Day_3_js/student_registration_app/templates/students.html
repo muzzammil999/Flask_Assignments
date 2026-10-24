@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Registered Students{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2>Registered Students</h2>
+  <p>Total Registered: {{ students | length }}
+    &nbsp;|&nbsp; <a href="{{ url_for('export_excel') }}">&#11015; Download Excel</a></p>
+
+  {% if students %}
+    <div class="student-list">
+      {% for student in students %}
+        <div class="student-item">
+          {% if student.has_photo %}
+            <div class="student-avatar">
+              <img src="{{ url_for('student_photo', student_id=student.id) }}" alt="Photo">
+            </div>
+          {% endif %}
+          <div class="student-details">
+            <h3>{{ student.full_name }}</h3>
+            <p><strong>Email:</strong> {{ student.email }} | <strong>Phone:</strong> {{ student.mobile }}</p>
+            <p><strong>DOB:</strong> {{ student.dob }} | <strong>Gender:</strong> {{ student.gender or 'N/A' }}</p>
+            <p><strong>Course:</strong> {{ student.course or 'N/A' }} | <strong>Qualification:</strong> {{ student.qualification }}</p>
+            <p><strong>Training Mode:</strong> {{ student.training_mode or 'N/A' }} | <strong>Experience:</strong> {{ student.experience }} years</p>
+            <p><strong>Skills:</strong> {{ student.skills }}</p>
+            {% if student.address %}<p><strong>Address:</strong> {{ student.address }}</p>{% endif %}
+            {% if student.website %}
+              <p><strong>Website:</strong> <a href="{{ student.website }}" target="_blank">{{ student.website }}</a></p>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No students registered yet. <a href="{{ url_for('register_page') }}">Register now</a></p>
+  {% endif %}
+</div>
+{% endblock %}

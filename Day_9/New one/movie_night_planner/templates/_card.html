@@ -1,0 +1,33 @@
+{# _card.html - one movie card (included by home.html, variable "m"). #}
+<article class="movie">
+  <a href="{{ url_for('details', movie_id=m.id) }}" class="thumb">
+    {% include "_poster.html" %}
+    <span class="chip">{{ m.rating }}</span>
+    <span class="chips-right">{% for g in m.genres %}<span class="chip genre g-{{ g|lower }}">{{ g }}</span>{% endfor %}</span>
+    <span class="mins">{{ m.runtime }} mins</span>
+  </a>
+  <div class="body">
+    <div class="titleline">
+      <h3>{{ m.title }}</h3>
+      {% if is_owner(m) %}<span class="mine">Mine</span>{% endif %}
+      <span class="likes" title="{{ m.like_count }} like{{ '' if m.like_count == 1 else 's' }}">{{ m.like_count }}</span>
+    </div>
+    <p class="by"><span class="dot">{{ m.username[0]|upper }}</span> Proposed by <strong>{{ m.username }}</strong></p>
+  </div>
+  <div class="actions foot">
+    <a class="btn small soft" href="{{ url_for('details', movie_id=m.id) }}">Details</a>
+    {# Edit and Delete are shown ONLY to the creator (app.py checks it again). #}
+    {% if is_owner(m) %}
+      <a class="btn small soft" href="{{ url_for('edit_movie', movie_id=m.id) }}">Edit</a>
+      <form action="{{ url_for('delete_movie', movie_id=m.id) }}" method="post"
+            onsubmit="return confirm('Delete this movie?');">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn small danger">Delete</button>
+      </form>
+    {% endif %}
+    <form action="{{ url_for('like_movie', movie_id=m.id) }}" method="post" class="push">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn small like {{ 'liked' if m.liked }}">{{ 'Liked' if m.liked else 'Like' }}</button>
+    </form>
+  </div>
+</article>

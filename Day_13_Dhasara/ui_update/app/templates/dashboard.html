@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% set info = {
+  'draft': ('Draft', 'pencil-square', 'Not yet submitted'),
+  'submitted': ('Submitted', 'send-check', 'Waiting for an officer'),
+  'in_review': ('In review', 'search-heart', 'Officer is checking'),
+  'more_info': ('More info', 'chat-left-dots', 'Waiting for the submitter'),
+  'approved': ('Approved', 'patch-check', 'Awaiting settlement'),
+  'rejected': ('Rejected', 'x-octagon', 'Closed with a reason'),
+  'paid': ('Paid', 'cash-coin', 'Simulated payout recorded')} %}
+{% set intro = {'policyholder': 'Track your reimbursement claims and policies.', 'hospital': 'Submit and follow cashless claims for your hospital.',
+  'claims_officer': 'Pick up submitted claims, review them and record decisions.', 'admin': 'Record simulated settlements and manage reference data.'} %}
+{% block content %}
+<div class="hero"><h1>Welcome, {{ g.user.display_name }}</h1><p>{{ intro[g.user.role] }}</p></div>
+<div class="row g-3">
+  {% for s, (name, icon, hint) in info.items() %}
+  <div class="col-6 col-lg-3"><a class="tile st-{{ s }}" href="{{ url_for('claims.claim_list', status=s) }}">
+    <i class="bi bi-{{ icon }} ico"></i><div class="num">{{ counts.get(s, 0) }}</div><div class="name">{{ name }}</div><div class="hint">{{ hint }}</div></a></div>
+  {% endfor %}
+  {% for name, n in extra.items() %}
+  <div class="col-6 col-lg-3"><a class="tile st-in_review" href="{{ url_for('claims.review_queue') }}"><i class="bi bi-person-workspace ico"></i><div class="num">{{ n }}</div><div class="name">{{ name }}</div><div class="hint">Open the review queue</div></a></div>
+  {% endfor %}
+</div>
+<div class="mt-4 d-flex flex-wrap gap-2">
+  {% if g.user.role in ('policyholder', 'hospital') %}<a class="btn btn-primary" href="{{ url_for('claims.new_claim') }}"><i class="bi bi-plus-circle"></i> New claim</a>{% endif %}
+  {% if g.user.role == 'claims_officer' %}<a class="btn btn-primary" href="{{ url_for('claims.review_queue') }}"><i class="bi bi-list-check"></i> Open review queue</a>{% endif %}
+  {% if g.user.role == 'admin' %}<a class="btn btn-primary" href="{{ url_for('claims.claim_list', status='approved') }}"><i class="bi bi-cash-coin"></i> Approved claims to settle</a>{% endif %}
+  <a class="btn btn-outline-primary" href="{{ url_for('admin.reports') }}"><i class="bi bi-bar-chart-line"></i> View reports</a>
+</div>
+{% endblock %}

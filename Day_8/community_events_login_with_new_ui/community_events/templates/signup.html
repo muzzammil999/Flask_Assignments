@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Sign up — Community Events{% endblock %}
+{% block content %}
+<section class="view active" id="signup">
+    <a class="back" href="{{ url_for('home') }}">← All events</a>
+    <span class="eyebrow">Organizer area</span>
+    <h1>Create an account</h1>
+    <p class="lead">Sign up once, then log in to manage events.</p>
+
+    {# novalidate: the browser checks nothing, app.py validates everything #}
+    <form class="panel form-panel" style="max-width:480px" method="post" novalidate action="{{ url_for('signup') }}">
+        {# CSRF token: required for every POST form #}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-grid">
+            <div class="field span"><label for="username">Username *</label>
+                <input id="username" name="username" value="{{ username }}" placeholder="e.g. priya_k" autocomplete="username" autofocus>
+                <div class="hint">3 to 30 characters: letters, numbers and underscore (_)</div>
+            </div>
+            <div class="field span"><label for="password">Password *</label>
+                <input id="password" name="password" type="password" placeholder="At least 8 characters" autocomplete="new-password">
+            </div>
+            <div class="field span"><label for="confirm_password">Confirm password *</label>
+                <input id="confirm_password" name="confirm_password" type="password" placeholder="Type the password again" autocomplete="new-password">
+            </div>
+        </div>
+        <div class="form-actions"><button class="btn" type="submit">Create account</button><a class="btn secondary"
+                href="{{ url_for('login') }}">I already have an account</a></div>
+    </form>
+</section>
+{% endblock %}

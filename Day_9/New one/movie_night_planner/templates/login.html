@@ -1,0 +1,21 @@
+{# login.html - route: login() in app.py. Variable: username. #}
+{% extends "base.html" %}
+{% block title %}Log in - Movie Night Planner{% endblock %}
+{% block content %}
+<section class="card auth anim">
+  <div class="logo big">MN</div>
+  <h1>Welcome back</h1>
+  <p class="muted">Log in to vote for your favourite movie.</p>
+  <form method="post" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label class="stagger" style="--i:1">Username <span class="req">Required</span>
+      <input type="text" name="username" value="{{ username }}" autofocus>
+    </label>
+    <label class="stagger" style="--i:2">Password <span class="req">Required</span>
+      <input type="password" name="password">
+    </label>
+    <button class="btn primary wide stagger" style="--i:3">Log in</button>
+  </form>
+  <p class="muted center stagger" style="--i:4">New here? <a href="{{ url_for('register') }}">Register</a></p>
+</section>
+{% endblock %}

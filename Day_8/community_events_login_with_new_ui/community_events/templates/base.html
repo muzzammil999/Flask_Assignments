@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Community Events{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head><body>
+<div class="preview-tag">COMMUNITY EVENT MANAGER · Flask demo · No database</div>
+<header class="top"><div class="top-inner">
+    <a class="brand" href="{{ url_for('home') }}">community<span>·</span><em>events</em></a>
+    <nav class="nav" aria-label="Main navigation">
+        <a href="{{ url_for('home') }}" {% if page == 'home' %}class="active"{% endif %}>Explore</a>
+        {# These two links open the first event (set in app.py by nav_links) #}
+        <a href="{{ nav_details }}" {% if page == 'details' %}class="active"{% endif %}>Event details</a>
+        <a href="{{ nav_register }}" {% if page == 'register' %}class="active"{% endif %}>Registration</a>
+        <a class="nav-cta" href="{{ url_for('create_event') }}">+ Post event</a>
+        {# LOGIN MENU: shows Log in / Sign up for visitors, Log out for logged-in users #}
+        {% if session.get('user_id') %}
+        <form method="post" action="{{ url_for('logout') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">Log out ({{ session['username'] }})</button>
+        </form>
+        {% else %}
+        <a href="{{ url_for('login') }}" {% if page == 'login' %}class="active"{% endif %}>Log in</a>
+        <a href="{{ url_for('signup') }}" {% if page == 'signup' %}class="active"{% endif %}>Sign up</a>
+        {% endif %}
+        {# LOGIN MENU: shows Log in / Sign up for visitors, Log out for logged-in users #}
+        {% if session.get('user_id') %}
+        <form method="post" action="{{ url_for('logout') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">Log out ({{ session['username'] }})</button>
+        </form>
+        {% else %}
+        <a href="{{ url_for('login') }}" {% if page == 'login' %}class="active"{% endif %}>Log in</a>
+        <a href="{{ url_for('signup') }}" {% if page == 'signup' %}class="active"{% endif %}>Sign up</a>
+        {% endif %}
+    </nav>
+</div></header>
+<main class="shell">
+{# Messages sent from app.py with flash() #}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <div class="alert {{ 'error' if category == 'error' else '' }}">{{ '!' if category == 'error' else '✓' }} &nbsp; {{ message }}</div>
+    {% endfor %}
+{% endwith %}
+{% block content %}{% endblock %}
+</main>
+<footer class="footer">Community Event Manager · Flask demo · Data resets when the server restarts</footer>
+</body></html>

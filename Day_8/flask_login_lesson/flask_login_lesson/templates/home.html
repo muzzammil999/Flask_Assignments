@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}My Items{% endblock %}
+{% block content %}
+<h1>My Items</h1>
+<p>Create your own item list, then search and filter it. Your list is private to your account.</p>
+<p><a class="button" href="{{ url_for('register') }}">Create an account</a></p>
+{% endblock %}

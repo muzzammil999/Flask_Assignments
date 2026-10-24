@@ -1,0 +1,36 @@
+/* ---- Movie Night Planner: ADD THIS to the END of the copied style.css ---- */
+
+/* extra flash message types (success and error already exist) */
+.message.warning { background:#fff4e0; border-left-color:#b26a00; }
+.message.info    { background:#e5f1f6; border-left-color:var(--brand); }
+.message.big     { font-size:1.1rem; font-weight:600; padding:14px 18px; }
+
+/* "View Winning Movie" banner on the home page */
+.winner-banner { display:flex; align-items:center; justify-content:center; gap:16px;
+        background:var(--brand); color:white; text-decoration:none; border-radius:8px;
+        padding:22px 20px; margin:14px 0; text-align:left; }
+.winner-banner:hover { filter:brightness(1.08); }
+.winner-banner .trophy { font-size:2.2rem; }
+.winner-banner strong { display:block; font-size:1.4rem; }
+.winner-banner small { display:block; opacity:.9; }
+
+/* movie cards */
+.movie .movie-poster { width:100%; height:260px; object-fit:cover; border-radius:6px;
+        margin-bottom:8px; max-height:none; display:block; }
+.poster-placeholder { display:flex; align-items:center; justify-content:center;
+        background:#e5edf1; font-size:3rem; }
+.likes { font-weight:600; margin:6px 0; }
+button.liked { background:var(--ok); }
+
+/* details page: poster on the left, information on the right */
+.details-layout { display:grid; grid-template-columns: minmax(220px, 340px) 1fr; gap:24px; }
+@media (max-width: 700px) { .details-layout { grid-template-columns: 1fr; } }
+.poster-large { width:100%; max-height:520px; object-fit:contain; background:#e5edf1;
+        border-radius:8px; display:block; }
+.poster-large.poster-placeholder { height:340px; font-size:5rem; }
+
+/* result page */
+.center { text-align:center; }
+.center-actions { justify-content:center; }
+.card.winner { max-width:520px; margin:14px auto; border:2px solid var(--brand); }
+.card.winner .poster-large { max-width:320px; margin:0 auto 12px; }

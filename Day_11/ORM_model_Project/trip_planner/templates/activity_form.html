@@ -1,0 +1,35 @@
+{# Page: Add/Edit Activity (routes: add_activity, edit_activity in app.py).
+   Data: `trip` (parent Trip), `activity` (None when adding), `errors` {field: message},
+   `values` (what to pre-fill), `page_title`, and `categories` (from the context
+   processor in app.py). The date picker is limited to the trip's dates.
+   Form field names are name/date/time/category/place/cost (the model columns for
+   date and time are activity_date / activity_time). #}
+{% extends "base.html" %}
+{% block title %}{{ page_title }} | Trip Planner{% endblock %}
+{% block content %}
+<div class="form-wrap wide"><div class="form-card"><p class="eyebrow">{{ trip.destination }} · {{ trip.start_date.strftime('%d %b %Y') }} – {{ trip.end_date.strftime('%d %b %Y') }}</p><h1>{{ page_title }}</h1><p class="muted">Activity date must be within this trip's date range.</p>
+<form method="post" enctype="multipart/form-data">
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <label for="name">Activity name</label><input id="name" name="name" value="{{ values.get('name', '') }}" required maxlength="160">
+  {% if errors.get('name') %}<small class="field-error">{{ errors.name }}</small>{% endif %}
+  <div class="two-col">
+    <div><label for="date">Activity date</label><input id="date" name="date" type="date" min="{{ trip.start_date.isoformat() }}" max="{{ trip.end_date.isoformat() }}" value="{{ values.get('date', '') }}" required>
+    {% if errors.get('date') %}<small class="field-error">{{ errors.date }}</small>{% endif %}</div>
+    <div><label for="time">Time</label><input id="time" name="time" type="time" value="{{ values.get('time', '') }}" required>
+    {% if errors.get('time') %}<small class="field-error">{{ errors.time }}</small>{% endif %}</div>
+  </div>
+  <label for="category">Category</label>
+  <select id="category" name="category" required><option value="">Choose a category</option>
+  {% for option in categories %}<option value="{{ option }}" {% if values.get('category', '') == option %}selected{% endif %}>{{ option }}</option>{% endfor %}
+  </select>{% if errors.get('category') %}<small class="field-error">{{ errors.category }}</small>{% endif %}
+  <label for="place">Place</label><input id="place" name="place" value="{{ values.get('place', '') }}" required maxlength="200">
+  {% if errors.get('place') %}<small class="field-error">{{ errors.place }}</small>{% endif %}
+  <label for="cost">Estimated cost</label><input id="cost" name="cost" type="number" min="0" step="0.01" value="{{ values.get('cost', '') }}" required>
+  {% if errors.get('cost') %}<small class="field-error">{{ errors.cost }}</small>{% endif %}
+  <label for="image">Photo (optional)</label><input id="image" name="image" type="file" accept="image/png,image/jpeg,image/gif,image/webp">
+  <small class="muted">PNG, JPG, GIF or WEBP, up to 5 MB.</small>
+  {% if errors.get('image') %}<small class="field-error">{{ errors.image }}</small>{% endif %}
+  {% if activity and activity.image_filename %}<div class="current-image"><img src="{{ url_for('media', filename=activity.image_filename) }}" alt="Current photo"><label class="check"><input type="checkbox" name="remove_image" value="1"> Remove current photo</label></div>{% endif %}
+  <div class="actions"><button class="button" type="submit">Save Activity</button><a class="button secondary" href="{{ url_for('trip_detail', trip_id=trip.id) }}">Cancel</a></div>
+</form></div></div>
+{% endblock %}

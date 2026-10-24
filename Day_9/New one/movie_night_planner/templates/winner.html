@@ -1,0 +1,40 @@
+{# winner.html - route: winner() in app.py. Variable: movies (top 3 by likes). #}
+{% extends "base.html" %}
+{% block title %}Winning Movie - Movie Night Planner{% endblock %}
+{% block content %}
+<a class="back" href="{{ url_for('home') }}">&larr; Back to Home</a>
+{% if movies %}
+  {% set top = movies[0] %}
+  <section class="banner">
+    <div><small>COMMUNITY POLL</small><h1>Winning Movie: {{ top.title }}!</h1></div>
+  </section>
+
+  <section class="card winbox">
+    {% set m = top %}
+    <div class="posterbox">{% include "_poster.html" %}<span class="chip place">1st Place</span></div>
+    <div>
+      {% for g in top.genres %}<span class="tag">{{ g }}</span> {% endfor %}<span class="tag grey">{{ top.rating }}</span>
+      <h1>{{ top.title }}</h1>
+      <p class="muted">{{ top.runtime }} mins · proposed by {{ top.username }}</p>
+      <p>{{ top.synopsis }}</p>
+      <div class="tiles"><div><small>TOTAL SUPPORT</small><b>{{ top.like_count }} {{ 'Like' if top.like_count == 1 else 'Likes' }}</b></div></div>
+      <a class="btn" href="{{ url_for('details', movie_id=top.id) }}">View Movie</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Leaderboard</h2>
+    {% for m in movies %}
+      <div class="rank">
+        <span class="num">{{ loop.index }}</span>
+        <span class="mini">{% include "_poster.html" %}</span>
+        <a href="{{ url_for('details', movie_id=m.id) }}">{{ m.title }}</a>
+        <span class="bar"><i style="width: {{ (m.like_count / (movies[0].like_count or 1) * 100)|round }}%"></i></span>
+        <strong>{{ m.like_count }} {{ 'like' if m.like_count == 1 else 'likes' }}</strong>
+      </div>
+    {% endfor %}
+  </section>
+{% else %}
+  <p class="card center muted">No movies yet, so there is no winner.</p>
+{% endif %}
+{% endblock %}

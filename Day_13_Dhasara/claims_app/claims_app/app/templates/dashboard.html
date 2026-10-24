@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% from "_macros.html" import badge %}
+{% block content %}
+<h1 class="h4">Welcome, {{ g.user.display_name }}</h1>
+<div class="row g-3 my-2">
+  {% for s in ['draft','submitted','in_review','more_info','approved','rejected','paid'] %}
+  <div class="col-6 col-md-3"><a class="card text-decoration-none" href="{{ url_for('claims.claim_list', status=s) }}">
+    <div class="card-body"><div class="fs-3">{{ counts.get(s, 0) }}</div>{{ badge(s) }}</div></a></div>
+  {% endfor %}
+  {% for name, n in extra.items() %}
+  <div class="col-6 col-md-3"><div class="card border-primary"><div class="card-body"><div class="fs-3">{{ n }}</div>{{ name }}</div></div></div>
+  {% endfor %}
+</div>
+<p class="mt-3">
+  {% if g.user.role in ('policyholder', 'hospital') %}<a class="btn btn-primary" href="{{ url_for('claims.new_claim') }}">New claim</a>{% endif %}
+  {% if g.user.role == 'claims_officer' %}<a class="btn btn-primary" href="{{ url_for('claims.review_queue') }}">Open review queue</a>{% endif %}
+  {% if g.user.role == 'admin' %}<a class="btn btn-primary" href="{{ url_for('claims.claim_list', status='approved') }}">Approved claims to settle</a>{% endif %}
+</p>
+{% endblock %}

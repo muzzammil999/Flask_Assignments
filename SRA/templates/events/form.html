@@ -1,0 +1,35 @@
+{% extends "events/layout.html" %}
+{% block title %}{{ 'Edit event' if editing else 'Post a new event' }}{% endblock %}
+{% block content %}
+{% set back = url_for('events.details', event_id=ev.id) if editing else url_for('events.list_events') %}
+<a class="back" href="{{ back }}">← {{ 'Event details' if editing else 'Back to events' }}</a><br>
+<span class="eyebrow">Organizer area</span>
+<h1>{{ 'Edit event' if editing else 'Post a new event' }}</h1>
+<p class="lead">{{ 'Update the event details while protecting existing registrations.' if editing else 'Fill in the event details so people can discover and register.' }}</p>
+
+{% if errors %}<div class="alert error"><ul class="errors">{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+
+<form class="panel form-panel" method="post" enctype="multipart/form-data">
+  <div class="form-grid">
+    <div class="field"><label>Event title *</label><input name="title" value="{{ ev.title or '' }}" placeholder="e.g. Digital Skills Saturday"></div>
+    <div class="field"><label>Category *</label>
+      <select name="category"><option value="">Choose a category</option>
+        {% for c in categories %}<option {{ 'selected' if ev.category == c }}>{{ c }}</option>{% endfor %}</select></div>
+    <div class="field"><label>Event date *</label><input type="date" name="event_date" value="{{ ev.event_date or '' }}"></div>
+    <div class="field"><label>Start time *</label>
+      <input type="time" name="start_time" value="{% if ev.start_time %}{{ ev.start_time if ev.start_time is string else ev.start_time|hm24 }}{% endif %}"></div>
+    <div class="field"><label>Venue *</label><input name="venue" value="{{ ev.venue or '' }}" placeholder="Event location"></div>
+    <div class="field"><label>Seat capacity *</label><input type="number" min="1" name="capacity" value="{{ ev.capacity or '' }}" placeholder="30">
+      {% if editing %}<div class="hint">Cannot be lower than {{ ev.booked }} seats already booked.</div>{% endif %}</div>
+    <div class="field"><label>Organizer email *</label><input type="email" name="organizer_email" value="{{ ev.organizer_email or '' }}" placeholder="organizer@example.com"></div>
+    <div class="field"><label>Registration deadline *</label><input type="date" name="reg_deadline" value="{{ ev.reg_deadline or '' }}"></div>
+    <div class="field span"><label>Description *</label><textarea name="description" placeholder="What will participants learn or do?">{{ ev.description or '' }}</textarea></div>
+    <div class="field span"><label>{{ 'Replace image (optional)' if editing else 'Event image (optional)' }}</label>
+      <input type="file" name="image" accept="image/png,image/jpeg"><div class="hint">PNG or JPEG · Maximum 2 MB</div></div>
+  </div>
+  <div class="form-actions">
+    <button class="btn" type="submit">{{ 'Save changes' if editing else 'Publish event' }}</button>
+    <a class="btn secondary" href="{{ back }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

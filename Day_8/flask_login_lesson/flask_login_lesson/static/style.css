@@ -1,0 +1,7 @@
+body{font-family:system-ui,sans-serif;max-width:800px;margin:auto;padding:20px;background:#f4f7f8;color:#17323b}
+header,.item{display:flex;justify-content:space-between;align-items:center;gap:16px}
+header{border-bottom:2px solid #d7e5e8;padding-bottom:16px}nav form{display:inline}
+a{color:#126c80}main{padding:20px 0}.card,.item,.message{background:white;padding:18px;border-radius:10px;margin:14px 0}
+label{display:block;margin:12px 0}input,select{padding:9px;margin:4px 0;max-width:100%;box-sizing:border-box}
+button,.button{background:#126c80;color:white;border:0;border-radius:6px;padding:10px 14px;cursor:pointer;text-decoration:none}
+.message{border-left:4px solid #126c80}.item span{color:#526970}

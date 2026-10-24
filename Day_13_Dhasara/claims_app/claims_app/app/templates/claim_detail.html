@@ -1,0 +1,71 @@
+{% extends "base.html" %}{% from "_macros.html" import badge, csrf %}
+{% block content %}
+{% set p = claim.policy %}
+<h1 class="h4">Claim #{{ claim.id }} {{ badge(claim.status) }}</h1>
+<div class="row g-3">
+  <div class="col-md-6"><div class="card h-100"><div class="card-body"><h2 class="h6">Policy snapshot</h2>
+    <p class="mb-1">Policy {{ p.id }} ({{ p.status }}), {{ p.start_date }} to {{ p.end_date }}</p>
+    <p class="mb-1">Plan {{ p.plan.name }}: limit {{ p.plan.annual_limit|inr }}, deductible {{ p.plan.deductible|inr }}, co-pay {{ p.plan.copay_percent }}%</p>
+    <p class="mb-1">Covers: {{ p.plan.covered_treatment_types.replace('|', ', ') }}</p>
+    <p class="mb-0">Remaining fictional cover: {{ cover|inr }}</p></div></div></div>
+  <div class="col-md-6"><div class="card h-100"><div class="card-body"><h2 class="h6">Treatment event</h2>
+    <p class="mb-1">{{ claim.claim_type|label }} - {{ claim.treatment_type|label }} for {{ claim.member.display_name }} ({{ claim.member.relationship }})</p>
+    <p class="mb-1">{{ claim.hospital.name }}, {{ claim.hospital.city }}</p>
+    <p class="mb-1">{{ claim.admission_date }} to {{ claim.discharge_date }}</p>
+    <p class="mb-1">Requested {{ claim.requested_amount|inr }}</p><p class="mb-0 text-muted">{{ claim.description }}</p></div></div></div>
+</div>
+
+{% if checks %}<div class="alert alert-info mt-3"><b>Review checks</b><ul class="mb-0">{% for w in checks %}<li>{{ w }}</li>{% endfor %}</ul></div>{% endif %}
+
+<h2 class="h6 mt-4">Document checklist</h2>
+{% if 'checklist' in actions %}
+<form method="post" action="{{ url_for('claims.checklist', claim_id=claim.id) }}" class="row g-2 align-items-end">{{ csrf() }}
+  {% for t, s in docs.items() %}<div class="col-md-4"><label class="form-label">{{ t|label }}</label>
+    <select class="form-select" name="{{ t }}"><option value="received" {{ 'selected' if s == 'received' }}>Received</option><option value="missing" {{ 'selected' if s == 'missing' }}>Missing</option></select></div>{% endfor %}
+  <div class="col-md-2"><button class="btn btn-outline-primary">Update</button></div>
+</form>
+{% else %}<ul>{% for t, s in docs.items() %}<li>{{ t|label }}: <b>{{ s|label }}</b></li>{% endfor %}</ul>{% endif %}
+
+{% if info %}<div class="card mt-4"><div class="card-body"><h2 class="h6">Decision explanation</h2>
+  <p class="mb-1">{{ claim.decision_reason or "" }}</p>
+  <table class="table table-sm w-auto mb-0">
+    <tr><td>Requested</td><td>{{ info.requested|inr }}</td></tr>
+    <tr><td>Eligible (officer) - difference {{ info.reduction|inr }}</td><td>{{ info.eligible|inr }}</td></tr>
+    <tr><td>Deductible</td><td>- {{ info.deductible|inr }}</td></tr>
+    <tr><td>Co-pay {{ info.copay_pct }}%</td><td>- {{ info.copay|inr }}</td></tr>
+    <tr><th>Simulated payout</th><th>{{ info.payout|inr }}</th></tr></table></div></div>{% endif %}
+{% if claim.settlement %}<div class="alert alert-success mt-3">Simulated settlement: {{ claim.settlement.amount|inr }} payable to <b>{{ claim.settlement.payee_type }}</b>, recorded by {{ claim.settlement.recorded_by.display_name }} on {{ claim.settlement.recorded_at.date() }}. No real money moved.</div>{% endif %}
+
+<h2 class="h6 mt-4">Actions</h2>
+<div class="d-flex flex-wrap gap-2 mb-2">
+  {% if 'edit' in actions %}<a class="btn btn-outline-primary" href="{{ url_for('claims.edit_claim', claim_id=claim.id) }}">Edit draft</a>{% endif %}
+  {% for key, label in [('submit', 'Submit claim'), ('assign', 'Assign to me'), ('start', 'Start review')] %}
+    {% if key in actions %}<form method="post" action="{{ url_for('claims.' ~ key, claim_id=claim.id) }}">{{ csrf() }}<button class="btn btn-primary">{{ label }}</button></form>{% endif %}
+  {% endfor %}
+</div>
+{% if 'respond' in actions %}
+<form method="post" action="{{ url_for('claims.respond', claim_id=claim.id) }}" class="mb-3">{{ csrf() }}
+  <label class="form-label">Your response to the information request</label><textarea class="form-control mb-2" name="note" required></textarea>
+  <button class="btn btn-primary">Send response</button></form>{% endif %}
+{% if 'decide' in actions %}
+<div class="row g-3">
+  <form class="col-md-4" method="post" action="{{ url_for('claims.more_info', claim_id=claim.id) }}">{{ csrf() }}<h3 class="h6">Request information</h3>
+    <select class="form-select mb-2" name="document_type">{% for t in docs %}<option value="{{ t }}">{{ t|label }}</option>{% endfor %}</select>
+    <textarea class="form-control mb-2" name="reason" placeholder="Reason" required></textarea><button class="btn btn-warning">Request</button></form>
+  <form class="col-md-4" method="post" action="{{ url_for('claims.approve', claim_id=claim.id) }}">{{ csrf() }}<h3 class="h6">Approve</h3>
+    <input class="form-control mb-2" name="eligible_amount" type="number" step="0.01" min="0.01" max="{{ claim.requested_amount }}" placeholder="Eligible amount" required>
+    <textarea class="form-control mb-2" name="reason" placeholder="Reason" required></textarea><button class="btn btn-success">Approve</button></form>
+  <form class="col-md-4" method="post" action="{{ url_for('claims.reject', claim_id=claim.id) }}">{{ csrf() }}<h3 class="h6">Reject</h3>
+    <textarea class="form-control mb-2" name="reason" placeholder="Written reason" required></textarea><button class="btn btn-danger" data-confirm="Reject this claim?">Reject</button></form>
+</div>{% endif %}
+{% if 'settle' in actions and info %}
+<form method="post" action="{{ url_for('claims.settle', claim_id=claim.id) }}" class="mt-3">{{ csrf() }}
+  <label class="form-label">Simulated payout to {{ 'hospital' if claim.claim_type == 'cashless' else 'policyholder' }}</label>
+  <input class="form-control mb-2 w-auto" name="amount" value="{{ info.payout }}" readonly><button class="btn btn-dark">Record simulated settlement</button></form>{% endif %}
+
+<h2 class="h6 mt-4">Timeline</h2>
+<ul class="list-group">
+{% for h in claim.history %}<li class="list-group-item"><small class="text-muted">{{ h.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+  {{ (h.from_status or 'new')|label }} &rarr; {{ h.to_status|label }} by <b>{{ h.actor.display_name }}</b>{% if h.note %} - {{ h.note }}{% endif %}</li>{% endfor %}
+</ul>
+{% endblock %}

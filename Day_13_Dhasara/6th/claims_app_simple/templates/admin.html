@@ -1,0 +1,39 @@
+{% extends "base.html" %}{% from "_macros.html" import csrf, header %}
+{% block content %}
+{{ header('Administration', 'Manage hospitals, plans and user roles.', 'gear') }}
+<p class="text-muted small">Reference data can be added or edited, never deleted, so existing claims stay valid.</p>
+
+<h2 class="sec"><i class="bi bi-hospital"></i>Hospitals</h2>
+{% for h in hospitals + [None] %}
+<form class="row g-2 mb-1" method="post" action="{{ url_for('admin_save_hospital') }}">{{ csrf() }}
+  {% if h %}<input type="hidden" name="id" value="{{ h.id }}">{% endif %}
+  <div class="col-md-4"><input class="form-control form-control-sm" name="name" value="{{ h.name if h }}" placeholder="New hospital name" required></div>
+  <div class="col-md-3"><input class="form-control form-control-sm" name="city" value="{{ h.city if h }}" placeholder="City" required></div>
+  <div class="col-md-2"><select class="form-select form-select-sm" name="network_status"><option value="1" {{ 'selected' if h and h.network_status }}>Network</option><option value="0" {{ 'selected' if h and not h.network_status }}>Non-network</option></select></div>
+  <div class="col-md-2"><button class="btn btn-sm btn-primary">{{ 'Save' if h else 'Add' }}</button></div>
+</form>{% endfor %}
+
+<h2 class="sec"><i class="bi bi-card-checklist"></i>Plans</h2>
+{% for p in plans + [None] %}
+<form class="row g-2 mb-1" method="post" action="{{ url_for('admin_save_plan') }}">{{ csrf() }}
+  {% if p %}<input type="hidden" name="id" value="{{ p.id }}">{% endif %}
+  <div class="col-md-2"><input class="form-control form-control-sm" name="name" value="{{ p.name if p }}" placeholder="New plan name" required></div>
+  <div class="col-md-2"><input class="form-control form-control-sm" name="annual_limit" value="{{ p.annual_limit if p }}" placeholder="Annual limit" required></div>
+  <div class="col-md-2"><input class="form-control form-control-sm" name="deductible" value="{{ p.deductible if p }}" placeholder="Deductible" required></div>
+  <div class="col-md-1"><input class="form-control form-control-sm" name="copay_percent" value="{{ p.copay_percent if p }}" placeholder="Co-pay %" required></div>
+  <div class="col-md-3 small">{% for t in treatments %}<label class="me-2"><input type="checkbox" name="covered" value="{{ t }}" {{ 'checked' if p and p.covers(t) }}> {{ t }}</label>{% endfor %}</div>
+  <div class="col-md-2"><button class="btn btn-sm btn-primary">{{ 'Save' if p else 'Add' }}</button></div>
+</form>{% endfor %}
+
+<h2 class="sec"><i class="bi bi-people"></i>Users and roles</h2>
+{% for u in users + [None] %}
+<form class="row g-2 mb-1" method="post" action="{{ url_for('admin_save_user') }}">{{ csrf() }}
+  {% if u %}<input type="hidden" name="id" value="{{ u.id }}">{% endif %}
+  <div class="col-md-2">{% if u %}<input class="form-control form-control-sm" value="{{ u.username }}" disabled>{% else %}<input class="form-control form-control-sm" name="username" placeholder="New username" required>{% endif %}</div>
+  <div class="col-md-2"><input class="form-control form-control-sm" name="display_name" value="{{ u.display_name if u }}" placeholder="Display name" required></div>
+  <div class="col-md-2"><select class="form-select form-select-sm" name="role">{% for r in roles %}<option value="{{ r }}" {{ 'selected' if u and u.role == r }}>{{ r|label }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><select class="form-select form-select-sm" name="hospital_id"><option value="">No hospital</option>{% for h in hospitals %}<option value="{{ h.id }}" {{ 'selected' if u and u.hospital_id == h.id }}>{{ h.name }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><input class="form-control form-control-sm" name="password" type="password" placeholder="{{ 'New password (optional)' if u else 'Password (min 8)' }}" {{ '' if u else 'required' }}></div>
+  <div class="col-md-2"><button class="btn btn-sm btn-primary">{{ 'Save' if u else 'Add' }}</button></div>
+</form>{% endfor %}
+{% endblock %}

@@ -1,0 +1,79 @@
+{# movie_form.html - used by create_movie() AND edit_movie() in app.py.
+   Variables: movie (dict), genres, ratings, editing (True = edit). #}
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if editing else 'Create' }} Movie - Movie Night Planner{% endblock %}
+{% block content %}
+{% set m = movie %}
+<a class="back" href="{{ url_for('details', movie_id=m.id) if editing else url_for('home') }}">&larr; Back</a>
+<h1 class="light-title">{{ 'Edit Movie' if editing else 'Create a Movie' }}</h1>
+
+<form method="post" enctype="multipart/form-data" novalidate class="formgrid">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <section class="card">
+    <label>Movie Title
+      <input type="text" name="title" value="{{ m.title }}" placeholder="e.g. Inception" aria-invalid="{{ 'true' if field_errors.get('title') else 'false' }}">
+      {% for error in field_errors.get('title', []) %}<span class="field-error">{{ error }}</span>{% endfor %}
+    </label>
+    <fieldset class="genres">
+      <legend>Genres <span class="req">Pick 1 to {{ max_genres }}</span></legend>
+      <div class="chips-select">
+        {% for g in genres %}
+        <label class="gchip">
+          <input type="checkbox" name="genre" value="{{ g }}" {{ 'checked' if g in m.genres }}>
+          <span>{{ g }}</span>
+        </label>
+        {% endfor %}
+      </div>
+      {% for error in field_errors.get('genre', []) %}<span class="field-error">{{ error }}</span>{% endfor %}
+    </fieldset>
+    <label>Rating
+      <select name="rating" aria-invalid="{{ 'true' if field_errors.get('rating') else 'false' }}">{% for r in ratings %}<option {{ 'selected' if r == m.rating }}>{{ r }}</option>{% endfor %}</select>
+      {% for error in field_errors.get('rating', []) %}<span class="field-error">{{ error }}</span>{% endfor %}
+    </label>
+    <label>Runtime (Minutes)
+      <input type="text" name="runtime" value="{{ m.runtime }}" placeholder="e.g. 148" aria-invalid="{{ 'true' if field_errors.get('runtime') else 'false' }}">
+      {% for error in field_errors.get('runtime', []) %}<span class="field-error">{{ error }}</span>{% endfor %}
+    </label>
+    <label>Synopsis
+      <textarea name="synopsis" rows="4" placeholder="Why should we watch this?" aria-invalid="{{ 'true' if field_errors.get('synopsis') else 'false' }}">{{ m.synopsis }}</textarea>
+      {% for error in field_errors.get('synopsis', []) %}<span class="field-error">{{ error }}</span>{% endfor %}
+    </label>
+    <div class="actions">
+      <button class="btn">{{ 'Save Changes' if editing else 'Submit Movie' }}</button>
+      <a class="btn soft" href="{{ url_for('details', movie_id=m.id) if editing else url_for('home') }}">Cancel</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Poster Image</h2>
+    <div class="posterbox small" id="preview">{% include "_poster.html" %}</div>
+    <label>{{ 'Upload Replacement Poster' if editing else 'Choose Poster' }}
+      <input type="file" name="poster" id="poster" accept=".png,.jpg,.jpeg" aria-invalid="{{ 'true' if field_errors.get('poster') else 'false' }}">
+      {% for error in field_errors.get('poster', []) %}<span class="field-error">{{ error }}</span>{% endfor %}
+    </label>
+    <p class="muted">PNG or JPG, max 2 MB (optional).</p>
+  </section>
+</form>
+
+<script>
+  // limit the genre checkboxes to {{ max_genres }} (the server checks it again)
+  var MAX_GENRES = {{ max_genres }};
+  document.querySelectorAll('.gchip input').forEach(function (box) {
+    box.addEventListener('change', function () {
+      var picked = document.querySelectorAll('.gchip input:checked');
+      if (picked.length > MAX_GENRES) { box.checked = false; }
+    });
+  });
+
+  // show the chosen poster immediately (preview only, nothing is uploaded yet)
+  document.getElementById("poster").onchange = function () {
+    if (!this.files[0]) return;
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      document.getElementById("preview").innerHTML = '<img src="' + e.target.result + '" alt="preview">';
+    };
+    reader.readAsDataURL(this.files[0]);
+  };
+</script>
+{% endblock %}

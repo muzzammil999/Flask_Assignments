@@ -1,0 +1,13 @@
+﻿plan_id,plan_name,covered_treatment_types,annual_limit_inr,deductible_inr,copay_percent
+1,Essential Care,inpatient,100000,2000,10
+2,Plus Care,inpatient|daycare,200000,1000,5
+3,Family Care,inpatient|daycare,300000,1500,10
+4,ICICI Lombard Elevate,inpatient|daycare,500000,2000,5
+5,HDFC ERGO Optima Secure,inpatient|daycare,500000,1000,0
+6,Tata AIG MediCare,inpatient|daycare,300000,1500,10
+7,Care Supreme,inpatient|daycare,500000,2500,5
+8,Aditya Birla Activ One Max,inpatient|daycare,700000,2000,0
+9,HDFC ERGO my:health Suraksha,inpatient|daycare,400000,1000,0
+10,Star Health Comprehensive,inpatient|daycare,500000,2000,10
+11,Niva Bupa ReAssure,inpatient|daycare,500000,1000,0
+12,ICICI Lombard Health AdvantEdge,inpatient|daycare,500000,1500,5

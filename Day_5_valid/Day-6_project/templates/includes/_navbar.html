@@ -1,0 +1,11 @@
+<header class="top">
+    <div class="top-inner">
+        <a class="brand" href="{{ url_for('index') }}">community<span>·</span><em>events</em></a>
+        <nav class="nav" aria-label="Main navigation">
+            <a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Explore</a>
+             <a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Event details</a>
+            <a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Registration</a> 
+            <a href="{{ url_for('create_event') }}" class="nav-cta">+ Post event</a>
+        </nav>
+    </div>
+</header>

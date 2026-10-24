@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Community Events{% endblock %}</title>
+    <!-- Static stylesheet loaded dynamically via Flask url_for -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Header & Navigation Bar Partial -->
+    {% include 'includes/_navbar.html' %}
+
+    <!-- Main Content Container -->
+    <main class="shell">
+        <!-- Flash Message Alerts -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert {% if category == 'error' %}error{% endif %}">
+                        {% if category == 'error' %}⚠️{% else %}✓{% endif %} &nbsp; {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Dynamic Page Body injected here by child templates -->
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer Partial -->
+    {% include 'includes/_footer.html' %}
+
+</body>
+</html>

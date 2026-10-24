@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% block content %}<h1>{{ heading }}</h1>{% if errors %}<div class="alert alert-danger">{% for
+    error in errors %}<div>{{ error }}</div>{% endfor %}</div>{% endif %}<form method="post" class="col-md-6">
+    <div class="mb-3"><label class="form-label">Title<input class="form-control" name="title" required
+                value="{{ book.get('title','') }}"></label></div>
+    <div class="mb-3"><label class="form-label">Author<input class="form-control" name="author" required
+                value="{{ book.get('author','') }}"></label></div>
+    <div class="mb-3"><label class="form-label">Status<select class="form-select" name="status">{% for item in ['To
+                read','Reading','Finished'] %}<option value="{{ item }}" {% if book.get('status','To read')==item
+                    %}selected{% endif %}>{{ item }}</option>{% endfor %}</select></label></div><button
+        class="btn btn-success">Save</button> <a href="{{ url_for('home') }}">Cancel</a>
+</form>{% endblock %}

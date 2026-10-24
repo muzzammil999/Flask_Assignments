@@ -1,0 +1,41 @@
+{# users.html - route: users() in app.py. Variable: people (list of users,
+   each with a "movies" list). Delete is shown ONLY to the movie's creator. #}
+{% extends "base.html" %}
+{% block title %}Users - Movie Night Planner{% endblock %}
+{% block content %}
+<h1 class="page-title">Users <span class="count">{{ people|length }} members</span></h1>
+
+{% for person in people %}
+<section class="card user">
+  <div class="userhead">
+    <span class="dot lg">{{ person.username[0]|upper }}</span>
+    <div>
+      <h3>{{ person.username }}{% if person.id == session['user_id'] %} <span class="mine">You</span>{% endif %}</h3>
+      <p class="muted">{{ person.movies|length }} movie{{ '' if person.movies|length == 1 else 's' }} created</p>
+    </div>
+  </div>
+
+  {% for m in person.movies %}
+  <div class="urow">
+    <span class="mini">{% include "_poster.html" %}</span>
+    <div class="grow">
+      <a href="{{ url_for('details', movie_id=m.id) }}"><strong>{{ m.title }}</strong></a>
+      <p class="muted">{{ m.genres|join(', ') }} · {{ m.rating }} · {{ m.runtime }} mins · {{ m.like_count }} {{ 'like' if m.like_count == 1 else 'likes' }}</p>
+    </div>
+    <a class="btn small soft" href="{{ url_for('details', movie_id=m.id) }}">View</a>
+    {% if is_owner(m) %}
+      <a class="btn small soft" href="{{ url_for('edit_movie', movie_id=m.id) }}">Edit</a>
+      <form action="{{ url_for('delete_movie', movie_id=m.id) }}" method="post"
+            onsubmit="return confirm('Delete this movie?');">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="back" value="users">
+        <button class="btn small danger">Delete</button>
+      </form>
+    {% endif %}
+  </div>
+  {% else %}
+  <p class="muted">No movies created yet.</p>
+  {% endfor %}
+</section>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}{% from "_macros.html" import csrf, inp, header %}
+{% block content %}
+<div class="crumbs"><a href="{{ url_for('claim_list') }}">Claims</a> / <b>{{ 'Edit draft' if claim else 'New claim' }}</b></div>
+{{ header('Edit draft #' ~ claim.id if claim else 'Submit a ' ~ ('reimbursement' if g.user.role == 'policyholder' else 'cashless') ~ ' claim', 'Save as a draft first, or submit when everything is correct. The server re-checks every field.', 'pencil-square' if claim else 'plus-circle') }}
+<form method="post" novalidate>{{ csrf() }}
+<div class="row g-3"><div class="col-xl-8">
+  <div class="card card-body mb-3"><h2 class="card-title"><span class="panel-num">1</span>Policy and insured member</h2>
+  {% if g.user.role == 'policyholder' %}
+    <div class="row"><div class="col-md-6 mb-3"><label class="form-label" for="policy_id">Policy</label>
+      <select class="form-select {{ 'is-invalid' if errors.policy_id }}" id="policy_id" name="policy_id" required><option value="">Choose...</option>
+        {% for p in policies %}<option value="{{ p.id }}" {{ 'selected' if v.get('policy_id')|string == p.id|string }}>Policy {{ p.id }} - {{ p.plan.name }}</option>{% endfor %}
+      </select><div class="invalid-feedback">{{ errors.policy_id }}</div></div>
+    <div class="col-md-6 mb-3"><label class="form-label" for="member_id">Covered member</label>
+      <select class="form-select {{ 'is-invalid' if errors.member_id }}" id="member_id" name="member_id" required><option value="">Choose...</option>
+        {% for p in policies %}{% for m in p.members %}<option value="{{ m.id }}" data-policy="{{ p.id }}" {{ 'selected' if v.get('member_id')|string == m.id|string }}>{{ m.display_name }} ({{ m.relationship }})</option>{% endfor %}{% endfor %}
+      </select><div class="invalid-feedback">{{ errors.member_id }}</div></div></div>
+  {% else %}
+    <div class="row"><div class="col-md-6">{{ inp('policy_id', 'Policy ID', v, errors, 'number', 'required') }}</div><div class="col-md-6">{{ inp('member_id', 'Member ID', v, errors, 'number', 'required') }}</div></div>
+  {% endif %}</div>
+
+  <div class="card card-body mb-3"><h2 class="card-title"><span class="panel-num">2</span>Hospital and treatment</h2>
+  {% if g.user.role == 'policyholder' %}
+    <div class="mb-3"><label class="form-label" for="hospital_id">Hospital</label>
+      <select class="form-select {{ 'is-invalid' if errors.hospital_id }}" id="hospital_id" name="hospital_id" required><option value="">Choose...</option>
+        {% for h in hospitals %}<option value="{{ h.id }}" {{ 'selected' if v.get('hospital_id')|string == h.id|string }}>{{ h.name }}, {{ h.city }}{{ '' if h.network_status else ' (non-network)' }}</option>{% endfor %}
+      </select><div class="invalid-feedback">{{ errors.hospital_id }}</div></div>
+  {% else %}{{ inp('hospital_id', 'Hospital ID (must be your own network hospital)', v, errors, 'number', 'required') }}{% endif %}
+    <div class="row"><div class="col-md-4 mb-3"><label class="form-label" for="treatment_type">Treatment type</label>
+      <select class="form-select {{ 'is-invalid' if errors.treatment_type }}" id="treatment_type" name="treatment_type">
+        {% for t in ['inpatient','daycare'] %}<option value="{{ t }}" {{ 'selected' if v.get('treatment_type') == t }}>{{ t|label }}</option>{% endfor %}</select>
+      <div class="invalid-feedback">{{ errors.treatment_type }}</div></div>
+    <div class="col-md-4">{{ inp('admission_date', 'Admission date', v, errors, 'date', 'required') }}</div>
+    <div class="col-md-4">{{ inp('discharge_date', 'Discharge date', v, errors, 'date', 'required') }}</div></div></div>
+
+  <div class="card card-body"><h2 class="card-title"><span class="panel-num">3</span>Billing and description</h2>
+    {{ inp('requested_amount', 'Requested amount (INR)', v, errors, 'number', 'required min="0.01" step="0.01"') }}
+    {{ inp('description', 'Short description', v, errors, 'text', 'required maxlength="255"') }}
+    <div class="d-flex gap-2"><button class="btn btn-light" name="action" value="draft"><i class="bi bi-save"></i> Save draft</button>
+      <button class="btn btn-primary" name="action" value="submit"><i class="bi bi-send"></i> Submit claim</button></div></div>
+</div>
+<div class="col-xl-4"><div class="card card-body"><h2 class="card-title"><i class="bi bi-info-circle"></i>Before you submit</h2>
+  <ul class="small text-muted ps-3 mb-0"><li>The member must belong to the chosen policy.</li><li>Admission date cannot be in the future when submitting (drafts may keep it).</li>
+  <li>{{ 'Cashless claims are only for your own network hospital.' if g.user.role == 'hospital' else 'Reimbursement may use any listed hospital.' }}</li>
+  <li>After saving, mark the hospital bill and discharge summary as received on the claim page.</li><li>An officer reviews every claim; nothing is approved automatically.</li></ul></div></div>
+</div></form>
+{% endblock %}

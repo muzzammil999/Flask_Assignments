@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}{{ movie.movie_name }}{% endblock %}
+{% block content %}
+<article class="card details-layout">
+  <div>
+    {% if movie.poster_filename %}
+      <img class="poster-large" src="{{ url_for('static', filename='uploads/' + movie.poster_filename) }}" alt="Poster of {{ movie.movie_name }}">
+    {% else %}
+      <div class="poster-large poster-placeholder">🎬</div>
+    {% endif %}
+  </div>
+
+  <div>
+    <span class="tag">{{ movie.genre }}</span>
+    <h1>{{ movie.movie_name }}</h1>
+
+    <dl>
+      <dt>Genre</dt><dd>{{ movie.genre }}</dd>
+      <dt>Length</dt><dd>{{ movie.length }} minutes</dd>
+      <dt>Certification</dt><dd>{{ movie.certification }}</dd>
+      <dt>Created by</dt><dd>{{ movie.owner_name }}</dd>
+      <dt>Likes</dt><dd>❤️ {{ movie.like_count }}</dd>
+      {% if movie.created_at %}
+        <dt>Added on</dt><dd>{{ movie.created_at[:10] }}</dd>
+      {% endif %}
+    </dl>
+
+    <div class="actions">
+      <form action="{{ url_for('vote', movie_id=movie.id) }}" method="post" class="inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="{% if movie.user_liked %}liked{% endif %}">
+          {% if movie.user_liked %}❤️ Liked{% else %}❤️ Like Movie{% endif %}
+        </button>
+      </form>
+
+      {% if session.get('user_id') == movie.user_id %}
+        <a class="button secondary" href="{{ url_for('edit_movie', movie_id=movie.id) }}">Edit Movie</a>
+        <form action="{{ url_for('delete_movie', movie_id=movie.id) }}" method="post" class="inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="danger">Delete Movie</button>
+        </form>
+      {% endif %}
+
+      <a href="{{ url_for('home') }}">Back to Movies</a>
+    </div>
+  </div>
+</article>
+{% endblock %}

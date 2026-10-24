@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit story</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <main>
+      <nav><a href="{{ url_for('home') }}">Home</a></nav>
+      <h1>Edit story</h1>
+    {% if error %}
+    <p class="error" role="alert">{{ error }}</p>
+    {% endif %}
+    <form method="post">
+      <p>
+        <label
+          >Title <input name="title" required value="{{ form['title'] }}"
+        /></label>
+      </p>
+      <p>
+        <label
+          >Author <input name="author" required value="{{ form['author'] }}"
+        /></label>
+      </p>
+      <p>
+        <label
+          >Story<textarea name="story" required rows="8">{{ form['story'] }}</textarea>
+        </label>
+      </p>
+      <button type="submit">Update story</button>
+      </form>
+    </main>
+  </body>
+</html>

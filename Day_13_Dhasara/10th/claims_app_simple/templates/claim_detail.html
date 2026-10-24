@@ -1,0 +1,121 @@
+{% extends "base.html" %}{% from "_macros.html" import badge, csrf %}
+{% block content %}
+{% set p = claim.policy %}{% set plan = p.plan %}
+{% set used = plan.annual_limit - cover %}
+<div class="crumbs"><a href="{{ url_for('claim_list') }}">Claims</a> / <b>Claim #{{ claim.id }}</b></div>
+<div class="page-head"><i class="bi bi-file-earmark-medical"></i><div>
+  <h1>Claim #{{ claim.id }} {{ badge(claim.status) }}</h1><p>{{ claim.claim_type|label }} claim for {{ claim.member.display_name }} &middot; {{ claim.treatment_type|label }}</p></div></div>
+
+{% set flow = ['draft', 'submitted', 'in_review', 'approved', 'paid'] %}
+{% set cur = {'more_info': 'in_review', 'rejected': 'approved'}.get(claim.status, claim.status) %}
+<ol class="stepper">{% for s in flow %}
+  <li class="{{ 'done' if loop.index0 < flow.index(cur) }} {{ 'now st-' ~ claim.status if s == cur }}"><span>{{ loop.index }}</span>{{ (claim.status if s == cur else s)|label }}</li>{% endfor %}
+</ol>
+
+<div class="row g-3 mb-3">
+  <div class="col-md-6 col-xl-3"><div class="card card-body sum"><i class="bi bi-person"></i><div><small>Policyholder</small><b>{{ p.holder.display_name }}</b><span>Policy {{ p.id }} &middot; {{ plan.name }}</span></div></div></div>
+  <div class="col-md-6 col-xl-3"><div class="card card-body sum"><i class="bi bi-hospital"></i><div><small>Hospital</small><b>{{ claim.hospital.name }}</b><span>{{ claim.hospital.city }} &middot; <span class="chip {{ 'ok' if claim.hospital.network_status }}">{{ 'Network' if claim.hospital.network_status else 'Non-network' }}</span></span></div></div></div>
+  <div class="col-md-6 col-xl-3"><div class="card card-body sum"><i class="bi bi-calendar2-range"></i><div><small>Admission to discharge</small><b>{{ claim.admission_date.strftime('%d %b') }} - {{ claim.discharge_date.strftime('%d %b %Y') }}</b><span>{{ (claim.discharge_date - claim.admission_date).days }} night(s)</span></div></div></div>
+  <div class="col-md-6 col-xl-3"><div class="card card-body sum"><i class="bi bi-receipt"></i><div><small>Requested amount</small><b class="money">{{ claim.requested_amount|inr }}</b><span>{{ claim.claim_type|label }}</span></div></div></div>
+</div>
+
+<div class="row g-3">
+<div class="col-xl-8">
+  {% if checks %}<div class="alert alert-info"><b><i class="bi bi-clipboard2-check"></i> Review checks</b><ul class="mb-0 mt-1">{% for w in checks %}<li>{{ w }}</li>{% endfor %}</ul></div>{% endif %}
+
+  <div class="card card-body mb-3"><h2 class="card-title"><i class="bi bi-card-text"></i>Treatment and policy details</h2>
+    <dl class="kv">
+      <div><dt>Covered member</dt><dd>{{ claim.member.display_name }} ({{ claim.member.relationship }})</dd></div>
+      <div><dt>Treatment type</dt><dd>{{ claim.treatment_type|label }}</dd></div>
+      <div><dt>Plan covers</dt><dd>{{ plan.covered_treatment_types.replace('|', ', ') }}</dd></div>
+      <div><dt>Policy period</dt><dd>{{ p.start_date }} to {{ p.end_date }} {{ badge(p.status) }}</dd></div>
+      <div><dt>Assigned officer</dt><dd>{{ claim.officer.display_name if claim.officer else 'Not assigned' }}</dd></div>
+      <div><dt>Submitted by</dt><dd>{{ claim.creator.display_name }}</dd></div>
+      <div><dt>Description</dt><dd class="fw-normal">{{ claim.description }}</dd></div>
+    </dl></div>
+
+  <div class="card card-body mb-3"><h2 class="card-title"><i class="bi bi-file-earmark-check"></i>Document checklist</h2>
+    {% if 'checklist' in actions %}
+    <form method="post" action="{{ url_for('checklist_update', claim_id=claim.id) }}" class="row g-2 align-items-end">{{ csrf() }}
+      {% for t, s in docs.items() %}<div class="col-md-5"><label class="form-label">{{ t|label }}</label>
+        <select class="form-select" name="{{ t }}"><option value="received" {{ 'selected' if s == 'received' }}>Received</option><option value="missing" {{ 'selected' if s == 'missing' }}>Missing</option></select></div>{% endfor %}
+      <div class="col-md-2"><button class="btn btn-primary w-100">Update</button></div>
+    </form>
+    {% else %}<dl class="kv">{% for t, s in docs.items() %}<div><dt>{{ t|label }}</dt><dd><span class="chip {{ 'ok' if s == 'received' }}">{{ s|label }}</span></dd></div>{% endfor %}</dl>{% endif %}
+  </div>
+
+  <div class="card card-body"><h2 class="card-title"><i class="bi bi-clock-history"></i>Audit trail</h2>
+    <ul class="timeline">{% for h in claim.history %}
+      <li class="st-{{ h.to_status }}"><time>{{ h.timestamp.strftime('%d %b %Y, %H:%M') }}</time>
+        <b>{{ (h.from_status or 'new')|label }} &rarr; {{ h.to_status|label }}</b> by {{ h.actor.display_name }}
+        {% if h.note %}<div class="text-muted">{{ h.note }}</div>{% endif %}</li>{% endfor %}
+    </ul></div>
+</div>
+
+<div class="col-xl-4">
+  {% if ['edit', 'submit', 'assign', 'start', 'respond']|select('in', actions)|list %}
+  <div class="card card-body mb-3"><h2 class="card-title"><i class="bi bi-lightning-charge"></i>Next step</h2>
+    <div class="d-flex flex-wrap gap-2">
+      {% if 'edit' in actions %}<a class="btn btn-light" href="{{ url_for('edit_claim', claim_id=claim.id) }}">Edit draft</a>{% endif %}
+      {% for key, endpoint, label in [('submit', 'submit', 'Submit claim'), ('assign', 'assign_claim', 'Assign to me'), ('start', 'start', 'Start review')] %}{% if key in actions %}
+      <form method="post" action="{{ url_for(endpoint, claim_id=claim.id) }}">{{ csrf() }}<button class="btn btn-primary">{{ label }}</button></form>{% endif %}{% endfor %}
+    </div>
+    {% if 'respond' in actions %}
+    <form method="post" action="{{ url_for('respond', claim_id=claim.id) }}">{{ csrf() }}
+      <label class="form-label">Your response to the information request</label><textarea class="form-control mb-2" name="note" required></textarea>
+      <button class="btn btn-primary">Send response</button></form>{% endif %}
+  </div>{% endif %}
+
+  <div class="card card-body engine mb-3"><h2 class="card-title"><i class="bi bi-calculator"></i>Settlement engine</h2>
+    <div class="formula">Payout = (Eligible - Deductible) x (1 - Co-pay / 100)</div>
+    <div class="row-l mt-2"><span class="text-muted">Requested</span><b class="money">{{ claim.requested_amount|inr }}</b></div>
+
+    {% if 'decide' in actions %}
+    <form method="post" action="{{ url_for('approve_claim', claim_id=claim.id) }}" id="approve-form" data-ded="{{ plan.deductible }}" data-copay="{{ plan.copay_percent }}">{{ csrf() }}
+      <label class="form-label mt-2" for="eligible_amount">Eligible amount (INR)</label>
+      <input class="form-control money" id="eligible_amount" name="eligible_amount" type="number" step="0.01" min="0.01" max="{{ claim.requested_amount }}" required>
+      <div class="row-l mt-2"><span class="text-muted">Deductible (plan)</span><span class="money">{{ plan.deductible|inr }}</span></div>
+      <div class="row-l"><span class="text-muted">Co-pay (plan)</span><span>{{ plan.copay_percent }}%</span></div>
+      <div class="row-l deduct"><span>Co-pay deduction</span><span class="money" id="pv-copay">-</span></div>
+      <div class="payout"><div><small>Simulated payout</small></div><b id="pv-payout">-</b></div>
+      <div class="small text-muted mb-1">Cover used {{ used|inr }} of {{ plan.annual_limit|inr }}</div>
+      <div class="meter mb-1"><span style="width: {{ [100, (used / plan.annual_limit * 100)|round(1)]|min }}%"></span></div>
+      <div class="small text-muted mb-3">Remaining cover: <b>{{ cover|inr }}</b></div>
+      <label class="form-label" for="reason">Decision reason</label><textarea class="form-control mb-2" id="reason" name="reason" required></textarea>
+      <button class="btn btn-success w-100"><i class="bi bi-check-circle"></i> Approve claim</button>
+    </form>
+    <hr>
+    <form method="post" action="{{ url_for('more_info', claim_id=claim.id) }}" class="mb-3">{{ csrf() }}
+      <label class="form-label">Request more information</label>
+      <select class="form-select mb-2" name="document_type">{% for t in docs %}<option value="{{ t }}">{{ t|label }}</option>{% endfor %}</select>
+      <textarea class="form-control mb-2" name="reason" placeholder="Reason" required></textarea><button class="btn btn-warning w-100">Request information</button></form>
+    <form method="post" action="{{ url_for('reject_claim', claim_id=claim.id) }}">{{ csrf() }}
+      <label class="form-label">Reject claim</label><textarea class="form-control mb-2" name="reason" placeholder="Written reason (required)" required></textarea>
+      <button class="btn btn-danger w-100" data-confirm="Reject this claim? The submitter will see your written reason." data-confirm-title="Confirm rejection" data-confirm-ok="Yes, reject"><i class="bi bi-x-circle"></i> Reject claim</button></form>
+
+    {% elif info %}
+    <div class="row-l"><span class="text-muted">Eligible (officer)</span><b class="money">{{ info.eligible|inr }}</b></div>
+    <div class="row-l deduct"><span>Difference from requested</span><span class="money">-{{ info.reduction|inr }}</span></div>
+    <div class="row-l deduct"><span>Deductible</span><span class="money">-{{ info.deductible|inr }}</span></div>
+    <div class="row-l deduct"><span>Co-pay {{ info.copay_pct }}%</span><span class="money">-{{ info.copay|inr }}</span></div>
+    <div class="payout"><div><small>Simulated payout</small></div><b>{{ info.payout|inr }}</b></div>
+    <p class="mb-0 small"><b>Reason:</b> {{ claim.decision_reason }}</p>
+    {% else %}
+    <div class="row-l"><span class="text-muted">Deductible</span><span class="money">{{ plan.deductible|inr }}</span></div>
+    <div class="row-l"><span class="text-muted">Co-pay</span><span>{{ plan.copay_percent }}%</span></div>
+    <div class="row-l"><span class="text-muted">Remaining cover</span><b class="money">{{ cover|inr }}</b></div>
+    {% if claim.decision_reason %}<p class="mb-0 small"><b>Reason:</b> {{ claim.decision_reason }}</p>{% else %}<p class="mb-0 small text-muted">No decision has been recorded yet.</p>{% endif %}
+    {% endif %}
+
+    {% if 'settle' in actions and info %}
+    <hr><form method="post" action="{{ url_for('settle_claim', claim_id=claim.id) }}">{{ csrf() }}
+      <label class="form-label">Simulated payout to {{ 'hospital' if claim.claim_type == 'cashless' else 'policyholder' }}</label>
+      <input class="form-control mb-2 money" name="amount" value="{{ info.payout }}" readonly>
+      <button class="btn btn-primary w-100" type="submit"
+        data-confirm="Record a settlement of {{ info.payout|inr }} to the {{ 'hospital' if claim.claim_type == 'cashless' else 'policyholder' }} for claim #{{ claim.id }}? The claim will be marked Paid and this cannot be undone."
+        data-confirm-title="Confirm settlement" data-confirm-ok="Yes, record settlement" data-confirm-style="primary"><i class="bi bi-cash-coin"></i> Record settlement</button></form>{% endif %}
+    {% if claim.settlement %}<div class="alert alert-success mt-3 mb-0">Paid {{ claim.settlement.amount|inr }} to the <b>{{ claim.settlement.payee_type }}</b> on {{ claim.settlement.recorded_at.date() }} (recorded by {{ claim.settlement.recorded_by.display_name }}). No real money moved.</div>{% endif %}
+  </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+﻿user_id,username,display_name,role,hospital_id
+1,aasha,Aasha Rao,policyholder,
+2,bilal,Bilal Khan,policyholder,
+3,chitra,Chitra Devi,policyholder,
+4,dev,Dev Kumar,policyholder,
+5,esha,Esha Reddy,policyholder,
+6,farhan,Farhan Ali,policyholder,
+7,gita,Gita Naik,policyholder,
+8,harish,Harish Babu,policyholder,
+9,city_hospital,CityCare Desk,hospital,1
+10,lotus_hospital,Lotus Desk,hospital,2
+11,green_hospital,Green Valley Desk,hospital,3
+15,sunrise_hospital,Sunrise Desk,hospital,4
+12,officer_meera,Meera Shah,claims_officer,
+13,officer_rahul,Rahul Sen,claims_officer,
+14,admin_demo,Demo Administrator,admin,

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Your dashboard</h1>
+<section class="card"><h2>Add item</h2>
+  <form action="{{ url_for('add_item') }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Item name <input name="name" required minlength="2" maxlength="80"></label>
+    <label>Category <select name="category">{% for choice in categories %}<option>{{ choice }}</option>{% endfor %}</select></label>
+    <button>Add</button>
+  </form>
+</section>
+<section class="card"><h2>Search and filter</h2>
+  <form method="get" action="{{ url_for('dashboard') }}">
+    <label>Search <input name="search" value="{{ search }}" placeholder="Item name"></label>
+    <label>Category <select name="category"><option>All</option>
+    {% for choice in categories %}<option {% if category == choice %}selected{% endif %}>{{ choice }}</option>{% endfor %}</select></label>
+    <button>Apply</button> <a href="{{ url_for('dashboard') }}">Clear</a>
+  </form>
+</section>
+<h2>Items ({{ items|length }})</h2>
+{% for item in items %}<div class="item"><strong>{{ item['name'] }}</strong><span>{{ item['category'] }}</span></div>
+{% else %}<p>No items match your search. Add one or clear the filters.</p>{% endfor %}
+{% endblock %}

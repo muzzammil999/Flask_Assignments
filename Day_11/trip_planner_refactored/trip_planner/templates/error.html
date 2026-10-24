@@ -1,0 +1,4 @@
+{# Shown by the 400/404/413/500 handlers in app.py. Data: `message`. #}
+{% extends "base.html" %}
+{% block title %}Error | Trip Planner{% endblock %}
+{% block content %}<div class="empty-state"><h1>Something went wrong</h1><p>{{ message }}</p><a class="button" href="{{ url_for('home') }}">Back Home</a></div>{% endblock %}

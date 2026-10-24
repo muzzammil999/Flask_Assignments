@@ -1,0 +1,8 @@
+{# _poster.html - shows the poster of movie "m" (used on every page that
+   names a movie). If the movie has no poster, a flat gradient (coloured by
+   genre) is shown instead - no pictures, no wallpaper. #}
+{% if m.poster %}
+  <img src="{{ url_for('static', filename='uploads/' + m.poster) }}" alt="{{ m.title }} poster">
+{% else %}
+  <div class="noposter g-{{ m.genres[0]|lower }}" role="img" aria-label="{{ m.title }} (no poster)"></div>
+{% endif %}

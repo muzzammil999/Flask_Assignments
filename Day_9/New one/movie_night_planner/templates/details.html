@@ -1,0 +1,48 @@
+{# details.html - route: details() in app.py. Variable: movie. #}
+{% extends "base.html" %}
+{% block title %}{{ movie.title }} - Movie Night Planner{% endblock %}
+{% block content %}
+{% set m = movie %}
+<a class="back" href="{{ url_for('home') }}">&larr; Back to All Movies</a>
+<section class="detail">
+  <div class="card posterbox">{% include "_poster.html" %}</div>
+
+  <div>
+    <div class="card">
+      {% for g in m.genres %}<span class="tag">{{ g }}</span> {% endfor %}<span class="tag grey">{{ m.rating }}</span>
+      <h1>{{ m.title }}</h1>
+      <p class="by"><span class="dot">{{ m.username[0]|upper }}</span> Proposed by <strong>{{ m.username }}</strong></p>
+      <div class="note"><small>SYNOPSIS</small><p>{{ m.synopsis }}</p></div>
+      <div class="tiles">
+        <div><small>RUNTIME</small><b>{{ m.runtime }} mins</b></div>
+        <div><small>RATING</small><b>{{ m.rating }}</b></div>
+        <div><small>{{ 'GENRES' if m.genres|length > 1 else 'GENRE' }}</small><b>{{ m.genres|join(', ') }}</b></div>
+      </div>
+    </div>
+
+    <div class="card likebox">
+      <div><span class="big">{{ m.like_count }}</span> {{ 'Like' if m.like_count == 1 else 'Likes' }}</div>
+      <form action="{{ url_for('like_movie', movie_id=m.id) }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn">{{ 'Liked (You voted)' if m.liked else 'Like this movie' }}</button>
+      </form>
+    </div>
+
+    <div class="card owner">
+      {% if is_owner(m) %}
+        <span>You created this movie</span>
+        <div class="actions">
+          <a class="btn small soft" href="{{ url_for('edit_movie', movie_id=m.id) }}">Edit Movie</a>
+          <form action="{{ url_for('delete_movie', movie_id=m.id) }}" method="post"
+                onsubmit="return confirm('Delete this movie?');">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn small danger">Delete Movie</button>
+          </form>
+        </div>
+      {% else %}
+        <span>Only <strong>{{ m.username }}</strong> can edit or delete this movie.</span>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

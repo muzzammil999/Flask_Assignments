@@ -1,0 +1,90 @@
+{# home.html - route: home() in app.py.
+   Variables: movies, genres, search, genre, top (top 3), total, tie, my_likes. #}
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div>
+    <h1>Vote for Movie Night</h1>
+    <p>Like your favourite movies. The most-liked movie wins the big screen!</p>
+  </div>
+  <a class="btn outline" href="{{ url_for('winner') }}">View Winning Movie</a>
+</section>
+
+<section class="card filterbar">
+  <form method="get" class="row filter">
+    <label class="grow">Search Movie Name
+      <input type="text" name="search" value="{{ search }}" placeholder="e.g. Interstellar, Toy Story...">
+    </label>
+    <label class="genre-pick">Genre
+      <select name="genre">
+        <option value="">All Genres</option>
+        {% for g in genres %}<option {{ 'selected' if g == genre }}>{{ g }}</option>{% endfor %}
+      </select>
+    </label>
+    <button class="btn primary">Filter</button>
+    <a class="clear" href="{{ url_for('home') }}">Clear</a>
+  </form>
+</section>
+
+<div class="home-layout">
+  <div>
+    <div class="section-head">
+      <h2 class="section-title">Community Movies <span class="count">{{ movies|length }} film{{ '' if movies|length == 1 else 's' }}</span></h2>
+      <span class="hint">Vote by clicking the Like button</span>
+    </div>
+    {% if movies %}
+      <section class="grid">
+        {% for m in movies %}{% include "_card.html" %}{% endfor %}
+      </section>
+    {% else %}
+      <p class="card center muted">No movies found. Use “Create Movie” to add one.</p>
+    {% endif %}
+  </div>
+
+  <aside class="side">
+    <section class="card tracker">
+      <div class="tracker-head">
+        <h3><span class="live-dot"></span> Live Ballot Tracker</h3>
+        <span class="stage">{{ 'Tiebreaker Stage' if tie else 'Voting Open' }}</span>
+      </div>
+      <p class="muted">Instant Matchup Standings (Top 3)</p>
+
+      {% for t in top %}
+      <div class="stand">
+        <div class="stand-line">
+          <span class="rank-badge r{{ t.rank }}">{{ t.rank }}</span>
+          <a class="stand-title" href="{{ url_for('details', movie_id=t.id) }}">{{ t.title }}</a>
+          {% if t.liked %}<span class="yours">(Your Vote)</span>{% endif %}
+          <span class="stand-votes"><b>{{ t.like_count }} vote{{ '' if t.like_count == 1 else 's' }}</b> ({{ t.percent }}%)</span>
+        </div>
+        <div class="meter {{ 'dim' if t.rank > 1 }}"><i style="width: {{ t.percent }}%"></i></div>
+      </div>
+      {% else %}
+      <p class="muted">No movies yet.</p>
+      {% endfor %}
+
+      <div class="active-vote">
+        <div class="active-line">
+          <span>Your active {{ 'votes' if my_likes|length != 1 else 'vote' }}:</span>
+          {% if my_likes %}
+            <b class="ok">✓ {{ my_likes|map(attribute='title')|join(', ') }}</b>
+          {% else %}
+            <b class="none">None yet</b>
+          {% endif %}
+        </div>
+        <p class="muted">You can like or unlike any movie at any time.</p>
+      </div>
+      <div class="lockin"><span>Total likes cast:</span><code>{{ total }}</code></div>
+    </section>
+
+    <section class="card guide">
+      <h3>Voting Guidelines</h3>
+      <ul>
+        <li>Like as many movies as you want; one like per movie.</li>
+        <li>In case of a tie, the movie proposed first wins.</li>
+        <li>Suggest a movie via the “CREATE MOVIE” tab in the navbar.</li>
+      </ul>
+    </section>
+  </aside>
+</div>
+{% endblock %}

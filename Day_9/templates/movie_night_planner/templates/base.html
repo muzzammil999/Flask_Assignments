@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Movie Night Planner{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style_additions.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('home') }}">Movie Night Planner</a>
+
+    <nav>
+      <a href="{{ url_for('home') }}" {% if page == 'home' %}class="active"{% endif %}>Home</a>
+      {# nav_details comes from a context processor in app.py (link to the
+         top-liked movie, or to home when there are no movies yet). #}
+      <a href="{{ nav_details }}" {% if page == 'details' %}class="active"{% endif %}>Movie Details</a>
+      {# The "Create Movie" link is only SHOWN to logged-in users.
+         This is just for convenience - the real protection is
+         @login_required in app.py. #}
+      {% if session.get('user_id') %}
+        <a href="{{ url_for('create_movie') }}" {% if page == 'create' %}class="active"{% endif %}>Create Movie</a>
+      {% endif %}
+    </nav>
+
+    <div class="account">
+      {% if session.get('user_id') %}
+        <span class="who">Signed in as <strong>{{ session['username'] }}</strong></span>
+        {# Logout is a POST form (not a link) and carries the CSRF token. #}
+        <form action="{{ url_for('logout') }}" method="post" class="inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="small secondary">Log out</button>
+        </form>
+      {% else %}
+        <a href="{{ url_for('login') }}" {% if page == 'login' %}class="active"{% endif %}>Log in</a>
+        <a href="{{ url_for('register') }}" class="button small">Register</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <main>
+    {# Messages created with flash() in app.py. Categories used:
+       success, error, warning, info. Jinja escapes them automatically. #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <p class="message {{ category }}">{{ message }}</p>
+      {% endfor %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

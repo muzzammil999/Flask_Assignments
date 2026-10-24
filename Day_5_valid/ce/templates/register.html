@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Register for {{ event.title }}{% endblock %}
+
+{% block content %}
+<a class="back" href="{{ url_for('event_details', event_id=event.id) }}">← Event details</a>
+<span class="eyebrow">Seat reservation</span>
+<h1>Register for an event</h1>
+<p class="lead">Enter your details to reserve one or two seats.</p>
+
+<div class="registration-layout">
+    <form class="panel form-panel" method="post" novalidate
+          action="{{ url_for('register_event', event_id=event.id) }}">
+        <div class="form-grid">
+            <div class="field span">
+                <label for="full_name">Full name *</label>
+                <input id="full_name" name="full_name" value="{{ form.full_name }}" placeholder="Your full name">
+            </div>
+
+            <div class="field">
+                <label for="email">Email address *</label>
+                <input id="email" name="email" value="{{ form.email }}" placeholder="you@example.com">
+            </div>
+
+            <div class="field">
+                <label for="mobile">Mobile number *</label>
+                <input id="mobile" name="mobile" value="{{ form.mobile }}" placeholder="10-digit phone number">
+            </div>
+
+            <div class="field span">
+                <label for="seats_requested">Seats requested *</label>
+                <select id="seats_requested" name="seats_requested">
+                    <option value="1" {% if form.seats_requested == '1' %}selected{% endif %}>1 seat</option>
+                    <option value="2" {% if form.seats_requested == '2' %}selected{% endif %}>2 seats</option>
+                </select>
+                <div class="hint">A person can register once per event using the same email.</div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn" type="submit">Confirm registration</button>
+            <a class="btn secondary" href="{{ url_for('event_details', event_id=event.id) }}">Cancel</a>
+        </div>
+    </form>
+
+    <aside class="panel aside">
+        <div class="cover"></div>
+        <span class="pill">{{ event.category|upper }}</span>
+        <h3 style="margin-top:10px">{{ event.title }}</h3>
+        <p>{{ event.event_date.strftime('%d %b %Y') }} · {{ event.venue }}</p>
+        <div class="capacity">{{ event.available_seats }} seats available</div>
+    </aside>
+</div>
+{% endblock %}

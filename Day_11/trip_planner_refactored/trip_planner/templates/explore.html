@@ -1,0 +1,20 @@
+{# Page: Completed Trips (route: completed_trips_page, URL /completed).
+   Data: `trips` and `search` from app.py. Card markup: _completed_card.html.
+   Shows the signed-in user's own trips whose end date has passed (ended yesterday or earlier). #}
+{% extends "base.html" %}
+{% block title %}Completed Trips | Trip Planner{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">YOUR TRAVEL HISTORY</p><h1>Completed Trips</h1><p class="muted">Trips whose end date has passed move here automatically.</p></div></div>
+{# GET form: submitting reloads this page with ?search=... #}
+<form class="filter-bar search-only" method="get">
+  <div class="filter-search"><label for="search">Search by destination</label><input id="search" name="search" value="{{ search }}" placeholder="Try Goa"></div>
+  <div class="filter-actions"><button class="button" type="submit">Search</button><a class="button secondary" href="{{ url_for('completed_trips_page') }}">Clear</a></div>
+</form>
+<div class="card-grid">
+{% for trip in trips %}
+  {% include "_completed_card.html" %}
+{% else %}
+  <div class="empty-state"><span>🏁</span><h2>No completed trips yet</h2><p>A trip moves here automatically the day after its end date.</p><a class="button" href="{{ url_for('my_trips') }}">Go to My Trips</a></div>
+{% endfor %}
+</div>
+{% endblock %}

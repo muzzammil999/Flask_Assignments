@@ -1,0 +1,24 @@
+{# register.html - route: register() in app.py. Variable: username. #}
+{% extends "base.html" %}
+{% block title %}Register - Movie Night Planner{% endblock %}
+{% block content %}
+<section class="card auth anim">
+  <div class="logo big">MN</div>
+  <h1>Register for Movie Night Planner</h1>
+  <p class="muted">Create an account to propose movies and cast your likes.</p>
+  <form method="post" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label class="stagger" style="--i:1">Username <span class="req">Required</span>
+      <input type="text" name="username" value="{{ username }}" placeholder="e.g. muzzammil" autofocus>
+    </label>
+    <label class="stagger" style="--i:2">Password <span class="req">Required</span>
+      <input type="password" name="password" placeholder="Minimum 8 characters">
+    </label>
+    <label class="stagger" style="--i:3">Confirm Password <span class="req">Required</span>
+      <input type="password" name="confirm_password" placeholder="Re-enter your password">
+    </label>
+    <button class="btn primary wide stagger" style="--i:4">Create Account</button>
+  </form>
+  <p class="muted center stagger" style="--i:5">Already have an account? <a href="{{ url_for('login') }}">Log in here</a></p>
+</section>
+{% endblock %}

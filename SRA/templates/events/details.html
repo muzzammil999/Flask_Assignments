@@ -1,0 +1,31 @@
+{% extends "events/layout.html" %}
+{% from "events/_card_cover.html" import cover %}
+{% block title %}{{ ev.title }}{% endblock %}
+{% block content %}
+<a class="back" href="{{ url_for('events.list_events') }}">← All events</a><br>
+<span class="eyebrow">{{ ev.category }}</span>
+{% if message %}<div class="alert" style="margin-top:12px">✓ &nbsp; {{ message }}</div>{% endif %}
+<div class="split"><div><h1>{{ ev.title }}</h1></div>
+  <a class="btn secondary" href="{{ url_for('events.edit', event_id=ev.id) }}">Edit event</a></div>
+<div class="details">
+  <div>{{ cover(ev, 'banner') }}
+    <div class="panel" style="margin-top:20px"><h2>About this event</h2>
+      <p style="white-space:pre-line">{{ ev.description }}</p></div></div>
+  <aside class="panel">
+    {% if ev.is_full %}<span class="pill full">EVENT FULL</span>
+    {% elif ev.is_closed %}<span class="pill closed">REGISTRATION CLOSED</span>
+    {% else %}<span class="pill">REGISTRATION OPEN</span>{% endif %}
+    <h2 style="margin-top:15px">Reserve your place</h2>
+    <p>{{ ev.available }} of {{ ev.capacity }} seats still available.</p>
+    <div class="meter {{ 'full' if ev.is_full }}"><span style="width:{{ ev.percent }}%"></span></div>
+    <div class="facts">
+      <div class="fact"><small>Date and time</small><strong>{{ ev.event_date|dmy }} · {{ ev.start_time|hm12 }}</strong></div>
+      <div class="fact"><small>Venue</small><strong>{{ ev.venue }}</strong></div>
+      <div class="fact"><small>Deadline</small><strong>{{ ev.reg_deadline|dmy }}</strong></div>
+      <div class="fact"><small>Organizer</small><strong>{{ ev.organizer_email }}</strong></div>
+    </div>
+    {% if ev.is_full or ev.is_closed %}<span class="btn disabled">{{ 'Event is full' if ev.is_full else 'Registration closed' }}</span>
+    {% else %}<a class="btn" href="{{ url_for('events.register', event_id=ev.id) }}">Register for this event →</a>{% endif %}
+  </aside>
+</div>
+{% endblock %}

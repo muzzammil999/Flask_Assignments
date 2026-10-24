@@ -1,0 +1,16 @@
+{# Page: Register (route: register).  Data: `errors` dict, `username`. POST -> INSERT into users. #}
+{% extends "base.html" %}
+{% block title %}Register | Trip Planner{% endblock %}
+{% block content %}
+<div class="form-wrap"><div class="form-card"><p class="eyebrow">CREATE YOUR ACCOUNT</p><h1>Register</h1><p class="muted">Save and manage your own trips.</p>
+<form method="post" novalidate>
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <label for="username">Username</label><input id="username" name="username" value="{{ username }}" required maxlength="80" autocomplete="username">
+  {% if errors.get('username') %}<small class="field-error">{{ errors.username }}</small>{% endif %}
+  <label for="password">Password</label><input id="password" name="password" type="password" required minlength="8" autocomplete="new-password">
+  {% if errors.get('password') %}<small class="field-error">{{ errors.password }}</small>{% endif %}
+  <label for="confirm_password">Confirm password</label><input id="confirm_password" name="confirm_password" type="password" required autocomplete="new-password">
+  {% if errors.get('confirm_password') %}<small class="field-error">{{ errors.confirm_password }}</small>{% endif %}
+  <button class="button full" type="submit">Create Account</button>
+</form><p class="form-bottom">Already registered? <a href="{{ url_for('login') }}">Log in</a></p></div></div>
+{% endblock %}

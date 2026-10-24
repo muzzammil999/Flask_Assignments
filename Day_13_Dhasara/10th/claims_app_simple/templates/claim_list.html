@@ -1,0 +1,31 @@
+{% extends "base.html" %}{% from "_macros.html" import badge, csrf, header %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+  {{ header('Review queue' if queue else 'All claims', 'Claims waiting for officer action, oldest first by ID.' if queue else 'Search and filter the claims you are allowed to see.', 'clipboard2-pulse' if queue else 'folder2-open') }}
+  <a class="btn btn-light" href="{{ url_for('export_csv', **request.args) }}"><i class="bi bi-download"></i> Export CSV</a>
+</div>
+<form class="card card-body mb-3" method="get"><div class="row g-2 align-items-end">
+  <div class="col-md-3"><label class="form-label">Search</label><input class="form-control" name="q" value="{{ f.q }}" placeholder="Claim ID or member name"></div>
+  <div class="col-md-2"><label class="form-label">Status</label><select class="form-select" name="status"><option value="">All</option>
+    {% for s in statuses %}<option value="{{ s }}" {{ 'selected' if f.status == s }}>{{ s|label }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><label class="form-label">Type</label><select class="form-select" name="claim_type"><option value="">All</option>
+    {% for t in ['cashless','reimbursement'] %}<option value="{{ t }}" {{ 'selected' if f.claim_type == t }}>{{ t|label }}</option>{% endfor %}</select></div>
+  <div class="col-md-3"><label class="form-label">Hospital</label><select class="form-select" name="hospital_id"><option value="">All</option>
+    {% for h in hospitals %}<option value="{{ h.id }}" {{ 'selected' if f.hospital_id == h.id|string }}>{{ h.name }}</option>{% endfor %}</select></div>
+  <div class="col-md-2 d-flex gap-2"><button class="btn btn-primary flex-fill">Filter</button><a class="btn btn-light" href="{{ request.path }}">Reset</a></div>
+</div></form>
+<div class="table-responsive"><table class="table align-middle">
+  <tr><th>Claim</th><th>Member</th><th>Hospital</th><th>Type</th><th class="text-end">Requested</th><th class="text-end">Age</th><th>Status</th><th></th></tr>
+  {% for c in claims %}
+  <tr><td><a class="fw-semibold" href="{{ url_for('detail', claim_id=c.id) }}">#{{ c.id }}</a></td>
+    <td>{{ c.member.display_name }}<br><small class="text-muted">Policy {{ c.policy_id }}</small></td><td>{{ c.hospital.name }}</td><td>{{ c.claim_type|label }}</td>
+    <td class="text-end money">{{ c.requested_amount|inr }}</td><td class="text-end">{{ (today - c.created_at.date()).days }}d</td>
+    <td>{{ badge(c.status) }}{% if c.officer %}<br><small class="text-muted">{{ c.officer.display_name }}</small>{% endif %}</td>
+    <td class="text-end text-nowrap">
+      {% if queue and c.status == 'submitted' and not c.officer_user_id %}
+      <form class="d-inline" method="post" action="{{ url_for('assign_claim', claim_id=c.id) }}">{{ csrf() }}<button class="btn btn-primary btn-sm">Assign to me</button></form>{% endif %}
+      <a class="btn btn-light btn-sm" href="{{ url_for('detail', claim_id=c.id) }}">Open</a></td></tr>
+  {% else %}<tr><td colspan="8" class="text-center text-muted py-4">No claims match these filters. Try Reset.</td></tr>{% endfor %}
+</table></div>
+<p class="text-muted small mt-2">{{ claims|length }} claim(s) shown.</p>
+{% endblock %}

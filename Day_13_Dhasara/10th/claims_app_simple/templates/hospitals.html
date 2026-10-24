@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% from "_macros.html" import header %}
+{% block content %}
+{{ header('Hospital directory', 'Cashless claims are allowed only at network hospitals.', 'hospital') }}
+<table class="table table-sm"><tr><th>ID</th><th>Name</th><th>City</th><th>Cashless network</th></tr>
+{% for h in hospitals %}<tr><td>{{ h.id }}</td><td>{{ h.name }}</td><td>{{ h.city }}</td><td>{{ 'Yes' if h.network_status else 'No' }}</td></tr>{% endfor %}</table>
+{% endblock %}

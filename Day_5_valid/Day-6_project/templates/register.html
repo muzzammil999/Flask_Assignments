@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Register for {{ event.title }} | Community Events{% endblock %}
+
+{% block content %}
+{% set booked = event.booked_seats | default(0) %}
+{% set total = event.capacity | default(1) %}
+{% set available = total - booked %}
+
+<section class="view active" id="register">
+    <a class="back" href="{{ url_for('event_details', event_id=event.id) }}">← Event details</a>
+    <span class="eyebrow">Seat reservation</span>
+    <h1>Register for an event</h1>
+    <p class="lead">Enter your details to reserve one or two seats.</p>
+
+    <div class="registration-layout">
+        <div class="panel form-panel">
+            <form class="form-grid" method="POST" action="{{ url_for('register_event', event_id=event.id) }}">
+                <div class="field span">
+                    <label for="name">Full name *</label>
+                    <input id="name" name="name" placeholder="Your full name" required>
+                </div>
+                <div class="field">
+                    <label for="email">Email address *</label>
+                    <input id="email" name="email" type="email" placeholder="you@example.com" required>
+                </div>
+                <div class="field">
+                    <label for="phone">Mobile number *</label>
+                    <input id="phone" name="phone" placeholder="10-digit phone number" required>
+                </div>
+                <div class="field span">
+                    <label for="seats">Seats requested *</label>
+                    <select id="seats" name="seats" required>
+                        <option value="1">1 seat</option>
+                        {% if available >= 2 %}
+                            <option value="2">2 seats</option>
+                        {% endif %}
+                    </select>
+                    <div class="hint">A person can register once per event using the same email.</div>
+                </div>
+
+                <div class="form-actions field span">
+                    <button class="btn" type="submit">Confirm registration</button>
+                    <a class="btn secondary" href="{{ url_for('event_details', event_id=event.id) }}">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <aside class="panel aside">
+            <div class="cover {{ event.cover_class | default('') }}"></div>
+            <span class="pill">{{ event.category }}</span>
+            <h3 style="margin-top:10px">{{ event.title }}</h3>
+            <p>{{ event.date }} · {{ event.venue }}</p>
+            <div class="capacity">{{ available }} seats available</div>
+        </aside>
+    </div>
+</section>
+{% endblock %}

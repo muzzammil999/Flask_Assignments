@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Log in{% endblock %}
+{% block content %}
+<h1>Log in</h1>
+<form method="post" action="{{ url_for('login') }}" class="card narrow">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  {# Remember which page the visitor wanted (for example a Like).
+     app.py checks it is a page on this site before redirecting. #}
+  <input type="hidden" name="next" value="{{ next_url }}">
+
+  <label>Username
+    <input name="username" value="{{ username }}" autocomplete="username" autofocus>
+  </label>
+  <label>Password
+    <input type="password" name="password" autocomplete="current-password">
+  </label>
+  <button type="submit">Log in</button>
+</form>
+<p>No account yet? <a href="{{ url_for('register') }}">Register</a></p>
+{% endblock %}

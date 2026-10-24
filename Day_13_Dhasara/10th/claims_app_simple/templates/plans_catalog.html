@@ -1,0 +1,54 @@
+
+{% extends "base.html" %}
+{% from "_macros.html" import header %}
+
+{% block content %}
+{{ header('Available Insurance Plans',
+          'Compare sample health insurance plans and their coverage.',
+          'shield-check') }}
+
+<div class="row g-3">
+  {% for plan in plans %}
+  <div class="col-md-6 col-xl-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <span class="badge text-bg-primary mb-2">
+          Health Insurance
+        </span>
+
+        <h2 class="h5">{{ plan.name }}</h2>
+
+        <hr>
+
+        <p class="text-muted mb-1">Annual coverage limit</p>
+        <h3 class="h4">{{ plan.annual_limit|inr }}</h3>
+
+        <p class="mb-2">
+          <strong>Deductible:</strong>
+          {{ plan.deductible|inr }}
+        </p>
+
+        <p class="mb-2">
+          <strong>Co-payment:</strong>
+          {{ plan.copay_percent }}%
+        </p>
+
+        <p class="mb-3">
+          <strong>Treatments covered:</strong>
+          {{ plan.covered_treatment_types.replace('|', ', ') }}
+        </p>
+
+        <p class="small text-muted">
+          Demo information only. Refer to the insurer's
+          official policy wording for actual terms.
+        </p>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="col-12">
+    <p>No insurance plans are available.</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

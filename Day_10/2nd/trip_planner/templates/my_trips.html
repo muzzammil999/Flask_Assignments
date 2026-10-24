@@ -1,0 +1,15 @@
+{# Page: My Trips (route: my_trips).  Data: `trips` = ACTIVE trips only (with total_cost), `completed_count`.
+   Links: create_trip, trip_detail, edit_trip.  Photo via the media route. #}
+{% extends "base.html" %}
+{% block title %}My Trips | Trip Planner{% endblock %}
+{% block content %}
+<div class="page-heading"><div><p class="eyebrow">YOUR TRAVEL PLANS</p><h1>My Trips</h1><p class="muted">Upcoming and ongoing trips. Only you can see and manage them.</p></div><a class="button" href="{{ url_for('create_trip') }}">+ Create Trip</a></div>
+<div class="card-grid">
+{% for trip in trips %}
+  <article class="trip-card">{% if trip.image_filename %}<img class="card-image" src="{{ url_for('media', filename=trip.image_filename) }}" alt="Photo of {{ trip.destination }}">{% endif %}<p class="eyebrow">{{ trip.start_date.strftime('%d %b %Y') }} – {{ trip.end_date.strftime('%d %b %Y') }}</p><h2>{{ trip.destination }}</h2><div class="trip-stats"><div><small>Budget</small><strong>{{ '%.2f'|format(trip.budget) }}</strong></div><div><small>Activity total</small><strong>{{ '%.2f'|format(trip.total_cost) }}</strong></div></div><div class="actions"><a class="button small" href="{{ url_for('trip_detail', trip_id=trip.id) }}">View Trip</a><a class="button secondary small" href="{{ url_for('edit_trip', trip_id=trip.id) }}">Edit</a></div></article>
+{% else %}
+  <div class="empty-state"><span>🧳</span><h2>Your next trip starts here</h2><p>Create a trip, add activities, and see your budget update. Finished trips live under Completed Trips.</p><a class="button" href="{{ url_for('create_trip') }}">Create your first trip</a></div>
+{% endfor %}
+</div>
+{% if completed_count %}<p class="muted" style="margin-top:24px">{{ completed_count }} finished trip{{ '' if completed_count == 1 else 's' }} moved to <a href="{{ url_for('completed_trips_page') }}">Completed Trips →</a></p>{% endif %}
+{% endblock %}

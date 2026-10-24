@@ -1,0 +1,4 @@
+{% macro cover(ev, extra='') -%}
+<div class="cover {{ extra }} {{ ['','c2','c3'][ev.id % 3] if not ev.image }} {{ 'has-img' if ev.image }}"
+  {% if ev.image %}style="background-image:url('{{ url_for('static', filename='uploads/' + ev.image) }}')"{% endif %}></div>
+{%- endmacro %}

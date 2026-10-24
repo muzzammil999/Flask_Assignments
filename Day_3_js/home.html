@@ -1,0 +1,106 @@
+{% extends "base.html" %} {% block title %}Home | Story App{% endblock %} {%
+block content %}
+<h1>Story App</h1>
+<p>Write and read stories.</p>
+<h2>Add a story</h2>
+<p class="error" id="form-error" role="alert" hidden></p>
+<form
+  id="story-form"
+  action="{{ url_for('home') }}"
+  data-js-action="{{ url_for('add_story_with_brackets') }}"
+>
+  <p>
+    <label
+      >Title <input name="title" required value="{{ form.get('title', '') }}"
+    /></label>
+  </p>
+  <p>
+    <label
+      >Author
+      <input name="author" required value="{{ form.get('author', '') }}"
+    /></label>
+  </p>
+  <p>
+    <label
+      >Story
+      <textarea name="story" rows="6" required>
+{{ form.get('story', '') }}</textarea
+      >
+    </label>
+  </p>
+  <button type="submit">Add story</button>
+</form>
+
+<h2>Stories</h2>
+<p>Total stories: {{ stories | length }}</p>
+{% if stories %}
+<ul class="story-list">
+  {% for story in stories %}
+  <li>
+    <strong>{{ story['title'] }}</strong> by {{ story['author'] }}
+    <p class="story-text">{{ story['story'] }}</p>
+    <div class="story-actions">
+      <a href="{{ url_for('edit_story', story_id=loop.index0) }}">Edit</a>
+      <form
+        class="inline-form"
+        method="post"
+        action="{{ url_for('delete_story', story_id=loop.index0) }}"
+      >
+        <button
+          class="delete-button"
+          type="submit"
+          style="
+            background-color: #dc3545;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px;
+            cursor: pointer;
+          "
+        >
+          Delete
+        </button>
+      </form>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No stories yet.</p>
+{% endif %}
+<script>
+  const storyForm = document.querySelector("#story-form");
+  const formError = document.querySelector("#form-error");
+ 
+
+  storyForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    formError.hidden = true;
+
+    const response = await fetch(storyForm.dataset.jsAction, {
+      method: "POST",
+      body: new FormData(storyForm),
+    });
+
+    const result = await response.json();
+    console.log(result);
+
+    if (!response.ok) {
+      formError.textContent = result.error || "Unable to add story.";
+      formError.hidden = false;
+      return;
+    }
+
+    window.location.href = result.redirect_url;
+    
+   
+   
+  });
+   console.log("Story added successfully!");
+  
+</script>
+{% endblock %}

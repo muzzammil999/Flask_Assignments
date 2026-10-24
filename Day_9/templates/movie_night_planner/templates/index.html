@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<h1>Movie Night Planner</h1>
+
+{# Big highlighted button that opens the result page. #}
+<a class="winner-banner" href="{{ url_for('result') }}">
+  <span class="trophy">🏆</span>
+  <span>
+    <strong>View Winning Movie</strong>
+    <small>See which movie has the most likes right now</small>
+  </span>
+</a>
+
+<section class="card">
+  <h2>Search and filter</h2>
+  <form method="get" action="{{ url_for('home') }}" class="filters">
+    <label>Movie / plan name
+      <input name="search" value="{{ filters.search }}" placeholder="e.g. spider">
+    </label>
+    <label>Genre
+      <select name="genre">
+        <option value="">All genres</option>
+        {% for g in genres %}
+          <option value="{{ g }}" {% if filters.genre == g %}selected{% endif %}>{{ g }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Sort by
+      <select name="sort">
+        <option value="likes" {% if filters.sort == 'likes' %}selected{% endif %}>Highest likes</option>
+        <option value="newest" {% if filters.sort == 'newest' %}selected{% endif %}>Newest first</option>
+      </select>
+    </label>
+    <button type="submit">Apply</button>
+    <a href="{{ url_for('home') }}">Clear</a>
+  </form>
+</section>
+
+<h2>{{ movies|length }} movie{{ '' if movies|length == 1 else 's' }}{% if is_filtered %} found{% endif %}</h2>
+
+<div class="grid">
+{% for movie in movies %}
+  <article class="card movie">
+    {% if movie.poster_filename %}
+      <img class="movie-poster" src="{{ url_for('static', filename='uploads/' + movie.poster_filename) }}" alt="Poster of {{ movie.movie_name }}">
+    {% else %}
+      <div class="movie-poster poster-placeholder">🎬</div>
+    {% endif %}
+
+    <span class="tag">{{ movie.genre }}</span>
+    <h3><a href="{{ url_for('movie_details', movie_id=movie.id) }}">{{ movie.movie_name }}</a></h3>
+    <p class="meta">
+      {{ movie.length }} minutes<br>
+      Certification: {{ movie.certification }}
+    </p>
+    <p class="likes">❤️ {{ movie.like_count }} Like{{ '' if movie.like_count == 1 else 's' }}</p>
+
+    <div class="actions">
+      <a class="button small" href="{{ url_for('movie_details', movie_id=movie.id) }}">Details</a>
+
+      {# Vote is always a POST form. app.py checks the login and sends
+         visitors to the login page with a flash message. #}
+      <form action="{{ url_for('vote', movie_id=movie.id) }}" method="post" class="inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="small {% if movie.user_liked %}liked{% endif %}">
+          {% if movie.user_liked %}❤️ Liked{% else %}Like{% endif %}
+        </button>
+      </form>
+
+      {# Edit/Delete are only SHOWN to the owner. app.py ALSO checks
+         ownership, so typing the URL by hand does not work either. #}
+      {% if session.get('user_id') == movie.user_id %}
+        <a class="button small secondary" href="{{ url_for('edit_movie', movie_id=movie.id) }}">Edit</a>
+        <form action="{{ url_for('delete_movie', movie_id=movie.id) }}" method="post" class="inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="small danger">Delete</button>
+        </form>
+      {% endif %}
+    </div>
+  </article>
+{% else %}
+  <p>
+    {% if is_filtered %}
+      No movies found. Try clearing the filters.
+    {% else %}
+      No movies available yet.
+    {% endif %}
+  </p>
+{% endfor %}
+</div>
+{% endblock %}

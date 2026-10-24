@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ event.title }} | Community Events{% endblock %}
+
+{% block content %}
+{% set booked = event.booked_seats | default(0) %}
+{% set total = event.capacity | default(1) %}
+{% set percent = (booked / total * 100) | round | int %}
+{% set available = total - booked %}
+{% set is_full = (available <= 0) %}
+
+<section class="view active" id="details">
+    <a class="back" href="{{ url_for('index') }}">← All events</a>
+    <span class="eyebrow">{{ event.category }}</span>
+
+    <div class="split">
+        <div>
+            <h1>{{ event.title }}</h1>
+            <p class="lead">{{ event.headline | default('A community event in ' ~ event.venue) }}</p>
+        </div>
+        <a class="btn secondary" href="{{ url_for('edit_event', event_id=event.id) }}">Edit event</a>
+    </div>
+
+    <div class="details">
+        <div>
+            <div class="cover banner {{ event.cover_class | default('') }}"></div>
+            <div class="panel" style="margin-top:20px">
+                <h2>About this event</h2>
+                <p style="white-space: pre-line;">{{ event.description }}</p>
+            </div>
+        </div>
+
+        <aside class="panel">
+            <span class="pill {% if is_full %}full{% endif %}">
+                {% if is_full %}REGISTRATION FULL{% else %}REGISTRATION OPEN{% endif %}
+            </span>
+            <h2 style="margin-top:15px">Reserve your place</h2>
+            <p>{{ available }} of {{ total }} seats still available.</p>
+
+            <div class="meter {% if is_full %}full{% endif %}">
+                <span style="width: {{ percent }}%"></span>
+            </div>
+
+            <div class="facts">
+                <div class="fact">
+                    <small>Date and time</small>
+                    <strong>{{ event.date }} · {{ event.time }}</strong>
+                </div>
+                <div class="fact">
+                    <small>Venue</small>
+                    <strong>{{ event.venue }}</strong>
+                </div>
+                <div class="fact">
+                    <small>Deadline</small>
+                    <strong>{{ event.deadline }}</strong>
+                </div>
+                <div class="fact">
+                    <small>Organizer</small>
+                    <strong>{{ event.email }}</strong>
+                </div>
+            </div>
+
+            {% if not is_full %}
+                <a class="btn" style="width: 100%; justify-content: center;" href="{{ url_for('register_event', event_id=event.id) }}">
+                    Register for this event →
+                </a>
+            {% else %}
+                <button class="btn secondary" style="width: 100%; justify-content: center;" disabled>
+                    Event is fully booked
+                </button>
+            {% endif %}
+        </aside>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h4">Reports (simulated figures)</h1>
+<p class="text-muted">Claims you are allowed to see. Amounts are fictional, not real financial results.</p>
+<table class="table table-sm"><tr><th>Status</th><th>Type</th><th>Claims</th><th>Requested</th><th>Eligible</th><th>Simulated paid</th></tr>
+{% for r in rows %}<tr><td>{{ r[0]|label }}</td><td>{{ r[1]|label }}</td><td>{{ r[2] }}</td><td>{{ r[3]|inr }}</td><td>{{ r[4]|inr }}</td><td>{{ r[5]|inr }}</td></tr>
+{% else %}<tr><td colspan="6" class="text-center text-muted">No claims to report.</td></tr>{% endfor %}
+<tr class="fw-bold"><td colspan="2">Total</td><td>{{ totals[0] }}</td><td>{{ totals[1]|inr }}</td><td>{{ totals[2]|inr }}</td><td>{{ totals[3]|inr }}</td></tr></table>
+{% endblock %}

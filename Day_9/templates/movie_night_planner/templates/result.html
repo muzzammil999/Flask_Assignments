@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Winning Movie{% endblock %}
+{% block content %}
+<h1 class="center">🏆 Winning Movie</h1>
+
+{% if total_movies == 0 %}
+  {# Case 1: nothing in the database. #}
+  <p class="message info">No movies available yet. No winning movie yet.</p>
+
+{% elif top_likes == 0 %}
+  {# Case 2: movies exist but nobody has voted. #}
+  <p class="message info">No movie has received any votes yet.</p>
+
+{% elif winners|length > 1 %}
+  {# Case 3: tie - show every movie with the highest like count. #}
+  <p class="message success big">
+    Multiple movies are tied for the highest number of votes
+    ({{ top_likes }} like{{ '' if top_likes == 1 else 's' }} each).
+  </p>
+  <div class="grid">
+    {% for movie in winners %}
+      <article class="card movie">
+        {% if movie.poster_filename %}
+          <img class="movie-poster" src="{{ url_for('static', filename='uploads/' + movie.poster_filename) }}" alt="Poster of {{ movie.movie_name }}">
+        {% else %}
+          <div class="movie-poster poster-placeholder">🎬</div>
+        {% endif %}
+        <span class="tag">{{ movie.genre }}</span>
+        <h3>{{ movie.movie_name }}</h3>
+        <p class="meta">{{ movie.length }} minutes | {{ movie.certification }}<br>Created by {{ movie.owner_name }}</p>
+        <p class="likes">❤️ {{ movie.like_count }} Likes</p>
+        <div class="actions">
+          <a class="button small" href="{{ url_for('movie_details', movie_id=movie.id) }}">Details</a>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+
+{% else %}
+  {# Case 4: one clear winner. #}
+  {% set movie = winners[0] %}
+  <article class="card winner center">
+    {% if movie.poster_filename %}
+      <img class="poster-large" src="{{ url_for('static', filename='uploads/' + movie.poster_filename) }}" alt="Poster of {{ movie.movie_name }}">
+    {% else %}
+      <div class="poster-large poster-placeholder">🎬</div>
+    {% endif %}
+    <h2>{{ movie.movie_name }}</h2>
+    <p class="meta">
+      <span class="tag">{{ movie.genre }}</span>
+      {{ movie.length }} min | {{ movie.certification }}<br>
+      Created by {{ movie.owner_name }}
+    </p>
+    <p class="likes">❤️ {{ movie.like_count }} Like{{ '' if movie.like_count == 1 else 's' }}</p>
+    <p class="message success big">Congratulations! This movie received the highest number of votes.</p>
+    <div class="actions center-actions">
+      <a class="button secondary" href="{{ url_for('movie_details', movie_id=movie.id) }}">Movie details</a>
+    </div>
+  </article>
+{% endif %}
+
+<p class="center"><a class="button" href="{{ url_for('home') }}">Back to Home</a></p>
+{% endblock %}

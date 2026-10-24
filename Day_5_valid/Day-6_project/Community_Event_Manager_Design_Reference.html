@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Community Events — Student Design Reference</title>
+    <style>
+        :root {
+            --ink: #163042;
+            --muted: #627483;
+            --line: #dce5e6;
+            --bg: #f4f8f7;
+            --white: #fff;
+            --teal: #126d69;
+            --deep: #113d48;
+            --light: #e7f5ef;
+            --red: #b84449;
+            --gold: #f2c475
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font: 16px/1.5 system-ui, -apple-system, Segoe UI, sans-serif
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit
+        }
+
+        button,
+        a {
+            cursor: pointer
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit
+        }
+
+        .top {
+            background: var(--deep);
+            color: #fff
+        }
+
+        .top-inner {
+            max-width: 1160px;
+            margin: auto;
+            padding: 17px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px
+        }
+
+        .brand {
+            font-weight: 800;
+            font-size: 21px;
+            letter-spacing: -.5px
+        }
+
+        .brand em {
+            font-style: normal;
+            color: #a4e5c8
+        }
+
+        .nav {
+            display: flex;
+            gap: 24px;
+            align-items: center
+        }
+
+        .nav button {
+            border: 0;
+            background: none;
+            color: #d8e7e9;
+            padding: 8px 0
+        }
+
+        .nav button.active {
+            color: #fff;
+            border-bottom: 2px solid #b6e4ce
+        }
+
+        .nav .nav-cta {
+            background: #fff;
+            color: var(--deep);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 700;
+            border: 0
+        }
+
+        .shell {
+            max-width: 1160px;
+            margin: auto;
+            padding: 31px 24px 60px
+        }
+
+        .view {
+            display: none
+        }
+
+        .view.active {
+            display: block
+        }
+
+        .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--teal)
+        }
+
+        h1 {
+            font-size: clamp(28px, 4vw, 43px);
+            line-height: 1.12;
+            letter-spacing: -1.3px;
+            margin: 7px 0 9px
+        }
+
+        h2 {
+            font-size: 22px;
+            line-height: 1.25;
+            margin: 0 0 8px
+        }
+
+        h3 {
+            font-size: 18px;
+            margin: 0 0 7px
+        }
+
+        .lead {
+            color: var(--muted);
+            margin: 0 0 24px
+        }
+
+        .split {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 20px
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 9px;
+            background: var(--teal);
+            color: #fff;
+            padding: 11px 17px;
+            font-weight: 700;
+            display: inline-flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        .btn:hover {
+            filter: brightness(.94)
+        }
+
+        .btn.secondary {
+            background: #edf2f2;
+            color: var(--ink)
+        }
+
+        .btn.danger {
+            background: #fff0ef;
+            color: var(--red)
+        }
+
+        .btn.small {
+            font-size: 13px;
+            padding: 8px 12px
+        }
+
+        .btn.outline {
+            background: #fff;
+            border: 1px solid var(--line);
+            color: var(--ink)
+        }
+
+        .panel,
+        .event-card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(12, 50, 55, .045)
+        }
+
+        .filter {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr auto auto;
+            gap: 14px;
+            align-items: end;
+            margin: 24px 0
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin: 0 0 7px
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            border: 1px solid #cbdada;
+            background: #fff;
+            border-radius: 8px;
+            padding: 11px 12px;
+            color: var(--ink);
+            outline-color: var(--teal)
+        }
+
+        .field textarea {
+            resize: vertical;
+            min-height: 118px
+        }
+
+        .check {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+            padding-bottom: 11px;
+            font-size: 14px
+        }
+
+        .check input {
+            accent-color: var(--teal)
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 19px
+        }
+
+        .event-card {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column
+        }
+
+        .cover {
+            height: 176px;
+            position: relative;
+            background: linear-gradient(150deg, #83bed1 0 47%, #e3bb81 48% 65%, #568a72 66%)
+        }
+
+        .cover:after {
+            content: "";
+            position: absolute;
+            right: 11%;
+            bottom: 0;
+            width: 30%;
+            height: 53%;
+            background: linear-gradient(90deg, #d07e5d 0 20%, #f6ddad 21% 78%, #b26b4b 79%);
+            clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 100%, 0 100%)
+        }
+
+        .cover.c2 {
+            background: linear-gradient(150deg, #b0cce3 0 45%, #e1b089 46% 62%, #688976 63%)
+        }
+
+        .cover.c3 {
+            background: linear-gradient(150deg, #a4d3d6 0 50%, #d5b482 51% 68%, #628271 69%)
+        }
+
+        .cover.c2:after {
+            left: 16%;
+            right: auto;
+            background: #c87c56
+        }
+
+        .cover.c3:after {
+            width: 45%;
+            height: 40%;
+            right: 24%;
+            background: #efddaa
+        }
+
+        .card-body {
+            padding: 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column
+        }
+
+        .pill {
+            display: inline-block;
+            width: max-content;
+            padding: 5px 10px;
+            background: var(--light);
+            border-radius: 30px;
+            color: #136353;
+            font-weight: 800;
+            font-size: 12px
+        }
+
+        .pill.full {
+            background: #fff1de;
+            color: #8b5b17
+        }
+
+        .card-body h2 {
+            font-size: 21px;
+            margin: 10px 0 6px
+        }
+
+        .meta {
+            font-size: 14px;
+            color: var(--muted);
+            margin: 3px 0
+        }
+
+        .capacity {
+            margin: 16px 0 7px;
+            font-size: 13px;
+            font-weight: 700
+        }
+
+        .meter {
+            height: 7px;
+            background: #eaf1ef;
+            border-radius: 20px;
+            overflow: hidden
+        }
+
+        .meter span {
+            display: block;
+            background: var(--teal);
+            height: 100%
+        }
+
+        .meter.full span {
+            background: #d19c46
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: auto;
+            padding-top: 19px
+        }
+
+        .alert {
+            background: #e8f7ed;
+            color: #226647;
+            border: 1px solid #b7e2c2;
+            border-radius: 9px;
+            padding: 12px 15px;
+            margin: 0 0 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .alert.error {
+            background: #fff1ef;
+            color: #9a383c;
+            border-color: #f2c3c1
+        }
+
+        .form-panel {
+            max-width: 850px;
+            padding: 27px
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 19px
+        }
+
+        .field.span {
+            grid-column: 1/-1
+        }
+
+        .form-actions {
+            border-top: 1px solid var(--line);
+            margin-top: 24px;
+            padding-top: 23px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .hint {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 6px
+        }
+
+        .banner {
+            height: 285px;
+            border-radius: 13px;
+            overflow: hidden
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: minmax(0, 1.55fr) minmax(280px, .85fr);
+            gap: 21px
+        }
+
+        .details .panel {
+            padding: 22px
+        }
+
+        .details p {
+            color: var(--muted)
+        }
+
+        .facts {
+            display: grid;
+            gap: 13px;
+            margin: 16px 0
+        }
+
+        .fact {
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 12px
+        }
+
+        .fact small {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px
+        }
+
+        .fact strong {
+            display: block;
+            margin-top: 3px
+        }
+
+        .back {
+            display: inline-block;
+            color: var(--teal);
+            font-weight: 700;
+            margin-bottom: 16px
+        }
+
+        .section-title {
+            margin: 27px 0 14px
+        }
+
+        .registration-layout {
+            display: grid;
+            grid-template-columns: 1.5fr .8fr;
+            gap: 20px;
+            align-items: start
+        }
+
+        .aside {
+            padding: 23px
+        }
+
+        .aside .cover {
+            height: 145px;
+            border-radius: 9px;
+            margin-bottom: 16px
+        }
+
+        .aside p {
+            color: var(--muted);
+            margin: 6px 0
+        }
+
+        .footer {
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+            padding: 21px
+        }
+
+        .preview-tag {
+            background: #f8e8bf;
+            color: #593e13;
+            text-align: center;
+            padding: 7px;
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        @media(max-width:900px) {
+            .grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+
+            .filter {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .details,
+            .registration-layout {
+                grid-template-columns: 1fr
+            }
+        }
+
+        @media(max-width:620px) {
+            .top-inner {
+                flex-direction: column;
+                align-items: stretch
+            }
+
+            .nav {
+                justify-content: space-between;
+                gap: 9px;
+                flex-wrap: wrap
+            }
+
+            .nav button {
+                font-size: 13px
+            }
+
+            .shell {
+                padding: 23px 15px 45px
+            }
+
+            .grid,
+            .filter,
+            .form-grid {
+                grid-template-columns: 1fr
+            }
+
+            .field.span {
+                grid-column: auto
+            }
+
+            .split {
+                align-items: start;
+                flex-direction: column
+            }
+
+            .form-panel {
+                padding: 18px
+            }
+
+            .cover {
+                height: 155px
+            }
+
+            .filter {
+                gap: 13px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="preview-tag">STUDENT DESIGN REFERENCE · Visual preview only · Sample content</div>
+    <header class="top">
+        <div class="top-inner"><a class="brand" href="#home" data-go="home">community<span>·</span><em>events</em></a>
+            <nav class="nav" aria-label="Preview navigation"><button data-go="home"
+                    class="active">Explore</button><button data-go="details">Event details</button><button
+                    data-go="register">Registration</button><button class="nav-cta" data-go="create">+ Post
+                    event</button></nav>
+        </div>
+    </header>
+    <main class="shell">
+        <section class="view active" id="home">
+            <div class="split">
+                <div><span class="eyebrow">Learn · Connect · Participate</span>
+                    <h1>Find your next community event.</h1>
+                    <p class="lead">Explore workshops and activities happening nearby.</p>
+                </div><button class="btn" data-go="create">+ Create an event</button>
+            </div>
+            <div class="alert">✓ &nbsp; Event published successfully. Your new event now appears in the list.</div>
+            <div class="panel filter">
+                <div class="field"><label for="search">Search events</label><input id="search"
+                        placeholder="Search by title or venue"></div>
+                <div class="field"><label for="category">Category</label><select id="category">
+                        <option>All categories</option>
+                        <option>Workshop</option>
+                        <option>Community</option>
+                        <option>Career</option>
+                    </select></div><label class="check"><input type="checkbox"> Upcoming only</label><button class="btn"
+                    type="button">Apply filters</button>
+            </div>
+            <div class="split section-title">
+                <h2>Upcoming events <span style="color:var(--muted);font-weight:400">(3)</span></h2><span
+                    class="meta">Sorted by event date</span>
+            </div>
+            <div class="grid">
+                <article class="event-card">
+                    <div class="cover"></div>
+                    <div class="card-body"><span class="pill">WORKSHOP</span>
+                        <h2>Digital Skills Saturday</h2>
+                        <div class="meta">📅 5 Oct 2026 · 10:00 AM</div>
+                        <div class="meta">📍 MITRAz Training Centre</div>
+                        <div class="capacity">12 / 30 seats booked · 18 available</div>
+                        <div class="meter"><span style="width:40%"></span></div>
+                        <div class="card-actions"><button class="btn small" data-go="details">View
+                                details</button><button class="btn small outline" data-go="edit">Edit</button><button
+                                class="btn small danger" type="button">Delete</button></div>
+                    </div>
+                </article>
+                <article class="event-card">
+                    <div class="cover c2"></div>
+                    <div class="card-body"><span class="pill full">FULL</span>
+                        <h2>Village Clean-up Drive</h2>
+                        <div class="meta">📅 8 Oct 2026 · 8:30 AM</div>
+                        <div class="meta">📍 Main Road, Puttaparthi</div>
+                        <div class="capacity">40 / 40 seats booked · 0 available</div>
+                        <div class="meter full"><span style="width:100%"></span></div>
+                        <div class="card-actions"><button class="btn small" data-go="details">View
+                                details</button><button class="btn small outline" data-go="edit">Edit</button><button
+                                class="btn small danger" type="button">Delete</button></div>
+                    </div>
+                </article>
+                <article class="event-card">
+                    <div class="cover c3"></div>
+                    <div class="card-body"><span class="pill">CAREER</span>
+                        <h2>Resume Help Session</h2>
+                        <div class="meta">📅 12 Oct 2026 · 2:00 PM</div>
+                        <div class="meta">📍 Learning Hall</div>
+                        <div class="capacity">3 / 25 seats booked · 22 available</div>
+                        <div class="meter"><span style="width:12%"></span></div>
+                        <div class="card-actions"><button class="btn small" data-go="details">View
+                                details</button><button class="btn small outline" data-go="edit">Edit</button><button
+                                class="btn small danger" type="button">Delete</button></div>
+                    </div>
+                </article>
+            </div>
+        </section>
+        <section class="view" id="create"><a class="back" href="#home" data-go="home">← Back to events</a><span
+                class="eyebrow">Organizer area</span>
+            <h1>Post a new event</h1>
+            <p class="lead">Fill in the event details so people can discover and register.</p>
+            <div class="panel form-panel">
+                <div class="form-grid">
+                    <div class="field"><label>Event title *</label><input placeholder="e.g. Digital Skills Saturday">
+                    </div>
+                    <div class="field"><label>Category *</label><select>
+                            <option>Choose a category</option>
+                            <option>Workshop</option>
+                            <option>Community</option>
+                            <option>Career</option>
+                        </select></div>
+                    <div class="field"><label>Event date *</label><input type="date"></div>
+                    <div class="field"><label>Start time *</label><input type="time"></div>
+                    <div class="field"><label>Venue *</label><input placeholder="Event location"></div>
+                    <div class="field"><label>Seat capacity *</label><input type="number" placeholder="30"></div>
+                    <div class="field"><label>Organizer email *</label><input type="email"
+                            placeholder="organizer@example.com"></div>
+                    <div class="field"><label>Registration deadline *</label><input type="date"></div>
+                    <div class="field span"><label>Description *</label><textarea
+                            placeholder="What will participants learn or do?"></textarea></div>
+                    <div class="field span"><label>Event image (optional)</label><input type="file"
+                            accept="image/png,image/jpeg">
+                        <div class="hint">PNG or JPEG · Maximum 2 MB</div>
+                    </div>
+                </div>
+                <div class="form-actions"><button class="btn" type="button">Publish event</button><button
+                        class="btn secondary" data-go="home">Cancel</button></div>
+            </div>
+        </section>
+        <section class="view" id="details"><a class="back" href="#home" data-go="home">← All events</a><span
+                class="eyebrow">Workshop</span>
+            <div class="split">
+                <div>
+                    <h1>Digital Skills Saturday</h1>
+                    <p class="lead">A practical introduction to everyday digital skills.</p>
+                </div><button class="btn secondary" data-go="edit">Edit event</button>
+            </div>
+            <div class="details">
+                <div>
+                    <div class="cover banner"></div>
+                    <div class="panel" style="margin-top:20px">
+                        <h2>About this event</h2>
+                        <p>Join a hands-on workshop for local learners. Explore useful digital tools, practise with
+                            guidance, and meet others who are learning with you. Bring a notebook and your questions.
+                        </p>
+                        <h3>What to expect</h3>
+                        <p>Short demonstrations, practical activities, and time for questions.</p>
+                    </div>
+                </div>
+                <aside class="panel"><span class="pill">REGISTRATION OPEN</span>
+                    <h2 style="margin-top:15px">Reserve your place</h2>
+                    <p>18 of 30 seats still available.</p>
+                    <div class="meter"><span style="width:40%"></span></div>
+                    <div class="facts">
+                        <div class="fact"><small>Date and time</small><strong>5 Oct 2026 · 10:00 AM</strong></div>
+                        <div class="fact"><small>Venue</small><strong>MITRAz Training Centre</strong></div>
+                        <div class="fact"><small>Deadline</small><strong>4 Oct 2026</strong></div>
+                        <div class="fact"><small>Organizer</small><strong>organizer@example.com</strong></div>
+                    </div><button class="btn" data-go="register">Register for this event →</button>
+                </aside>
+            </div>
+        </section>
+        <section class="view" id="register"><a class="back" href="#details" data-go="details">← Event details</a><span
+                class="eyebrow">Seat reservation</span>
+            <h1>Register for an event</h1>
+            <p class="lead">Enter your details to reserve one or two seats.</p>
+            <div class="registration-layout">
+                <div class="panel form-panel">
+                    <div class="form-grid">
+                        <div class="field span"><label>Full name *</label><input placeholder="Your full name"></div>
+                        <div class="field"><label>Email address *</label><input type="email"
+                                placeholder="you@example.com"></div>
+                        <div class="field"><label>Mobile number *</label><input placeholder="10-digit phone number">
+                        </div>
+                        <div class="field span"><label>Seats requested *</label><select>
+                                <option>1 seat</option>
+                                <option>2 seats</option>
+                            </select>
+                            <div class="hint">A person can register once per event using the same email.</div>
+                        </div>
+                    </div>
+                    <div class="form-actions"><button class="btn" type="button">Confirm registration</button><button
+                            class="btn secondary" data-go="details">Cancel</button></div>
+                </div>
+                <aside class="panel aside">
+                    <div class="cover"></div><span class="pill">WORKSHOP</span>
+                    <h3 style="margin-top:10px">Digital Skills Saturday</h3>
+                    <p>5 Oct 2026 · MITRAz Training Centre</p>
+                    <div class="capacity">18 seats available</div>
+                </aside>
+            </div>
+        </section>
+        <section class="view" id="edit"><a class="back" href="#details" data-go="details">← Event details</a><span
+                class="eyebrow">Organizer area</span>
+            <h1>Edit event</h1>
+            <p class="lead">Update the event details while protecting existing registrations.</p>
+            <div class="panel form-panel">
+                <div class="form-grid">
+                    <div class="field"><label>Event title *</label><input value="Digital Skills Saturday"></div>
+                    <div class="field"><label>Category *</label><select>
+                            <option selected>Workshop</option>
+                            <option>Community</option>
+                            <option>Career</option>
+                        </select></div>
+                    <div class="field"><label>Event date *</label><input type="date" value="2026-10-05"></div>
+                    <div class="field"><label>Start time *</label><input type="time" value="10:00"></div>
+                    <div class="field"><label>Venue *</label><input value="MITRAz Training Centre"></div>
+                    <div class="field"><label>Seat capacity *</label><input type="number" value="30">
+                        <div class="hint">Cannot be lower than 12 seats already booked.</div>
+                    </div>
+                    <div class="field"><label>Organizer email *</label><input type="email"
+                            value="organizer@example.com"></div>
+                    <div class="field"><label>Registration deadline *</label><input type="date" value="2026-10-04">
+                    </div>
+                    <div class="field span"><label>Description
+                            *</label><textarea>A practical introduction to everyday digital skills for local learners.</textarea>
+                    </div>
+                    <div class="field span"><label>Replace image (optional)</label><input type="file"
+                            accept="image/png,image/jpeg"></div>
+                </div>
+                <div class="form-actions"><button class="btn" type="button">Save changes</button><button
+                        class="btn secondary" data-go="details">Cancel</button></div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">Community Event Manager · Student design reference · Sample dates and content · Build the
+        working Flask application yourself</footer>
+    <script>const views = [...document.querySelectorAll('.view')]; function show(name) { if (!document.getElementById(name)) name = 'home'; views.forEach(v => v.classList.toggle('active', v.id === name)); document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('active', b.dataset.go === name)); window.scrollTo({ top: 0, behavior: 'instant' }); } document.querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', e => { e.preventDefault(); show(el.dataset.go); history.replaceState(null, '', '#' + el.dataset.go) })); show(location.hash.slice(1) || 'home');</script>
+</body>
+
+</html>

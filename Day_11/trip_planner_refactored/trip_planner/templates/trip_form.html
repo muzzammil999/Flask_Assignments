@@ -1,0 +1,30 @@
+{# Page: Create/Edit Trip (routes: create_trip, edit_trip in app.py).
+   Data: `trip` (None when creating), `errors` {field: message}, `values` (what to
+   pre-fill: request.form after a failed submit, trip.form_values() when editing),
+   `page_title`.
+   enctype="multipart/form-data" is required for the photo upload; static/js/script.js
+   keeps the end date >= start date (marker attribute: data-trip-form). #}
+{% extends "base.html" %}
+{% block title %}{{ page_title }} | Trip Planner{% endblock %}
+{% block content %}
+<div class="form-wrap wide"><div class="form-card"><p class="eyebrow">TRIP DETAILS</p><h1>{{ page_title }}</h1>
+{% if errors.get('date_range') %}<div class="flash error">{{ errors.date_range }}</div>{% endif %}
+<form method="post" enctype="multipart/form-data" data-trip-form>
+  <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+  <label for="destination">Destination</label><input id="destination" name="destination" value="{{ values.get('destination', '') }}" required maxlength="160">
+  {% if errors.get('destination') %}<small class="field-error">{{ errors.destination }}</small>{% endif %}
+  <div class="two-col">
+    <div><label for="start_date">Start date</label><input id="start_date" name="start_date" type="date" value="{{ values.get('start_date', '') }}" required>
+    {% if errors.get('start_date') %}<small class="field-error">{{ errors.start_date }}</small>{% endif %}</div>
+    <div><label for="end_date">End date</label><input id="end_date" name="end_date" type="date" value="{{ values.get('end_date', '') }}" required>
+    {% if errors.get('end_date') %}<small class="field-error">{{ errors.end_date }}</small>{% endif %}</div>
+  </div>
+  <label for="budget">Budget</label><input id="budget" name="budget" type="number" min="0" step="0.01" value="{{ values.get('budget', '') }}" required>
+  {% if errors.get('budget') %}<small class="field-error">{{ errors.budget }}</small>{% endif %}
+  <label for="image">Photo (optional)</label><input id="image" name="image" type="file" accept="image/png,image/jpeg,image/gif,image/webp">
+  <small class="muted">PNG, JPG, GIF or WEBP, up to 5 MB.</small>
+  {% if errors.get('image') %}<small class="field-error">{{ errors.image }}</small>{% endif %}
+  {% if trip and trip.image_filename %}<div class="current-image"><img src="{{ url_for('media', filename=trip.image_filename) }}" alt="Current photo"><label class="check"><input type="checkbox" name="remove_image" value="1"> Remove current photo</label></div>{% endif %}
+  <div class="actions"><button class="button" type="submit">Save Trip</button><a class="button secondary" href="{{ url_for('my_trips') }}">Cancel</a></div>
+</form></div></div>
+{% endblock %}

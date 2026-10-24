@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Explore events — Community Events{% endblock %}
+{% block content %}
+<section class="view active" id="home">
+<div class="split"><div><span class="eyebrow">Learn · Connect · Participate</span><h1>Find your next community event.</h1><p class="lead">Explore workshops and activities happening nearby.</p></div><a class="btn" href="{{ url_for('create_event') }}">+ Create an event</a></div>
+
+{# Filter: a normal GET form. Flask reads the values in home() and filters in SQL. #}
+<form class="panel filter" method="get" action="{{ url_for('home') }}">
+    <div class="field"><label for="search">Search events</label>
+        <input id="search" name="search" value="{{ filters.search }}" placeholder="Search by title or venue"></div>
+    <div class="field"><label for="category">Category</label>
+        <select id="category" name="category">
+            <option value="">All categories</option>
+            {% for c in categories %}
+            <option value="{{ c }}" {% if filters.category == c %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+        </select></div>
+    <label class="check"><input type="checkbox" name="upcoming" value="1" {% if filters.upcoming %}checked{% endif %}> Upcoming only</label>
+    <div class="filter-actions">
+        <button class="btn" type="submit">Apply filters</button>
+        {% if is_filtered %}<a class="btn outline" href="{{ url_for('home') }}">Clear</a>{% endif %}
+    </div>
+</form>
+
+<div class="split section-title"><h2>{% if is_filtered %}Matching events{% else %}All events{% endif %} <span style="color:var(--muted);font-weight:400">({{ events|length }})</span></h2><span class="meta">Sorted by event date</span></div>
+
+{% if events %}
+<div class="grid">
+{% for event in events %}
+<article class="event-card">
+    {% if event.image_filename %}
+        <div class="cover image-cover" style="background-image:url('{{ url_for('static', filename='uploads/' + event.image_filename) }}')"></div>
+    {% else %}
+        <div class="cover {% if loop.index % 3 == 2 %}c2{% elif loop.index % 3 == 0 %}c3{% endif %}"></div>
+    {% endif %}
+    <div class="card-body">
+        <span class="pill {% if event.available_seats == 0 %}full{% endif %}">{{ event.category|upper if event.available_seats > 0 else 'FULL' }}</span>
+        <h2>{{ event.title }}</h2>
+        <div class="meta">📅 {{ event.event_date.strftime('%d %b %Y') }} · {{ event.start_time.strftime('%I:%M %p') }}</div>
+        <div class="meta">📍 {{ event.venue }}</div>
+        <div class="capacity">{{ event.booked_seats }} / {{ event.seat_capacity }} seats booked · {{ event.available_seats }} available</div>
+        <div class="meter {% if event.available_seats == 0 %}full{% endif %}"><span style="width:{{ event.percentage }}%"></span></div>
+        <div class="card-actions">
+            <a class="btn small" href="{{ url_for('event_details', event_id=event.id) }}">View details</a>
+            <a class="btn small outline" href="{{ url_for('edit_event', event_id=event.id) }}">Edit</a>
+            {# A small form sends the delete request - no JavaScript needed #}
+            <form method="post" action="{{ url_for('delete_event', event_id=event.id) }}"><button class="btn small danger" type="submit">Delete</button></form>
+        </div>
+    </div>
+</article>
+{% endfor %}
+</div>
+{% else %}
+<div class="panel empty">
+    {% if is_filtered %}
+    <h2>No events match your filters</h2><p class="lead">Try a different search or <a href="{{ url_for('home') }}">clear the filters</a>.</p>
+    {% else %}
+    <h2>No events yet</h2><p class="lead">Be the first to create one.</p>
+    {% endif %}<a class="btn" href="{{ url_for('create_event') }}">+ Create an event</a></div>
+{% endif %}
+</section>
+{% endblock %}

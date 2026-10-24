@@ -1,0 +1,51 @@
+{% extends "events/layout.html" %}
+{% from "events/_card_cover.html" import cover %}
+{% block title %}Explore events{% endblock %}
+{% block content %}
+<div class="split"><div>
+  <span class="eyebrow">Learn · Connect · Participate</span>
+  <h1>Find your next community event.</h1>
+  <p class="lead">Explore workshops and activities happening nearby.</p></div>
+  <a class="btn" href="{{ url_for('events.create') }}">+ Create an event</a></div>
+
+{% if message %}<div class="alert">✓ &nbsp; {{ message }}</div>{% endif %}
+
+<form class="panel filter" method="get">
+  <div class="field"><label for="search">Search events</label>
+    <input id="search" name="q" value="{{ q }}" placeholder="Search by title or venue"></div>
+  <div class="field"><label for="category">Category</label>
+    <select id="category" name="category"><option value="">All categories</option>
+      {% for c in categories %}<option {{ 'selected' if c == category }}>{{ c }}</option>{% endfor %}</select></div>
+  <label class="check"><input type="checkbox" name="upcoming" value="1" {{ 'checked' if upcoming }}> Upcoming only</label>
+  <button class="btn" type="submit">Apply filters</button>
+</form>
+
+<div class="split section-title"><h2>Events <span style="color:var(--muted);font-weight:400">({{ events|length }})</span></h2>
+  <span class="meta">Sorted by event date</span></div>
+
+{% if events %}
+<div class="grid">
+{% for ev in events %}
+  <article class="event-card">{{ cover(ev) }}
+    <div class="card-body">
+      {% if ev.is_full %}<span class="pill full">FULL</span>
+      {% elif ev.is_closed %}<span class="pill closed">CLOSED</span>
+      {% else %}<span class="pill">{{ ev.category|upper }}</span>{% endif %}
+      <h2>{{ ev.title }}</h2>
+      <div class="meta">📅 {{ ev.event_date|dmy }} · {{ ev.start_time|hm12 }}</div>
+      <div class="meta">📍 {{ ev.venue }}</div>
+      <div class="capacity">{{ ev.booked }} / {{ ev.capacity }} seats booked · {{ ev.available }} available</div>
+      <div class="meter {{ 'full' if ev.is_full }}"><span style="width:{{ ev.percent }}%"></span></div>
+      <div class="card-actions">
+        <a class="btn small" href="{{ url_for('events.details', event_id=ev.id) }}">View details</a>
+        <a class="btn small outline" href="{{ url_for('events.edit', event_id=ev.id) }}">Edit</a>
+        <form class="inline" method="post" action="{{ url_for('events.delete', event_id=ev.id) }}"
+          onsubmit="return confirm('Delete this event{{ ' and its ' ~ ev.booked ~ ' booked seat(s)' if ev.booked }}?')">
+          <button class="btn small danger" type="submit">Delete</button></form>
+      </div>
+    </div>
+  </article>
+{% endfor %}
+</div>
+{% else %}<div class="panel empty">No events found. <a href="{{ url_for('events.create') }}" style="color:var(--teal);font-weight:700">Post the first one</a></div>{% endif %}
+{% endblock %}

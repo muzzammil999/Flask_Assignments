@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Login lesson{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header><a href="{{ url_for('home') }}">My Items</a>
+  <nav>{% if session.get('user_id') %}
+    <span>{{ session['username'] }}</span>
+    <form action="{{ url_for('logout') }}" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button>Log out</button>
+    </form>
+  {% else %}<a href="{{ url_for('login') }}">Log in</a> ·
+    <a href="{{ url_for('register') }}">Register</a>{% endif %}</nav></header>
+  <main>{% for message in get_flashed_messages() %}<p class="message">{{ message }}</p>{% endfor %}
+    {% block content %}{% endblock %}</main>
+</body>
+</html>

@@ -1,0 +1,14 @@
+﻿claim_id,policy_id,member_id,hospital_id,claim_type,treatment_type,admission_date,discharge_date,requested_amount_inr,status,eligible_amount_inr,officer_user_id,payment_recorded_date
+1001,101,201,1,cashless,inpatient,2026-08-10,2026-08-13,28000,paid,26000,12,2026-08-14
+1002,101,202,3,reimbursement,daycare,2026-09-12,2026-09-12,14000,rejected,0,12,
+1003,102,203,2,cashless,daycare,2026-09-20,2026-09-20,18000,approved,16000,13,
+1004,103,204,4,cashless,inpatient,2026-10-02,2026-10-05,42000,in_review,,12,
+1005,103,205,5,reimbursement,inpatient,2026-10-03,2026-10-06,35000,more_info,,13,
+1006,104,206,1,reimbursement,inpatient,2026-07-01,2026-07-03,22000,rejected,0,12,
+1007,105,207,1,cashless,inpatient,2026-10-10,2026-10-14,85000,submitted,,,
+1008,106,208,2,cashless,inpatient,2026-09-01,2026-09-05,40000,paid,38000,13,2026-09-08
+1009,106,209,3,reimbursement,daycare,2026-09-18,2026-09-18,12000,approved,10000,12,
+1010,107,210,4,cashless,inpatient,2026-10-15,2026-10-18,27000,draft,,,
+1011,108,211,5,reimbursement,inpatient,2026-09-25,2026-09-27,60000,more_info,,12,
+1012,108,211,5,reimbursement,inpatient,2026-09-25,2026-09-27,60000,submitted,,,
+1013,102,203,1,cashless,inpatient,2026-10-20,2026-10-22,45000,draft,,,

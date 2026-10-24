@@ -1,0 +1,33 @@
+﻿claim_id,sequence_no,from_status,to_status,actor_user_id,note,event_date
+1001,1,draft,submitted,9,Synthetic submitted event,2026-08-11
+1001,2,submitted,in_review,12,Synthetic in_review event,2026-08-12
+1001,3,in_review,approved,12,Synthetic approved event,2026-08-13
+1001,4,approved,paid,14,Synthetic paid event,2026-08-14
+1002,1,draft,submitted,1,Synthetic submitted event,2026-09-10
+1002,2,submitted,in_review,12,Synthetic in_review event,2026-09-11
+1002,3,in_review,rejected,12,Synthetic rejected event,2026-09-12
+1003,1,draft,submitted,10,Synthetic submitted event,2026-09-18
+1003,2,submitted,in_review,13,Synthetic in_review event,2026-09-19
+1003,3,in_review,approved,13,Synthetic approved event,2026-09-20
+1004,1,draft,submitted,15,Synthetic submitted event,2026-10-04
+1004,2,submitted,in_review,12,Synthetic in_review event,2026-10-05
+1005,1,draft,submitted,3,Synthetic submitted event,2026-10-04
+1005,2,submitted,in_review,13,Synthetic in_review event,2026-10-05
+1005,3,in_review,more_info,13,Synthetic more_info event,2026-10-06
+1006,1,draft,submitted,4,Synthetic submitted event,2026-07-01
+1006,2,submitted,in_review,12,Synthetic in_review event,2026-07-02
+1006,3,in_review,rejected,12,Synthetic rejected event,2026-07-03
+1007,1,draft,submitted,9,Synthetic submitted event,2026-10-14
+1008,1,draft,submitted,10,Synthetic submitted event,2026-09-05
+1008,2,submitted,in_review,13,Synthetic in_review event,2026-09-06
+1008,3,in_review,approved,13,Synthetic approved event,2026-09-07
+1008,4,approved,paid,14,Synthetic paid event,2026-09-08
+1009,1,draft,submitted,6,Synthetic submitted event,2026-09-16
+1009,2,submitted,in_review,12,Synthetic in_review event,2026-09-17
+1009,3,in_review,approved,12,Synthetic approved event,2026-09-18
+1010,1,,draft,15,Draft created,2026-10-16
+1011,1,draft,submitted,8,Synthetic submitted event,2026-09-25
+1011,2,submitted,in_review,12,Synthetic in_review event,2026-09-26
+1011,3,in_review,more_info,12,Synthetic more_info event,2026-09-27
+1012,1,draft,submitted,8,Synthetic submitted event,2026-09-27
+1013,1,,draft,9,Draft created,2026-10-16

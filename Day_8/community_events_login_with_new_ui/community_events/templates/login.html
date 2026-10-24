@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Log in — Community Events{% endblock %}
+{% block content %}
+<section class="view active" id="login">
+    <a class="back" href="{{ url_for('home') }}">← All events</a>
+    <span class="eyebrow">Organizer area</span>
+    <h1>Log in</h1>
+    <p class="lead">Log in to post, edit or delete events and to register for an event.</p>
+
+    {# novalidate: the browser checks nothing, app.py validates everything #}
+    <form class="panel form-panel" style="max-width:480px" method="post" novalidate action="{{ url_for('login') }}">
+        {# CSRF token: required for every POST form #}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {# The page the visitor wanted before login. app.py checks it is a page on this site. #}
+        <input type="hidden" name="next" value="{{ next_url }}">
+        <div class="form-grid">
+            <div class="field span"><label for="username">Username *</label>
+                <input id="username" name="username" value="{{ username }}" placeholder="Your username" autocomplete="username" autofocus>
+            </div>
+            <div class="field span"><label for="password">Password *</label>
+                <input id="password" name="password" type="password" placeholder="Your password" autocomplete="current-password">
+            </div>
+        </div>
+        <div class="form-actions"><button class="btn" type="submit">Log in</button><a class="btn secondary"
+                href="{{ url_for('signup') }}">Create an account</a></div>
+    </form>
+</section>
+{% endblock %}

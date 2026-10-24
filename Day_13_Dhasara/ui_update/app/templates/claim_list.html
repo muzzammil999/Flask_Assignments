@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% from "_macros.html" import badge, csrf, header %}
+{% block content %}
+{{ header('Review queue' if queue else 'Claims', 'Claims waiting for officer action, with age and next step.' if queue else 'Search and filter the claims you are allowed to see.', 'list-check' if queue else 'folder2-open') }}
+<form class="row g-2 mb-3" method="get">
+  <div class="col-md-3"><input class="form-control" name="q" value="{{ f.q }}" placeholder="Claim ID or member name"></div>
+  <div class="col-md-2"><select class="form-select" name="status"><option value="">All statuses</option>
+    {% for s in statuses %}<option value="{{ s }}" {{ 'selected' if f.status == s }}>{{ s|label }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><select class="form-select" name="claim_type"><option value="">All types</option>
+    {% for t in ['cashless','reimbursement'] %}<option value="{{ t }}" {{ 'selected' if f.claim_type == t }}>{{ t|label }}</option>{% endfor %}</select></div>
+  <div class="col-md-3"><select class="form-select" name="hospital_id"><option value="">All hospitals</option>
+    {% for h in hospitals %}<option value="{{ h.id }}" {{ 'selected' if f.hospital_id == h.id|string }}>{{ h.name }}</option>{% endfor %}</select></div>
+  <div class="col-md-2"><button class="btn btn-primary">Filter</button>
+    <a class="btn btn-outline-secondary" href="{{ request.path }}">Reset</a></div>
+</form>
+<div class="table-responsive"><table class="table align-middle">
+  <tr><th>ID</th><th>Member</th><th>Hospital</th><th>Type</th><th>Status</th><th>Requested</th><th>Age (days)</th><th>Next action</th><th></th></tr>
+  {% for c in claims %}
+  <tr><td><a href="{{ url_for('claims.detail', claim_id=c.id) }}">{{ c.id }}</a></td><td>{{ c.member.display_name }}</td><td>{{ c.hospital.name }}</td>
+    <td>{{ c.claim_type|label }}</td><td>{{ badge(c.status) }}</td><td>{{ c.requested_amount|inr }}</td>
+    <td>{{ (today - c.created_at.date()).days }}</td><td>{{ c.status|label }}</td>
+    <td>{% if queue and c.status == 'submitted' and not c.officer_user_id %}
+      <form method="post" action="{{ url_for('claims.assign', claim_id=c.id) }}">{{ csrf() }}<button class="btn btn-sm btn-outline-primary">Assign to me</button></form>
+      {% elif c.officer %}<small>{{ c.officer.display_name }}</small>{% endif %}</td></tr>
+  {% else %}<tr><td colspan="9" class="text-center text-muted">No claims match these filters. Try Reset.</td></tr>{% endfor %}
+</table></div>
+{% endblock %}
